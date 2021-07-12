@@ -31,7 +31,7 @@ if(-z $fasta_file)
 	die;
 }
 
-# reads in input fasta file and counts total number of sequences
+# reads in start of input fasta file to verify that we have enough sequences
 my $number_sequences = 0;
 open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
 while(<FASTA_FILE>) # for each line in the file
@@ -39,6 +39,14 @@ while(<FASTA_FILE>) # for each line in the file
 	if($_ =~ /^>/) # header line
 	{
 		$number_sequences++;
+		
+		# to avoid reading large files twice, stops reading once we have verified that
+		# we have two sequences
+		if($number_sequences >= 2)
+		{
+			close FASTA_FILE;
+			last;
+		}
 	}
 }
 close FASTA_FILE;
