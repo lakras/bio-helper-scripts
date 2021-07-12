@@ -8,7 +8,7 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.]`_
    
-- [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T, C+G, Ns, gaps, As, Ts, Cs, Gs, any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
+- [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path]`_
 
