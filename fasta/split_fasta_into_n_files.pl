@@ -4,7 +4,7 @@
 # about the same number of sequences.
 
 # Usage:
-# perl split_fasta_into_n_files.pl [fasta file path]
+# perl split_fasta_into_n_files.pl [fasta file path] [number output files to generate]
 
 # New files are created at filepath of old file with "_1_of_[n].fasta", "_2_of_[n].fasta",
 # etc. appended to the end. Files already at those paths will be overwritten.
