@@ -15,6 +15,10 @@ Includes the following scripts—
 - [`split_fasta_into_n_files.pl`](/fasta/split_fasta_into_n_files.pl): Splits fasta file with multiple sequences up into a number of smaller files, each with about the same number of sequences.
 
    _Usage: `perl split_fasta_into_n_files.pl [fasta file path]  [number output files to generate]`_
+   
+- [`split_fasta_n_sequences_per_file.pl`](/fasta/split_fasta_n_sequences_per_file.pl): Splits fasta file with multiple sequences up into multiple files, with a set number of sequences per file.
+
+   _Usage: `perl split_fasta_into_n_files.pl [fasta file path]  [number sequences per file]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
