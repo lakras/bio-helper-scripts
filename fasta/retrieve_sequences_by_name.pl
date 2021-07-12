@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 # Retrieves query sequences by name from fasta file.
+
 # Usage:
 # perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.]
 
