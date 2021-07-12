@@ -12,5 +12,9 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] > [output table file path]`_
 
+- [`split_fasta_into_n_files.pl`](/fasta/split_fasta_into_n_files.pl): Splits fasta file with multiple sequences up into a number of smaller files, each with about the same number of sequences.
+
+   _Usage: `perl split_fasta_into_n_files.pl [fasta file path]  [number output files to generate]`_
+
 
 More coming soon :)
