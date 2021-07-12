@@ -33,7 +33,7 @@ if(-z $fasta_file)
 }
 
 # sanity check
-if($number_files < 2)
+if(!$number_files or $number_files < 2)
 {
 	print STDERR "Fewer than 2 output files requested. My services are not needed here.\n";
 	die;
