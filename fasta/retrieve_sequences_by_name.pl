@@ -44,22 +44,39 @@ foreach my $sequence_name(@sequence_names)
 	$sequence_name_included{$sequence_name} = 1;
 }
 
+# counts number unique sequence names we are trying to retrieve
+my $number_unique_query_sequences = keys %sequence_name_included;
+
 # reads in fasta file and retrieves sequences matching query sequence names
 open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
-my $printing_this_sequence = 0;
+my $printing_this_sequence = 0; # 1 if we are printing the sequence we are currently reading
 my %sequence_name_found = (); # key: sequence name -> value: 1 if sequence has been found and printed
+my $number_unique_query_sequences_found = 0; # the number of unique query sequence names we have found in the fasta file
 while(<FASTA_FILE>) # for each line in the file
 {
 	chomp;
 	if($_ =~ /^>(.*)$/) # header line
 	{
+		# exits if we have found all sequences
+		if($number_unique_query_sequences_found >= $number_unique_query_sequences)
+		{
+			close FASTA_FILE;
+			last;
+		}
+	
 		# checks if this sequence name is one of our query sequences
 		my $sequence_name = $1;
 		$printing_this_sequence = 0;
 		if($sequence_name_included{$sequence_name})
 		{
+			# records that we are printing lines belonging to this sequence
 			$printing_this_sequence = 1;
+			
+			# marks this sequence as found
 			$sequence_name_found{$sequence_name} = 1;
+			
+			# updates count of number unique query sequence names found
+			$number_unique_query_sequences_found = keys %sequence_name_found;
 		}
 	}
 	
