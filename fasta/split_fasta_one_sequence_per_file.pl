@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
-# Splits fasta file with multiple sequences up into multiple files with one sequence per
-# file.
+# Splits fasta file into multiple files with one sequence per file. Each output file is
+# named using the sequence name.
 
 # Usage:
 # perl split_fasta_one_sequence_per_file.pl [fasta file path]
