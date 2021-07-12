@@ -20,7 +20,7 @@ Includes the following scripts—
 
    _Usage: `perl split_fasta_n_sequences_per_file.pl [fasta file path]  [number sequences per file]`_
    
-- [`split_fasta_one_sequence_per_file.pl`](/fasta/split_fasta_one_sequence_per_file.pl): Splits fasta file into multiple files with one sequence per file. Each output file is named using the sequence name.
+- [`split_fasta_one_sequence_per_file.pl`](/fasta/split_fasta_one_sequence_per_file.pl): Splits fasta file into multiple files with one sequence per file. Each output file is named using its sequence name.
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
 
