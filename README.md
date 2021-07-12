@@ -16,5 +16,9 @@ Includes the following scripts—
 
    _Usage: `perl split_fasta_into_n_files.pl [fasta file path]  [number output files to generate]`_
 
+## Misc. ([`misc`](/misc))
+- [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
+
+   _Usage: `perl split_into_n_files.pl [file path]  [number output files to generate]`_
 
 More coming soon :)
