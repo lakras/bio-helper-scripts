@@ -15,6 +15,23 @@ use warnings;
 my $fasta_file = $ARGV[0];
 my $number_files = $ARGV[1];
 
+# verifies that input fasta file exists and is not empty
+if(!$fasta_file)
+{
+	print STDERR "Error: no input fasta file provided. Exiting.\n";
+	die;
+}
+if(!-e $fasta_file)
+{
+	print STDERR "Error: input fasta file does not exist:\n\t".$fasta_file."\nExiting.\n";
+	die;
+}
+if(-z $fasta_file)
+{
+	print STDERR "Error: input fasta file is empty:\n\t".$fasta_file."\nExiting.\n";
+	die;
+}
+
 # sanity check
 if($number_files < 2)
 {
