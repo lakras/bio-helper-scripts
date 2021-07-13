@@ -12,15 +12,15 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] > [output table file path]`_
 
-- [`split_fasta_into_n_files.pl`](/fasta/split_fasta_into_n_files.pl): Splits fasta file with multiple sequences up into a number of smaller files, each with about the same number of sequences.
+- [`split_fasta_into_n_files.pl`](/fasta/split_fasta_into_n_files.pl): Splits up fasta file into a set number of smaller files, each with about the same number of sequences.
 
    _Usage: `perl split_fasta_into_n_files.pl [fasta file path]  [number output files to generate]`_
    
-- [`split_fasta_n_sequences_per_file.pl`](/fasta/split_fasta_n_sequences_per_file.pl): Splits fasta file with multiple sequences up into multiple files, with a set number of sequences per file.
+- [`split_fasta_n_sequences_per_file.pl`](/fasta/split_fasta_n_sequences_per_file.pl): Splits up fasta file into multiple files, with a set number of sequences per file.
 
    _Usage: `perl split_fasta_n_sequences_per_file.pl [fasta file path]  [number sequences per file]`_
    
-- [`split_fasta_one_sequence_per_file.pl`](/fasta/split_fasta_one_sequence_per_file.pl): Splits fasta file into multiple files with one sequence per file. Each output file is named using its sequence name.
+- [`split_fasta_one_sequence_per_file.pl`](/fasta/split_fasta_one_sequence_per_file.pl): Splits up fasta file into multiple files with one sequence per file. Each output file is named using its sequence name.
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
 
