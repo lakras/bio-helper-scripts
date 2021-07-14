@@ -24,7 +24,6 @@ my $lineages_aligned_fasta = $ARGV[0]; # lineages aligned to reference; referenc
 
 my $DELIMITER = "\t";
 my $NEWLINE = "\n";
-my $NO_DATA = " ";
 
 
 # verifies that input files exist and are non-empty
@@ -83,12 +82,12 @@ close ALIGNED_LINEAGES_GENOMES;
 
 
 # print list of lineages
-print "lineages:\n";
+print "lineages:".$NEWLINE;
 foreach my $lineage_name(keys %lineage_name_to_genome)
 {
-	print "\t".$lineage_name."\n";
+	print $DELIMITER.$lineage_name.$NEWLINE;
 }
-print "\n";
+print $NEWLINE;
 
 
 # process aligned lineages fasta file
@@ -174,15 +173,15 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 print "lineage-defining positions (1-indexed relative to reference ".$reference_sequence_name."):\n";
 foreach my $position(sort {$a <=> $b} keys %is_lineage_defining_position)
 {
-	print add_comma_separators($position)."\n";
+	print add_comma_separators($position).$NEWLINE;
 	foreach my $lineage_base(keys %{$position_to_base_to_matching_lineage{$position}})
 	{
 		my $matching_lineages = $position_to_base_to_matching_lineage{$position}{$lineage_base};
 		
-		print "\t".$lineage_base.": ".$matching_lineages."\n";
+		print $DELIMITER.$lineage_base.": ".$matching_lineages.$NEWLINE;
 	}
 }
-print "\n";
+print $NEWLINE;
 
 
 # returns 1 if base is A, T, C, G; returns 0 if not
