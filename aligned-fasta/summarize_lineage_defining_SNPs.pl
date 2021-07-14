@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Prints list of lineage-defining positions and the lineages consistent with each base
 # appearing at a position.
 
@@ -19,7 +20,9 @@
 use strict;
 use warnings;
 
+
 my $lineages_aligned_fasta = $ARGV[0]; # lineages aligned to reference; reference must be first sequence in file
+
 
 my $DELIMITER = "\t";
 my $NEWLINE = "\n";
@@ -233,5 +236,6 @@ sub add_comma_separators
     $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
     return scalar reverse $text;
 }
+
 
 # July 14, 2021

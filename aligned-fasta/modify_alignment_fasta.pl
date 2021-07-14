@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Modifies aligned fasta file according to allele changes specified in changes table.
 
 # Columns in changes table, tab-separated, no header line:
@@ -22,8 +23,10 @@
 use strict;
 use warnings;
 
+
 my $alignment_file = $ARGV[0]; # fasta alignment; reference sequence must appear first
 my $changes_table = $ARGV[1]; # table describing changes to make to sequences in alignment file
+
 
 my $NEWLINE = "\n";
 my $DELIMITER = "\t"; # in changes file
@@ -33,6 +36,7 @@ my $SEQUENCE_NAME_COLUMN = 0;
 my $POSITION_COLUMN = 1;
 my $CURRENT_ALLELE_COLUMN = 2;
 my $REPLACEMENT_ALLELE_COLUMN = 3;
+
 
 # verifies that fasta alignment file exists and is non-empty
 if(!$alignment_file)

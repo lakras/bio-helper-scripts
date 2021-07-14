@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Summarizes sequences in fasta file (number bases, number unambiguous bases, A+T, C+G, Ns, gaps, As, Ts, Cs, Gs, other bases).
 
 # Usage:
@@ -22,10 +23,13 @@
 # Prints to console. To print to file, use
 # perl summarize_fasta_sequences.pl [fasta file path] > [output file path]
 
+
 use strict;
 use warnings;
 
+
 my $fasta_file = $ARGV[0]; # sequence names may not appear more than once
+
 
 # characters whose frequencies we should print first (in order)
 my @PRIVILEGED_CHARACTERS = ("N", "-", "A", "T", "C", "G"); # must be all capitalized
@@ -33,6 +37,7 @@ my @PRIVILEGED_CHARACTERS = ("N", "-", "A", "T", "C", "G"); # must be all capita
 # for printing
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
+
 
 # verifies that fasta file exists and is non-empty
 if(!$fasta_file)
@@ -51,12 +56,14 @@ if(-z $fasta_file)
 	die;
 }
 
+
 # generates hash of privileged characters for faster use
 my %character_is_privileged = (); # key: character -> value: 1 if we should print it first
 foreach my $character(@PRIVILEGED_CHARACTERS)
 {
 	$character_is_privileged{$character} = 1;
 }
+
 
 # values to catalogue:
 my %character_to_number_appearances = (); # key: sequence name -> key: character (A, T, C, G, N, -, etc.) -> value: number of times it appears in the sequence
@@ -116,6 +123,7 @@ while(<FASTA_FILE>) # for each line in the file
 # process final sequence
 catalogue_characters_in_sequence($sequence_name, $sequence);
 close FASTA_FILE;
+
 
 # prints header line of output table: most important characters, in order, then all others
 print "sequence_name".$DELIMITER;
@@ -220,5 +228,6 @@ sub retrieve_value_or_0
 	}
 	return 0;
 }
+
 
 # July 12, 2021

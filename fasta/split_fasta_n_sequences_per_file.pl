@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Splits fasta file with multiple sequences up into multiple files, with a set number of
 # fasta sequences per file.
 
@@ -9,11 +10,14 @@
 # New files are created at filepath of old file with "_1.fasta", "_2.fasta", etc. appended
 # to the end. Files already at those paths will be overwritten.
 
+
 use strict;
 use warnings;
 
+
 my $fasta_file = $ARGV[0];
 my $number_sequences_per_file = $ARGV[1];
+
 
 # verifies that input fasta file exists and is not empty
 if(!$fasta_file)
@@ -32,12 +36,13 @@ if(-z $fasta_file)
 	die;
 }
 
-# sanity check
+# sanity check number sequences per file
 if(!$number_sequences_per_file or $number_sequences_per_file < 1)
 {
 	print STDERR "Error: Fewer than 1 sequences per file requested. Exiting.\n";
 	die;
 }
+
 
 # reads in start of input fasta file to verify that we have enough sequences
 my $number_sequences = 0;
@@ -58,6 +63,7 @@ while(<FASTA_FILE>) # for each line in the file
 	}
 }
 close FASTA_FILE;
+
 if($number_sequences < 2)
 {
 	print STDERR "Fewer than 2 sequences in input file. My services are not needed here.\n";
@@ -70,6 +76,7 @@ if($number_sequences < $number_sequences_per_file)
 	print STDERR "Output would be identical to input. My services are not needed here.\n";
 	die;
 }
+
 
 # splits sequences in fasta file into a number of smaller files
 my $current_output_file_number = 0; # the number added to the end of the filepath of the current output file
@@ -104,6 +111,7 @@ while(<FASTA_FILE>) # for each line in the file
 }
 close FASTA_FILE;
 close OUT_FILE;
+
 
 # May 27, 2020
 # July 12, 2021

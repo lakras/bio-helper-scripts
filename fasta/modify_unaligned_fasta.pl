@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Modifies unaligned fasta file according to allele changes specified in changes table.
 # Not designed to handle gaps.
 
@@ -24,8 +25,10 @@
 use strict;
 use warnings;
 
+
 my $fasta_file = $ARGV[0]; # unaligned fasta file
 my $changes_table = $ARGV[1]; # table describing changes to make to sequences in fasta file
+
 
 my $NEWLINE = "\n";
 my $DELIMITER = "\t"; # in changes file
@@ -35,6 +38,7 @@ my $SEQUENCE_NAME_COLUMN = 0;
 my $POSITION_COLUMN = 1;
 my $CURRENT_ALLELE_COLUMN = 2;
 my $REPLACEMENT_ALLELE_COLUMN = 3;
+
 
 # verifies that fasta alignment file exists and is non-empty
 if(!$fasta_file)
@@ -177,6 +181,7 @@ sub process_sequence
 	print ">".$current_sequence_name.$NEWLINE;
 	print $current_sequence.$NEWLINE;
 }
+
 
 # January 26, 2021
 # July 14, 2021

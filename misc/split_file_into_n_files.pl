@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Splits file with multiple lines up into a number of smaller files, each with about the
 # same number of lines.
 
@@ -9,11 +10,14 @@
 # New files are created at filepath of old file with "_1_of_[n].txt", "_2_of_[n].txt",
 # etc. appended to the end. Files already at those paths will be overwritten.
 
+
 use strict;
 use warnings;
 
+
 my $file = $ARGV[0];
 my $number_files = $ARGV[1];
+
 
 # verifies that input file exists and is not empty
 if(!$file)
@@ -32,12 +36,13 @@ if(-z $file)
 	die;
 }
 
-# sanity check
+# sanity check number files
 if(!$number_files or $number_files < 2)
 {
 	print STDERR "Fewer than 2 output files requested. My services are not needed here.\n";
 	die;
 }
+
 
 # count lines in file
 my $number_lines = 0; # number lines read in from input file
@@ -49,12 +54,14 @@ while(<FILE>) # for each line in the file
 }
 close FILE;
 
+
 # calculates number lines per file
 my $number_lines_per_file = $number_lines/$number_files;
 if($number_lines_per_file * $number_files < $number_lines)
 {
 	$number_lines_per_file++;
 }
+
 
 # prepares to read in input file and generate first output file
 my $number_lines_read_in = 0; # number lines read in from input file
@@ -64,6 +71,7 @@ if(-e $output_file)
 {
 	print STDERR "Warning: output file already exists. Overwriting:\n\t".$output_file."\n";
 }
+
 
 # splits file into smaller files
 open OUT_FILE, ">$output_file" || die "Could not open $output_file to write; terminating =(\n";
@@ -92,6 +100,7 @@ while(<FILE>) # for each line in the file
 }
 close FILE;
 close OUT_FILE;
+
 
 # March 4, 2020
 # July 12, 2021

@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+
 # Splits fasta file into multiple files with one sequence per file. Each output file is
 # named using the sequence name.
 
@@ -9,10 +10,13 @@
 # New files are created at filepath of old file with "_[sequence_name].fasta" appended to
 # to the end. Files already at those paths will be overwritten.
 
+
 use strict;
 use warnings;
 
+
 my $fasta_file = $ARGV[0];
+
 
 # verifies that input fasta file exists and is not empty
 if(!$fasta_file)
@@ -30,6 +34,7 @@ if(-z $fasta_file)
 	print STDERR "Error: input fasta file is empty:\n\t".$fasta_file."\nExiting.\n";
 	die;
 }
+
 
 # reads in start of input fasta file to verify that we have enough sequences
 my $number_sequences = 0;
@@ -50,11 +55,13 @@ while(<FASTA_FILE>) # for each line in the file
 	}
 }
 close FASTA_FILE;
+
 if($number_sequences < 2)
 {
 	print STDERR "Fewer than 2 sequences in input file. My services are not needed here.\n";
 	die;
 }
+
 
 # splits sequences in fasta file into a number of smaller files with one sequence per file
 my %sequence_name_to_number_appearances = (); # key: sequence name -> value: number of times sequence name has been seen
@@ -105,7 +112,8 @@ while(<FASTA_FILE>) # for each line in the file
 close FASTA_FILE;
 close OUT_FILE;
 
-# makes string safe for using as a filename
+
+# makes string safe for use as a filename
 # replaces all whitespace, |s, /s, and \s with underscores
 sub make_safe_for_filename
 {
@@ -125,5 +133,6 @@ sub make_safe_for_filename
 	
 	return $string;
 }
+
 
 # July 12, 2021
