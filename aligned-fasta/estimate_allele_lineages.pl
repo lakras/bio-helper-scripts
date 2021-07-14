@@ -65,7 +65,8 @@ my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_COLUMN = 5;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_READCOUNT_COLUMN = 6;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_FREQUENCY_COLUMN = 7;
 
-my $ONLY_PRINT_POSITIONS_WITH_CONSENSUS_ALLELE = 1; # if 0, prints all lineage-defining positions even if there is no consensus allele
+# if 0, prints all lineage-defining positions even if there is no consensus allele
+my $ONLY_PRINT_POSITIONS_WITH_CONSENSUS_ALLELE = 1;
 
 
 # verifies that input files exist and are non-empty
