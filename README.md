@@ -25,7 +25,7 @@ Includes the following scripts—
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
    
 ## FASTA alignment file processing ([`aligned-fasta`](/fasta))
-- [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies alignment fasta file according to changes specified in changes table. See script for description of changes table.
+- [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to changes specified in changes table. See script for description of changes table.
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
