@@ -36,6 +36,10 @@ Includes the following scripts—
 - [`summarize_lineage_defining_SNPs.pl`](/aligned-fasta/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each allele.
 
    _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
+   
+- [`estimate_allele_lineages.pl`](/aligned-fasta/estimate_allele_lineages.pl): Generates table listing lineages consistent with each sample's consensus and minor alleles. See script for description of input files.
+
+   _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] > [output table path]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
