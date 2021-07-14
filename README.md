@@ -24,12 +24,12 @@ Includes the following scripts—
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
    
-- [`modify_unaligned_fasta.pl`](/fasta/modify_unaligned_fasta.pl): Modifies unaligned fasta file according to changes specified in changes table. Not designed to handle gaps.
+- [`modify_unaligned_fasta.pl`](/fasta/modify_unaligned_fasta.pl): Modifies unaligned fasta file according to allele changes specified in changes table. Not designed to handle gaps.
 
    _Usage: `perl modify_unaligned_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
    
 ## FASTA alignment file processing ([`aligned-fasta`](/fasta))
-- [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to changes specified in changes table. See script for description of changes table.
+- [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to allele changes specified in changes table. See script for description of changes table.
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
    
