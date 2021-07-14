@@ -3,7 +3,7 @@ Helper scripts for processing genomic sequence data.
 
 Includes the following scripts—
 
-## SARS-CoV-2 or other genome lineages ([`lineages`](/fasta))
+## SARS-CoV-2 or other genome lineages ([`lineages`](/lineages))
    
 - [`summarize_lineage_defining_SNPs.pl`](/lineages/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each allele.
 
@@ -38,7 +38,7 @@ Includes the following scripts—
 
    _Usage: `perl modify_unaligned_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
    
-## FASTA alignment file processing ([`aligned-fasta`](/fasta))
+## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 - [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to allele changes specified in changes table. See script for description of changes table.
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
