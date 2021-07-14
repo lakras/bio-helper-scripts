@@ -11,7 +11,7 @@
 # sequence. If heterozygosity tables are provided, positions must be relative to same
 # reference as the two alignment fastas.
 
-# Heterozygosity table is same as used in polyphonia:
+# Optional input heterozygosity table is in same format as that used in polyphonia:
 # (see https://github.com/broadinstitute/polyphonia#--het)
 # - name of reference genome (e.g., NC_045512.2)
 # - position of locus relative to reference genome, 1-indexed (e.g., 28928)
@@ -21,6 +21,20 @@
 # - minor allele at that position (e.g., T)
 # - minor allele readcount (e.g., 72)
 # - minor allele frequency (e.g., 0.065574)
+
+# Output table contains columns:
+# - sample
+# - lineage_defining_position_([reference])
+# - consensus_allele
+# - consensus_allele_lineage
+
+# and, if heteroyzgosity tables are included:
+# - consensus_allele_readcount
+# - consensus_allele_frequency
+# - minor_allele
+# - minor_allele_lineage
+# - minor_allele_readcount
+# - minor_allele_frequency
 
 # Usage:
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables]

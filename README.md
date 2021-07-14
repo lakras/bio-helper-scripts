@@ -37,7 +37,7 @@ Includes the following scripts—
 
    _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
    
-- [`estimate_allele_lineages.pl`](/aligned-fasta/estimate_allele_lineages.pl): Generates table listing lineages consistent with each sample's consensus and minor alleles. See script for description of input files.
+- [`estimate_allele_lineages.pl`](/aligned-fasta/estimate_allele_lineages.pl): Generates table listing lineages consistent with each sample's consensus and minor alleles. See script for description of input files and output table.
 
    _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] > [output table path]`_
 
