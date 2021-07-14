@@ -169,6 +169,7 @@ sub process_sequence
 		return;
 	}
 	
+	# updates sequence according to changes described in change file
 	foreach my $position(keys %{$position_to_current_allele{$current_sequence_name}})
 	{
 		my $current_allele = $position_to_current_allele{$current_sequence_name}{$position};
@@ -202,6 +203,7 @@ sub process_sequence
 		}
 	}
 	
+	# prints updated sequence
 	print ">".$current_sequence_name.$NEWLINE;
 	print $current_sequence.$NEWLINE;
 }
