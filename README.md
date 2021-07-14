@@ -41,5 +41,9 @@ Includes the following scripts—
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
+   
+- [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table into R-friendly format. See script for example inputs and outputs.
+
+   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output file path]`_
 
 More coming soon :)
