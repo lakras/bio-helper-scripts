@@ -44,6 +44,6 @@ Includes the following scripts—
    
 - [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table into R-friendly format. See script for example inputs and outputs.
 
-   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output file path]`_
+   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
 
 More coming soon :)

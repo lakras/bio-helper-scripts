@@ -35,7 +35,7 @@
 # perl make_r_friendly_table.pl [table file path] [first data column]
 
 # Prints to console. To print to file, use
-# perl make_r_friendly_table.pl [table file path] [first data column] > [output file path]
+# perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]
 
 
 use strict;
