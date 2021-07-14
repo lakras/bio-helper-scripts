@@ -32,6 +32,10 @@ Includes the following scripts—
 - [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to changes specified in changes table. See script for description of changes table.
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
+   
+- [`summarize_lineage_defining_SNPs.pl`](/aligned-fasta/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each base appearing at a position.
+
+   _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
