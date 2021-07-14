@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Modifies alignment fasta file according to changes specified in changes table.
+# Modifies aligned fasta file according to changes specified in changes table.
 
 # Columns in changes table, tab-separated, no header line:
 # - name of sequence to change (must match sequence name in fasta)
