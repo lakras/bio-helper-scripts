@@ -3,6 +3,16 @@ Helper scripts for processing genomic sequence data.
 
 Includes the following scripts—
 
+## SARS-CoV-2 or other genome lineages ([`lineages`](/fasta))
+   
+- [`summarize_lineage_defining_SNPs.pl`](/lineages/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each allele.
+
+   _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
+   
+- [`estimate_allele_lineages.pl`](/lineages/estimate_allele_lineages.pl): Generates table listing lineages consistent with each sample's consensus and minor alleles. See script for descriptions of input files and output table.
+
+   _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] > [output table path]`_
+
 ## FASTA file processing ([`fasta`](/fasta))
 - [`retrieve_sequences_by_name.pl`](/fasta/retrieve_sequences_by_name.pl): Retrieves query sequences by name from fasta file.
 
@@ -32,14 +42,6 @@ Includes the following scripts—
 - [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to allele changes specified in changes table. See script for description of changes table.
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
-   
-- [`summarize_lineage_defining_SNPs.pl`](/aligned-fasta/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each allele.
-
-   _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
-   
-- [`estimate_allele_lineages.pl`](/aligned-fasta/estimate_allele_lineages.pl): Generates table listing lineages consistent with each sample's consensus and minor alleles. See script for descriptions of input files and output table.
-
-   _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] > [output table path]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
