@@ -5,31 +5,31 @@
 
 # Example input with $first_data_column 1
 # (Extra tabs added for readability--actual input file is tab-separated):
-#		1: root;	10: root;cellular organisms;
-# 1A	67			1
-# 1B	80			0
+#	1: root;	10: root;cellular organisms;
+# 1A	67		1
+# 1B	80		0
 
 # Output example
 # (Extra tabs added for readability)
-# id	column_title					value
-# 1A	1: root;						67
+# id	column_title			value
+# 1A	1: root;			67
 # 1A	10: root;cellular organisms;	1
-# 1B	1: root;						80
+# 1B	1: root;			80
 # 1B	10: root;cellular organisms;	0
 
 # Example input with $first_data_column 2
 # (Extra tabs added for readability--actual input file is tab-separated):
-#		days	1: root;	10: root;cellular organisms;
-# 1A	5		67			1
-# 1B	3		80			0
+#	days	1: root;	10: root;cellular organisms;
+# 1A	5	67		1
+# 1B	3	80		0
 
 # Output example
 # (Extra tabs added for readability)
-# id	days	column_title					value
-# 1A	5		1: root;						67
-# 1A	5		10: root;cellular organisms;	1
-# 1B	3		1: root;						80
-# 1B	3		10: root;cellular organisms;	0
+# id	days	column_title			value
+# 1A	5	1: root;			67
+# 1A	5	10: root;cellular organisms;	1
+# 1B	3	1: root;			80
+# 1B	3	10: root;cellular organisms;	0
 
 # Usage:
 # perl make_r_friendly_table.pl [table file path] [first data column]
