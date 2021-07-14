@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
-# Modifies unaligned fasta file according to changes specified in changes table. Not
-# designed to handle gaps.
+# Modifies unaligned fasta file according to allele changes specified in changes table.
+# Not designed to handle gaps.
 
 # Columns in changes table, tab-separated, no header line:
 # - name of sequence to change (must match sequence name in fasta)
