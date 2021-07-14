@@ -1,8 +1,7 @@
 #!/usr/bin/env perl
 
 
-# Prints list of lineage-defining positions and the lineages consistent with each base
-# appearing at a position.
+# Prints list of lineage-defining positions and the lineages consistent with each allele.
 
 # Lineage-defining positions are positions at which the aligned sequences have
 # non-identical unambiguous (A, T, C, or G) bases.

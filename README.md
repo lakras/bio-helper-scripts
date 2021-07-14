@@ -33,7 +33,7 @@ Includes the following scripts—
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
    
-- [`summarize_lineage_defining_SNPs.pl`](/aligned-fasta/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each base appearing at a position.
+- [`summarize_lineage_defining_SNPs.pl`](/aligned-fasta/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineages consistent with each allele.
 
    _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
 
