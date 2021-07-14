@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Modifies unaligned fasta file according to allele changes specified in changes table.
 # Not designed to handle gaps.
 

@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Modifies aligned fasta file according to allele changes specified in changes table.
 
 # Columns in changes table, tab-separated, no header line:

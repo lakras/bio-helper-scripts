@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Summarizes sequences in fasta file (number bases, number unambiguous bases, A+T, C+G, Ns, gaps, As, Ts, Cs, Gs, other bases).
 
 # Usage:

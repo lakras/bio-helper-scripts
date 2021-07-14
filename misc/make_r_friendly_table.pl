@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Converts table into R-friendly format.
 
 # Example input with $first_data_column 1

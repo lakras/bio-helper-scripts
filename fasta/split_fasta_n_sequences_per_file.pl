@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Splits fasta file with multiple sequences up into multiple files, with a set number of
 # fasta sequences per file.
 

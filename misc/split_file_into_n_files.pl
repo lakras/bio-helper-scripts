@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Splits file with multiple lines up into a number of smaller files, each with about the
 # same number of lines.
 

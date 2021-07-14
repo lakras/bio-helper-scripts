@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 
-
 # Retrieves query sequences by name from fasta file.
 
 # Usage:
