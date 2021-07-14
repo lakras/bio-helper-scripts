@@ -23,6 +23,11 @@ Includes the following scripts—
 - [`split_fasta_one_sequence_per_file.pl`](/fasta/split_fasta_one_sequence_per_file.pl): Splits up fasta file into multiple files with one sequence per file. Each output file is named using its sequence name.
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
+   
+## FASTA alignment file processing ([`aligned-fasta`](/fasta))
+- [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies alignment fasta file according to changes specified in changes table. See script for description of changes table.
+
+   _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
