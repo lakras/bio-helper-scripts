@@ -42,7 +42,7 @@ Includes the following scripts—
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
    
-- [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table into R-friendly format. See script for example inputs and outputs.
+- [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
    _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
 

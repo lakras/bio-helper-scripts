@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Converts table into R-friendly format.
+# Converts table to R-friendly format.
 
 # Example input with $first_data_column 1
 # (Extra tabs added for readability--actual input file is tab-separated):
