@@ -16,6 +16,9 @@ my $GCP = $ARGV[1]; # set to 1 to download a file from a google storage bucket: 
 my $output_directory = $ARGV[2]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
 
 
+my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
+
+
 # generates directory to contain downloaded files
 if(!$output_directory) # no output directory provided
 {
@@ -57,6 +60,7 @@ if(-e $output_script)
 {
 	print STDERR "Warning: output script already exists. Overwriting:\n\t"
 		.$output_script."\n";
+	die_if_overwrite_not_allowed();
 }
 my %used_output_file_paths = (); # key: output file path -> 1 if it's already been claimed
 open OUT_SCRIPT, ">$output_script" || die "Could not open $output_script to write; terminating =(\n";
@@ -91,6 +95,7 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 		{
 			print STDERR "Warning: output file path already exists. Overwriting:\n\t"
 				.$output_file_path."\n";
+			die_if_overwrite_not_allowed();
 		}
 		
 		# adds line to download script
@@ -111,6 +116,18 @@ close OUT_SCRIPT;
 
 # runs script to download files
 `perl $output_script`;
+
+
+# if overwriting not allowed (if $OVERWRITE is set to 0), prints an error and exits
+sub die_if_overwrite_not_allowed
+{
+	if(!$OVERWRITE)
+	{
+		print STDERR "Error: exiting to avoid overwriting. Set \$OVERWRITE to 1 to allow "
+			."overwriting.\n";
+		die;
+	}
+}
 
 
 # April 13, 2021
