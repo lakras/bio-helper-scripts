@@ -3,6 +3,9 @@
 # Downloads files listed in input file to new directory. If directory is not provided,
 # directory set to input file path sans extension.
 
+# If multiple files to download have the same name, adds "_dup" to the end of the
+# downloaded file path to prevent overwriting.
+
 # Usage:
 # perl download_files.pl [file with list of files to download] [optional output directory]
 
@@ -53,6 +56,7 @@ if(-e $output_script)
 	print STDERR "Warning: output script already exists. Overwriting:\n\t"
 		.$output_script."\n";
 }
+my %used_output_file_paths = (); # key: output file path -> 1 if it's already been claimed
 open OUT_SCRIPT, ">$output_script" || die "Could not open $output_script to write; terminating =(\n";
 open FILES_TO_DOWNLOAD, "<$files_to_download" || die "Could not open $files_to_download to read; terminating =(\n";
 while(<FILES_TO_DOWNLOAD>) # for each line in the file
@@ -68,8 +72,23 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 			$file_name = $1;
 		}
 		
+		# adds to name of output file if it already exists
+		my $output_file_path = $output_directory."/".$file_name;
+		my $file_renamed = 0;
+		while($used_output_file_paths{$output_file_path})
+		{
+			$output_file_path .= "_dup";
+			$file_renamed = 1;
+		}
+		if($file_renamed)
+		{
+			print STDERR "Warning: output file $file_name already exists. Renaming to:\n\t".
+				$output_file_path."\n";
+		}
+		
 		# adds line to download script
-		print OUT_SCRIPT "`curl ".$file_to_download." > ".$output_directory."/".$file_name."`;\n";
+		print OUT_SCRIPT "`curl ".$file_to_download." > ".$output_file_path."`;\n";
+		$used_output_file_paths{$output_file_path} = 1;
 	}
 }
 close FILES_TO_DOWNLOAD;
