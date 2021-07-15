@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Generates table listing lineages consistent with each sample's consensus and minor
+# Generates table listing lineage(s) consistent with each sample's consensus and minor
 # alleles.
 
 # Output table includes only Lineage-defining positions: positions at which the aligned
