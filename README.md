@@ -48,6 +48,10 @@ Includes the following scripts—
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
 ## Miscellaneous ([`misc`](/misc))
+- [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file.
+
+   _Usage: `perl download_files.pl [file with list of files to download] [optional output directory]`_
+
 - [`download_files_GCP.pl`](/misc/download_files_GCP.pl): Downloads files listed in input file from google storage bucket.
 
    _Usage: `perl download_files_GCP.pl [file with list of files to download] [optional output directory]`_
