@@ -48,6 +48,10 @@ Includes the following scripts—
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
 ## Miscellaneous ([`misc`](/misc))
+- [`download_files_GCP.pl`](/misc/download_files_GCP.pl): Downloads files listed in input file from google storage bucket.
+
+   _Usage: `perl download_files_GCP.pl [file with list of files to download] [optional output directory]`_
+
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
