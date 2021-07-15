@@ -1,17 +1,19 @@
 #!/usr/bin/env perl
 
-# Downloads files listed in input file to new directory. If directory is not provided,
-# directory set to input file path sans extension.
+# Downloads files listed in input file from online or from google storage bucket to
+# new directory. If output directory is not provided, directory set to input file path
+# sans extension.
 
 # If multiple files to download have the same name, adds "_dup" to the end of the
 # downloaded file path to prevent overwriting.
 
 # Usage:
-# perl download_files.pl [file with list of files to download] [optional output directory]
+# perl download_files.pl [file with list of files to download] [1 to download from GCP, 0 or blank otherwise] [optional output directory]
 
 
 my $files_to_download = $ARGV[0]; # file containing list of files to download, one per line
-my $output_directory = $ARGV[1]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
+my $GCP = $ARGV[1]; # set to 1 to download a file from a google storage bucket: if 0, downloads using curl; if 1, downloads using gsutil -m cp
+my $output_directory = $ARGV[2]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
 
 
 # generates directory to contain downloaded files
@@ -87,7 +89,14 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 		}
 		
 		# adds line to download script
-		print OUT_SCRIPT "`curl ".$file_to_download." > ".$output_file_path."`;\n";
+		if($GCP)
+		{
+			print OUT_SCRIPT "`gsutil -m cp ".$file_to_download." ".$output_file_path."`;\n";
+		}
+		else
+		{
+			print OUT_SCRIPT "`curl ".$file_to_download." > ".$output_file_path."`;\n";
+		}
 		$used_output_file_paths{$output_file_path} = 1;
 	}
 }
