@@ -18,6 +18,9 @@ my $file = $ARGV[0];
 my $number_files = $ARGV[1];
 
 
+my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
+
+
 # verifies that input file exists and is not empty
 if(!$file)
 {
@@ -69,6 +72,7 @@ my $output_file = $file."_".$file_number."_of_".$number_files.".txt"; # current 
 if(-e $output_file)
 {
 	print STDERR "Warning: output file already exists. Overwriting:\n\t".$output_file."\n";
+	die_if_overwrite_not_allowed();
 }
 
 
@@ -89,6 +93,7 @@ while(<FILE>) # for each line in the file
 		if(-e $output_file)
 		{
 			print STDERR "Warning: output file already exists. Overwriting:\n\t".$output_file."\n";
+			die_if_overwrite_not_allowed();
 		}
 		open OUT_FILE, ">$output_file" || die "Could not open $output_file to write; terminating =(\n";
 	}
@@ -99,6 +104,18 @@ while(<FILE>) # for each line in the file
 }
 close FILE;
 close OUT_FILE;
+
+
+# if overwriting not allowed (if $OVERWRITE is set to 0), prints an error and exits
+sub die_if_overwrite_not_allowed
+{
+	if(!$OVERWRITE)
+	{
+		print STDERR "Error: exiting to avoid overwriting. Set \$OVERWRITE to 1 to allow "
+			."overwriting.\n";
+		die;
+	}
+}
 
 
 # March 4, 2020

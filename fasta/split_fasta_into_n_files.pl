@@ -18,6 +18,9 @@ my $fasta_file = $ARGV[0];
 my $number_files = $ARGV[1];
 
 
+my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
+
+
 # verifies that input fasta file exists and is not empty
 if(!$fasta_file)
 {
@@ -88,6 +91,7 @@ while(<FASTA_FILE>) # for each line in the file
 			if(-e $current_output_file)
 			{
 				print STDERR "Warning: output file already exists. Overwriting:\n\t".$current_output_file."\n";
+				die_if_overwrite_not_allowed();
 			}
 			open OUT_FILE, ">$current_output_file" || die "Could not open $current_output_file to write; terminating =(\n";
 		}
@@ -98,6 +102,18 @@ while(<FASTA_FILE>) # for each line in the file
 }
 close FASTA_FILE;
 close OUT_FILE;
+
+
+# if overwriting not allowed (if $OVERWRITE is set to 0), prints an error and exits
+sub die_if_overwrite_not_allowed
+{
+	if(!$OVERWRITE)
+	{
+		print STDERR "Error: exiting to avoid overwriting. Set \$OVERWRITE to 1 to allow "
+			."overwriting.\n";
+		die;
+	}
+}
 
 
 # May 27, 2020

@@ -17,6 +17,9 @@ use warnings;
 my $fasta_file = $ARGV[0];
 
 
+my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
+
+
 # verifies that input fasta file exists and is not empty
 if(!$fasta_file)
 {
@@ -101,7 +104,13 @@ while(<FASTA_FILE>) # for each line in the file
 		}
 		
 		# opens new output file
-		my $current_output_file = $fasta_file."_".make_safe_for_filename($sequence_name).".fasta";# 
+		my $current_output_file = $fasta_file."_".make_safe_for_filename($sequence_name).".fasta";
+		if(-e $current_output_file)
+		{
+			print STDERR "Warning: output file already exists. Overwriting:\n\t"
+				.$current_output_file."\n";
+			die_if_overwrite_not_allowed();
+		}
 		open OUT_FILE, ">$current_output_file" || die "Could not open $current_output_file to write; terminating =(\n";
 
 	}
@@ -131,6 +140,18 @@ sub make_safe_for_filename
 	$string =~ s/\\/_/g;
 	
 	return $string;
+}
+
+
+# if overwriting not allowed (if $OVERWRITE is set to 0), prints an error and exits
+sub die_if_overwrite_not_allowed
+{
+	if(!$OVERWRITE)
+	{
+		print STDERR "Error: exiting to avoid overwriting. Set \$OVERWRITE to 1 to allow "
+			."overwriting.\n";
+		die;
+	}
 }
 
 
