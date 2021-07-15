@@ -84,8 +84,13 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 		}
 		if($file_renamed)
 		{
-			print STDERR "Warning: output file $file_name already exists. Renaming to:\n\t".
+			print STDERR "Warning: output file $file_name claimed. Renaming to:\n\t".
 				$output_file_path."\n";
+		}
+		if(-e $output_file_path)
+		{
+			print STDERR "Warning: output file path already exists. Overwriting:\n\t"
+				.$output_file_path."\n";
 		}
 		
 		# adds line to download script
