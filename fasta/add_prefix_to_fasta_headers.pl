@@ -47,6 +47,7 @@ foreach my $fasta_file(@fasta_files)
 }
 
 
+# reads in fasta file; adds prefix to each header
 foreach my $fasta_file(@fasta_files)
 {
 	open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
