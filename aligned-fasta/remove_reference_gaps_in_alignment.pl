@@ -121,7 +121,7 @@ sub remove_bases_at_indices_with_gaps_in_reference
 }
 
 
-# returns 1 if base is not gap, 0 if not
+# returns 1 if base is not gap, 0 if base is a gap (or whitespace or empty)
 sub is_base
 {
 	my $base = $_[0];
