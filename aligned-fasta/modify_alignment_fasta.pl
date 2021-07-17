@@ -148,7 +148,7 @@ while(<FASTA_FILE>) # for each line in the file
 		$current_sequence_name = $1;
 		$current_sequence = "";
 	}
-	else
+	else # not header line
 	{
 		$current_sequence .= uc($_);
 	}

@@ -47,6 +47,10 @@ Includes the following scripts—
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
+- [`remove_reference_gaps_in_alignment.pl`](/aligned-fasta/remove_reference_gaps_in_alignment.pl): Removes gaps in reference (first sequence) in alignment and bases or gaps at the corresponding positions in all other sequences in the alignment.
+
+   _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
+
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
