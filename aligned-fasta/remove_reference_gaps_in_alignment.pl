@@ -60,8 +60,7 @@ while(<FASTA_FILE>) # for each line in the file
 				$reference_sequence = $current_sequence;
 				$reference_sequence_name = $current_sequence_name;
 		
-				# maps position (1-indexed, relative to reference) to sequence string index (0-indexed)
-				# (if there are no gaps in reference, string index will be position-1)
+				# saves base indices in reference where there are gaps
 				my @reference_values = split(//, $reference_sequence);
 				for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++)
 				{
