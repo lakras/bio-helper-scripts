@@ -8,12 +8,11 @@
 # downloaded file path to prevent overwriting.
 
 # Usage:
-# perl download_files.pl [file with list of files to download] [1 to download from GCP, 0 or blank otherwise] [optional output directory]
+# perl download_files.pl [file with list of files to download] [optional output directory]
 
 
 my $files_to_download = $ARGV[0]; # file containing list of files to download, one per line
-my $GCP = $ARGV[1]; # set to 1 to download a file from a google storage bucket: if 0, downloads using curl; if 1, downloads using gsutil -m cp
-my $output_directory = $ARGV[2]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
+my $output_directory = $ARGV[1]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
 
 
 my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
@@ -98,8 +97,15 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 			die_if_overwrite_not_allowed();
 		}
 		
+		# determines if file is on GCP or elsewhere
+		$gcp = 0;
+		if($file_to_download =~ /^gs:\/\//) # if file path starts with gs://, it is a GCP file
+		{
+			$gcp = 1;
+		}
+		
 		# adds line to download script
-		if($GCP)
+		if($gcp)
 		{
 			print OUT_SCRIPT "`gsutil -m cp ".$file_to_download." ".$output_file_path."`;\n";
 		}
