@@ -56,6 +56,10 @@ Includes the following scripts—
 
    _Usage: `perl download_files.pl [file with list of files to download] [optional output directory]`_
 
+- [`bulk_replace.pl`](/misc/bulk_replace.pl): Replaces all occurrences of values to mapped replacement values. Values to replace must be surrounded by whitespace or at the start or end of a line.
+
+   _Usage: `perl bulk_replace.pl [tab-separated file mapping current values (first column) to new values (second column)] [path of file in which to replace values] [path of second file in which to replace values] [etc.]`_
+
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
