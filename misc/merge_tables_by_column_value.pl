@@ -172,6 +172,7 @@ print $table_1_column_titles.$DELIMITER; # all table1 values
 print $table_2_column_titles.$NEWLINE;   # all table2 values
 
 # prints merged table with columns from both tables
+my $no_data_to_print = $NO_DATA.$DELIMITER;
 foreach my $column_to_merge_by_value(sort keys %column_to_merge_by_values)
 {
 	# prints value merged by
@@ -186,7 +187,7 @@ foreach my $column_to_merge_by_value(sort keys %column_to_merge_by_values)
 	}
 	else
 	{
-		print $DELIMITER x $table_1_number_columns;
+		print $no_data_to_print x $table_1_number_columns;
 	}
 	
 	# prints table 2 values
@@ -197,7 +198,7 @@ foreach my $column_to_merge_by_value(sort keys %column_to_merge_by_values)
 	}
 	else
 	{
-		print $DELIMITER x $table_2_number_columns;
+		print $no_data_to_print x $table_2_number_columns;
 	}
 	print $NEWLINE;
 }
