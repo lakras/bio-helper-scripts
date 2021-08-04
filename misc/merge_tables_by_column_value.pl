@@ -80,7 +80,7 @@ while(<TABLE_1>) # for each row in the file
 			$table_1_number_columns = scalar @items_in_line;
 			if($table_1_column_to_merge_by >= $table_1_number_columns)
 			{
-				print STDERR "Error: table does not contain enough columns to retrieve column "
+				print STDERR "Error: table 1 does not contain enough columns to retrieve column "
 					.$table_1_column_to_merge_by.":\n\t".$table_1."\nExiting.\n";
 				die;
 			}
@@ -133,7 +133,7 @@ while(<TABLE_2>) # for each row in the file
 			$table_2_number_columns = scalar @items_in_line;
 			if($table_2_column_to_merge_by >= $table_2_number_columns)
 			{
-				print STDERR "Error: table does not contain enough columns to retrieve column "
+				print STDERR "Error: table 2 does not contain enough columns to retrieve column "
 					.$table_2_column_to_merge_by.":\n\t".$table_2."\nExiting.\n";
 				die;
 			}
