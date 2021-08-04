@@ -67,5 +67,9 @@ Includes the following scripts—
 - [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
    _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
+   
+- [`merge_tables_by_column_value.pl`](/misc/merge_tables_by_column_value.pl): Merges (takes union of) two tables by the values in the specified columns.
+
+   _Usage: `perl merge_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]`_
 
 More coming soon :)
