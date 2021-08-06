@@ -1,12 +1,12 @@
 #!/usr/bin/env perl
 
-# Retrieves query sequences by name from fasta file.
+# Retrieves query sequences by name from fasta file, taking query sequence names from a list in a file, one sequence name per line.
 
 # Usage:
-# perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.]
+# perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of query sequence names]
 
 # Prints to console. To print to file, use
-# perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.] > [output fasta file path]
+# perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of query sequence names] > [output fasta file path]
 
 
 use strict;
@@ -14,13 +14,23 @@ use warnings;
 
 
 my $fasta_file = $ARGV[0];
-my @sequence_names = @ARGV[1..$#ARGV];
+my $sequence_names_file = $ARGV[1];
 
 
-# verifies that query sequence names have been provided
-if(!scalar @sequence_names)
+# verifies that query sequence names file exists and is non-empty have been provided
+if(!$sequence_names_file)
 {
-	print STDERR "Error: no query sequence names provided. Exiting.\n";
+	print STDERR "Error: no query sequence names file provided. Exiting.\n";
+	die;
+}
+if(!-e $sequence_names_file)
+{
+	print STDERR "Error: query sequence names file does not exist:\n\t".$sequence_names_file."\nExiting.\n";
+	die;
+}
+if(-z $sequence_names_file)
+{
+	print STDERR "Error: query sequence names file is empty:\n\t".$sequence_names_file."\nExiting.\n";
 	die;
 }
 
@@ -42,12 +52,19 @@ if(-z $fasta_file)
 }
 
 
+# reads in list of files to extract
 # builds hash of query sequence names for fast checking
 my %sequence_name_included = (); # key: sequence name -> value: 1 if sequence is a query sequence
-foreach my $sequence_name(@sequence_names)
+open QUERY_NAMES_LIST, "<$sequence_names_file" || die "Could not open $sequence_names_file to read; terminating =(\n";
+while(<QUERY_NAMES_LIST>) # for each line in the file
 {
-	$sequence_name_included{$sequence_name} = 1;
+	chomp;
+	if($_ =~ /\S/) # non-empty line
+	{
+		$sequence_name_included{$_} = 1;
+	}
 }
+close QUERY_NAMES_LIST;
 
 
 # counts number unique sequence names we are trying to retrieve
@@ -107,3 +124,4 @@ foreach my $sequence_name(@sequence_names)
 
 
 # July 12, 2021
+# August 6, 2021
