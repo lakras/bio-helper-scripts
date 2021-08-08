@@ -149,7 +149,7 @@ while(<TABLE_2>) # for each row in the file
 				my $column_to_merge_by_value = $items_in_line[$table_2_column_to_merge_by];
 				if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
 				{
-					print "Warning: value ".$column_to_merge_by_value." appears more than "
+					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
 						."once in table 2. Printing final value encountered.\n";
 				}
 				$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value} = $line;
