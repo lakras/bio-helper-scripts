@@ -73,6 +73,10 @@ while(<TABLE_1>) # for each row in the file
 	if($_ =~ /\S/) # if row not empty
 	{
 		my $line = $_;
+		if($line =~ /^(.*[^\t])\t+$/) # strips any trailing tabs
+		{
+			$line = $1;
+		}
 		my @items_in_line = split($DELIMITER, $line);
 		
 		if($first_line) # column titles
@@ -126,6 +130,10 @@ while(<TABLE_2>) # for each row in the file
 	if($_ =~ /\S/) # if row not empty
 	{
 		my $line = $_;
+		if($line =~ /^(.*[^\t])\t+$/) # strips any trailing tabs
+		{
+			$line = $1;
+		}
 		my @items_in_line = split($DELIMITER, $line);
 		
 		if($first_line) # column titles
@@ -180,26 +188,50 @@ foreach my $column_to_merge_by_value(sort keys %column_to_merge_by_values)
 	print $DELIMITER;
 
 	# prints table 1 values
+	my $number_columns_printed = 0;
 	if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
 	{
 		print $column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value};
 		print $DELIMITER;
+		
+		# prepares to print any additional spacing needed
+		my @items_in_line = split($DELIMITER, $column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value});
+		$number_columns_printed = scalar @items_in_line;
 	}
-	else
+	
+	# prints any additional spacing needed
+	if($number_columns_printed < $table_1_number_columns)
 	{
-		print $no_data_to_print x $table_1_number_columns;
+		print $no_data_to_print x ($table_1_number_columns - $number_columns_printed);
+	}
+	elsif($number_columns_printed > $table_1_number_columns)
+	{
+		print STDERR "Error: too many columns printed from table 1 for value "
+			.$column_to_merge_by_value."; ".$number_columns_printed." > ".$table_1_number_columns."\n";
 	}
 	
 	# prints table 2 values
+	$number_columns_printed = 0;
 	if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
 	{
 		print $column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value};
-		print $DELIMITER;
+		
+		# prepares to print any additional spacing needed
+		my @items_in_line = split($DELIMITER, $column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value});
+		$number_columns_printed = scalar @items_in_line;
 	}
-	else
+	
+	# prints any additional spacing needed
+	if($number_columns_printed < $table_2_number_columns)
 	{
-		print $no_data_to_print x $table_2_number_columns;
+		print $no_data_to_print x ($table_2_number_columns - $number_columns_printed);
 	}
+	elsif($number_columns_printed > $table_2_number_columns)
+	{
+		print STDERR "Error: too many columns printed from table 2 for value "
+			.$column_to_merge_by_value."; ".$number_columns_printed." > ".$table_2_number_columns."\n";
+	}
+	
 	print $NEWLINE;
 }
 
