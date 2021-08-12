@@ -76,4 +76,8 @@ Includes the following scripts—
 
    _Usage: `perl merge_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]`_
 
+- [`filter_table_rows_by_column_value.pl`](/misc/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows with column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
+
+   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
+
 More coming soon :)
