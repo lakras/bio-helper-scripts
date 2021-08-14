@@ -67,17 +67,21 @@ Includes the following scripts—
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
-   
-- [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
+     
+- [`summarize_table_columns.pl`](/misc/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
-   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
-   
+   _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
+ 
+- [`filter_table_rows_by_column_value.pl`](/misc/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows with column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
+
+   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
+
 - [`merge_tables_by_column_value.pl`](/misc/merge_tables_by_column_value.pl): Merges (takes union of) two tables by the values in the specified columns.
 
    _Usage: `perl merge_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]`_
 
-- [`filter_table_rows_by_column_value.pl`](/misc/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows with column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
+- [`make_r_friendly_table.pl`](/misc/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
-   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
+   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
 
 More coming soon :)
