@@ -114,7 +114,7 @@ close FASTA_FILE;
 
 
 # verifies that all query sequences have been found and printed
-foreach my $sequence_name(@sequence_names)
+foreach my $sequence_name(keys %sequence_name_included)
 {
 	if(!$sequence_name_found{$sequence_name})
 	{
