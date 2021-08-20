@@ -189,7 +189,10 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 				{
 					$to_print .= filename($table_path)." ";
 				}
-				$to_print .= $items_in_line[$included_column];
+				if($items_in_line[$included_column])
+				{
+					$to_print .= $items_in_line[$included_column];
+				}
 			}
 			
 			# saves column titles to print if this line is column titles
@@ -210,7 +213,8 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 			# saves values to print if this line is values (rather than column titles)
 			else
 			{
-				if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+				if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
+					and $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $NO_DATA)
 				{
 					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
 					{
