@@ -28,7 +28,7 @@ my $INPUT_DESCRIPTIONS_COLUMN_TO_MERGE_BY_COLUMN = 1;
 
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
-my $NO_DATA = "";
+my $NO_DATA = "NA";
 
 
 my $APPEND_FILENAME_TO_COLUMN_TITLES = 1;
@@ -213,22 +213,24 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 			# saves values to print if this line is values (rather than column titles)
 			else
 			{
-				if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
-					and $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $NO_DATA)
+				if($value_to_merge_by and $value_to_merge_by ne $NO_DATA)
 				{
-					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
+					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
 					{
-						print STDERR "Error: value to merge by ".$value_to_merge_by
-							." appears more than once in table:"."\n\t".$table_path
-							."\nValues are different. Exiting.\n";
+						if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
+						{
+							print STDERR "Error: value to merge by ".$value_to_merge_by
+								." appears more than once in table:"."\n\t".$table_path
+								."\nValues are different. Exiting.\n";
+						}
+						else
+						{
+							print STDERR "Warning: value to merge by ".$value_to_merge_by
+								." appears more than once in table:"."\n\t".$table_path."\n";
+						}
 					}
-					else
-					{
-						print STDERR "Warning: value to merge by ".$value_to_merge_by
-							." appears more than once in table:"."\n\t".$table_path."\n";
-					}
+					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
 				}
-				$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
 			}
 			$first_line = 0; # next line is not column titles
 		}
