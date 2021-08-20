@@ -1,22 +1,29 @@
 #!/usr/bin/env perl
 
-# Merges (takes union of) two tables by the values in the specified columns.
+# Merges (takes union of) multiple tables by the values in the specified columns.
+
+# Input table has one row per table with tab-separated columns:
+# - input table path
+# - title column to merge by in 
+# - optional: Remaining tab-separated columns list titles of columns to include in output.
+#   If no column titles are provided, all columns are printed in the output.
 
 # Usage:
-# perl merge_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)]
+# perl merge_tables_by_column_value.pl [file describing input]
 
 # Prints to console. To print to file, use
-# perl merge_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]
+# perl merge_tables_by_column_value.pl [file describing input] > [merged output table path]
 
 
 use strict;
 use warnings;
 
 
-my $table_1 = $ARGV[0]; # file path of tab-separated table
-my $table_1_column_to_merge_by = $ARGV[1]; # table 1 column number to merge by (0-indexed)
-my $table_2 = $ARGV[2]; # file path of tab-separated table
-my $table_2_column_to_merge_by = $ARGV[3]; # table 2 column number to merge by (0-indexed)
+my $input_descriptions = $ARGV[0];
+
+
+my $INPUT_DESCRIPTIONS_TABLE_PATH_COLUMN = 0;
+my $INPUT_DESCRIPTIONS_COLUMN_TO_MERGE_BY_COLUMN = 1;
 
 
 my $NEWLINE = "\n";
@@ -24,216 +31,245 @@ my $DELIMITER = "\t";
 my $NO_DATA = "";
 
 
-# verifies that input tables exist and are non-empty
-if(!$table_1 or !$table_2)
-{
-	print STDERR "Error: two input tables not provided. Exiting.\n";
-	die;
-}
-if(!-e $table_1)
-{
-	print STDERR "Error: input table file does not exist:\n\t".$table_1."\nExiting.\n";
-	die;
-}
-if(!-e $table_2)
-{
-	print STDERR "Error: input table file does not exist:\n\t".$table_2."\nExiting.\n";
-	die;
-}
-if(-z $table_1)
-{
-	print STDERR "Error: input table file is empty:\n\t".$table_1."\nExiting.\n";
-	die;
-}
-if(-z $table_2)
-{
-	print STDERR "Error: input table file is empty:\n\t".$table_2."\nExiting.\n";
-	die;
-}
+my $APPEND_FILENAME_TO_COLUMN_TITLES = 1;
 
-# verifies that column numbers are non-negative value
-if($table_1_column_to_merge_by < 0 or $table_2_column_to_merge_by < 0)
+
+# verifies that input description table exists and is non-empty
+if(!$input_descriptions)
 {
-	print STDERR "Error: negative column number. Exiting.\n";
+	print STDERR "Error: input description table not provided. Exiting.\n";
+	die;
+}
+if(!-e $input_descriptions)
+{
+	print STDERR "Error: input description table does not exist:\n\t".$input_descriptions."\nExiting.\n";
+	die;
+}
+if(-z $input_descriptions)
+{
+	print STDERR "Error: input description table is empty:\n\t".$input_descriptions."\nExiting.\n";
 	die;
 }
 
 
-# reads in table 1
-my $table_1_column_to_merge_by_title = "";
-my $table_1_column_titles = "";
-my %column_to_merge_by_values = (); # key: value in column to merge by in either table -> value: 1
-my $table_1_number_columns = 0; # number columns in table 1
-my %column_to_merge_by_value_to_table_1_line = (); # key: value in column to merge by in table 1 -> value: corresponding line in table 1
-my $first_line = 1;
-open TABLE_1, "<$table_1" || die "Could not open $table_1 to read; terminating =(\n";
-while(<TABLE_1>) # for each row in the file
+# reads in input descriptions
+my %table_path_to_column_title_to_merge_by = (); # key: table path -> value: title of column to merge by
+my %table_path_to_include_all_columns = (); # key: table path -> value: 1 if we should include all columns from this table, 0 if not
+my %table_path_to_column_title_to_included = (); # key: table path -> key: column title -> value: 1 if column will be included in output, 0 if not
+open INPUT_DESCRIPTIONS, "<$input_descriptions" || die "Could not open $input_descriptions to read; terminating =(\n";
+while(<INPUT_DESCRIPTIONS>) # for each row in the file
 {
 	chomp;
 	if($_ =~ /\S/) # if row not empty
 	{
-		my $line = $_;
-		if($line =~ /^(.*[^\t])\t+$/) # strips any trailing tabs
-		{
-			$line = $1;
-		}
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $_);
 		
-		if($first_line) # column titles
+		# retrieves values
+		my $table_path = $items_in_line[$INPUT_DESCRIPTIONS_TABLE_PATH_COLUMN];
+		my $column_title_to_merge_by = $items_in_line[$INPUT_DESCRIPTIONS_COLUMN_TO_MERGE_BY_COLUMN];
+		my @column_titles_to_include = ();
+		foreach my $column_title(@items_in_line[$INPUT_DESCRIPTIONS_COLUMN_TO_MERGE_BY_COLUMN+1..$#items_in_line])
 		{
-			$table_1_number_columns = scalar @items_in_line;
-			if($table_1_column_to_merge_by >= $table_1_number_columns)
+			# saves only column titles containing at least one non-whitespace character
+			if($column_title =~ /\S/)
 			{
-				print STDERR "Error: table 1 does not contain enough columns to retrieve column "
-					.$table_1_column_to_merge_by.":\n\t".$table_1."\nExiting.\n";
-				die;
+				push(@column_titles_to_include, $column_title);
 			}
-			$table_1_column_titles = $line;
-			$table_1_column_to_merge_by_title = $items_in_line[$table_1_column_to_merge_by];
-			
-			$first_line = 0; # next line is not column titles
 		}
-		else # column values
+		
+		# verifies that input values make sense
+		if(!$table_path or !-e $table_path or -z $table_path)
 		{
-			if($items_in_line[$table_1_column_to_merge_by])
+			print STDERR "Error: input table path does not exist or is empty:\n\t"
+				.$table_path."\nExiting.\n";
+			die;
+		}
+		if(!$column_title_to_merge_by)
+		{
+			print STDERR "Error: column title to merge by not provided in input for table:\n\t"
+				.$table_path."\nExiting.\n";
+			die;
+		}
+		
+		# verifies that we haven't already seen this table path
+		if($table_path_to_column_title_to_merge_by{$table_path})
+		{
+			print STDERR "Error: table path listed more than once in input:\n\t"
+				.$table_path."\nExiting.\n";
+		}
+		
+		# saves values
+		$table_path_to_column_title_to_merge_by{$table_path} = $column_title_to_merge_by;
+		if(scalar @column_titles_to_include) # provided column titles to include
+		{
+			$table_path_to_include_all_columns{$table_path} = 0;
+			foreach my $column_title(@column_titles_to_include)
 			{
-				my $column_to_merge_by_value = $items_in_line[$table_1_column_to_merge_by];
-				if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
-				{
-					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-						."once in table 1. Printing final value encountered.\n";
-				}
-				$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value} = $line;
-				$column_to_merge_by_values{$column_to_merge_by_value} = 1;
+				$table_path_to_column_title_to_included{$table_path}{$column_title} = 1;
 			}
-			else
-			{
-				print STDERR "Warning: ignoring line with no value in column to merge "
-					."by:\n\t".$line."\n";
-			}
+		}
+		else # no column titles to include--include them all
+		{
+			$table_path_to_include_all_columns{$table_path} = 1;
 		}
 	}
 }
-close TABLE_1;
+close INPUT_DESCRIPTIONS;
 
 
-# reads in table 2
-my $table_2_column_to_merge_by_title = "";
-my $table_2_column_titles = "";
-my $table_2_number_columns = 0; # number columns in table 2
-my %column_to_merge_by_value_to_table_2_line = (); # key: value in column to merge by in table 1 -> value: corresponding line in table 2
-$first_line = 1;
-open TABLE_2, "<$table_2" || die "Could not open $table_2 to read; terminating =(\n";
-while(<TABLE_2>) # for each row in the file
+# reads in input tables
+my %table_path_to_column_titles_to_print = (); # key: table path -> value: column titles to print
+my %table_path_to_empty_line_to_print = (); # key: table path -> value: what should be printed if there is nothing to print
+my %value_to_merge_by_to_table_path_to_values_to_print = (); # key: value to merge by -> key: table path -> value: column values to print
+my $merged_column_title_of_value_to_merge_on = "";
+foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 {
-	chomp;
-	if($_ =~ /\S/) # if row not empty
+	my $first_line = 1;
+	my $column_to_merge_by = -1;
+	my %column_included = (); # key: column number (0-indexed) -> value: 1 if column will be included in output, 0 if not
+	open TABLE, "<$table_path" || die "Could not open $table_path to read; terminating =(\n";
+	while(<TABLE>) # for each row in the file
 	{
-		my $line = $_;
-		if($line =~ /^(.*[^\t])\t+$/) # strips any trailing tabs
+		chomp;
+		if($_ =~ /\S/) # if row not empty
 		{
-			$line = $1;
-		}
-		my @items_in_line = split($DELIMITER, $line);
-		
-		if($first_line) # column titles
-		{
-			$table_2_number_columns = scalar @items_in_line;
-			if($table_2_column_to_merge_by >= $table_2_number_columns)
+			my @items_in_line = split($DELIMITER, $_);
+			if($first_line) # column titles
 			{
-				print STDERR "Error: table 2 does not contain enough columns to retrieve column "
-					.$table_2_column_to_merge_by.":\n\t".$table_2."\nExiting.\n";
-				die;
-			}
-			$table_2_column_titles = $line;
-			$table_2_column_to_merge_by_title = $items_in_line[$table_2_column_to_merge_by];
-			
-			$first_line = 0; # next line is not column titles
-		}
-		else # column values
-		{
-			if($items_in_line[$table_2_column_to_merge_by])
-			{
-				my $column_to_merge_by_value = $items_in_line[$table_2_column_to_merge_by];
-				if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
+				# identifies column to merge by and columns to include in output
+				my $column = 0;
+				foreach my $column_title(@items_in_line)
 				{
-					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-						."once in table 2. Printing final value encountered.\n";
+					if($column_title)
+					{
+						if($column_title eq $table_path_to_column_title_to_merge_by{$table_path})
+						{
+							if($column_to_merge_by != -1)
+							{
+								print STDERR "Error: title of column to merge by "
+									.$table_path_to_column_title_to_merge_by{$table_path}
+									." appears more than once in table:"
+									."\n\t".$table_path."\nExiting.\n";
+								die;
+							}
+							$column_to_merge_by = $column;
+							
+							if($merged_column_title_of_value_to_merge_on)
+							{
+								$merged_column_title_of_value_to_merge_on .= "/";
+							}
+							$merged_column_title_of_value_to_merge_on .= $column_title;
+						}
+						if($table_path_to_include_all_columns{$table_path}
+							or $table_path_to_column_title_to_included{$table_path}{$column_title})
+						{
+							$column_included{$column} = 1;
+						}
+					}
+					$column++;
 				}
-				$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value} = $line;
-				$column_to_merge_by_values{$column_to_merge_by_value} = 1;
+				
+				# verifies that we have found column to merge by
+				if($column_to_merge_by == -1)
+				{
+					print STDERR "Error: could not find column to merge by "
+						.$table_path_to_column_title_to_merge_by{$table_path}." in table:"
+						."\n\t".$table_path."\nExiting.\n";
+					die;
+				}
 			}
+			
+			# retrieves value to merge by and chunk of line to print
+			my $value_to_merge_by = $items_in_line[$column_to_merge_by];
+			my $to_print = "";
+			foreach my $included_column(sort keys %column_included)
+			{
+				$to_print .= $DELIMITER;
+				if($APPEND_FILENAME_TO_COLUMN_TITLES and $first_line)
+				{
+					$to_print .= filename($table_path)." ";
+				}
+				$to_print .= $items_in_line[$included_column];
+			}
+			
+			# saves column titles to print if this line is column titles
+			if($first_line)
+			{
+				$table_path_to_column_titles_to_print{$table_path} = $to_print;
+			}
+			
+			# generates empty line to print if a value to merge on does not appear in this table
+			if($first_line)
+			{
+				foreach my $included_column(sort keys %column_included)
+				{
+					$table_path_to_empty_line_to_print{$table_path} .= $DELIMITER;
+				}
+			}
+			
+			# saves values to print if this line is values (rather than column titles)
 			else
 			{
-				print STDERR "Warning: ignoring line with no value in column to merge "
-					."by:\n\t".$line."\n";
+				if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+				{
+					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
+					{
+						print STDERR "Error: value to merge by ".$value_to_merge_by
+							." appears more than once in table:"."\n\t".$table_path
+							."\nValues are different. Exiting.\n";
+					}
+					else
+					{
+						print STDERR "Warning: value to merge by ".$value_to_merge_by
+							." appears more than once in table:"."\n\t".$table_path."\n";
+					}
+				}
+				$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
 			}
+			$first_line = 0; # next line is not column titles
 		}
 	}
+	close TABLE;
 }
-close TABLE_2;
-
 
 # prints column titles
-print $table_1_column_to_merge_by_title."/".$table_2_column_to_merge_by_title.$DELIMITER; # new column with column to merge by
-print $table_1_column_titles.$DELIMITER; # all table1 values
-print $table_2_column_titles.$NEWLINE;   # all table2 values
-
-# prints merged table with columns from both tables
-my $no_data_to_print = $NO_DATA.$DELIMITER;
-foreach my $column_to_merge_by_value(sort keys %column_to_merge_by_values)
+print $merged_column_title_of_value_to_merge_on;
+foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 {
-	# prints value merged by
-	print $column_to_merge_by_value;
-	print $DELIMITER;
+	print $table_path_to_column_titles_to_print{$table_path};
+}
+print $NEWLINE;
 
-	# prints table 1 values
-	my $number_columns_printed = 0;
-	if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
+# prints merged output table values
+foreach my $value_to_merge_by(keys %value_to_merge_by_to_table_path_to_values_to_print)
+{
+	print $value_to_merge_by;
+	foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 	{
-		print $column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value};
-		print $DELIMITER;
-		
-		# prepares to print any additional spacing needed
-		my @items_in_line = split($DELIMITER, $column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value});
-		$number_columns_printed = scalar @items_in_line;
+		if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+		{
+			print $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path};
+		}
+		else
+		{
+			print $table_path_to_empty_line_to_print{$table_path};
+		}
 	}
-	
-	# prints any additional spacing needed
-	if($number_columns_printed < $table_1_number_columns)
-	{
-		print $no_data_to_print x ($table_1_number_columns - $number_columns_printed);
-	}
-	elsif($number_columns_printed > $table_1_number_columns)
-	{
-		print STDERR "Error: too many columns printed from table 1 for value "
-			.$column_to_merge_by_value."; ".$number_columns_printed." > ".$table_1_number_columns."\n";
-	}
-	
-	# prints table 2 values
-	$number_columns_printed = 0;
-	if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
-	{
-		print $column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value};
-		
-		# prepares to print any additional spacing needed
-		my @items_in_line = split($DELIMITER, $column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value});
-		$number_columns_printed = scalar @items_in_line;
-	}
-	
-	# prints any additional spacing needed
-	if($number_columns_printed < $table_2_number_columns)
-	{
-		print $no_data_to_print x ($table_2_number_columns - $number_columns_printed);
-	}
-	elsif($number_columns_printed > $table_2_number_columns)
-	{
-		print STDERR "Error: too many columns printed from table 2 for value "
-			.$column_to_merge_by_value."; ".$number_columns_printed." > ".$table_2_number_columns."\n";
-	}
-	
 	print $NEWLINE;
 }
 
 
-# August 4, 2021
+# example input:  /Users/lakras/my_file.txt
+# example output: my_file.txt
+sub filename
+{
+	my $filepath = $_[0];
+	
+	if($filepath =~ /^.*\/([^\/]+)$/)
+	{
+		return $1;
+	}
+	return "";
+}
+
+# August 19, 2021
