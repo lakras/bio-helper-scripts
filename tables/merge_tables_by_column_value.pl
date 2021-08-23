@@ -202,7 +202,10 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 				{
 					$to_print .= filename($table_path)." ";
 				}
-				$to_print .= $items_in_line[$included_column];
+				if(defined $items_in_line[$included_column])
+				{
+					$to_print .= $items_in_line[$included_column];
+				}
 			}
 			
 			# saves column titles to print if this line is column titles
@@ -221,9 +224,9 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 			}
 			
 			# saves values to print if this line is values (rather than column titles)
-			else
+			elsif(defined $value_to_merge_by and length $value_to_merge_by and $value_to_merge_by ne $NO_DATA)
 			{
-				if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+				if(defined $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
 				{
 					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
 					{
@@ -264,7 +267,7 @@ foreach my $value_to_merge_by(sort {$value_to_merge_by_to_order_of_appearance{$a
 	print $value_to_merge_by;
 	foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_path_to_order_of_appearance{$b}} keys %table_path_to_column_title_to_merge_by) # sorts tables by order of their appearance in description file
 	{
-		if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+		if(defined $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
 		{
 			print $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path};
 		}
