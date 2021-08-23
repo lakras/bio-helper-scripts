@@ -64,6 +64,10 @@ Includes the following scripts—
 
    _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
 
+- [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive. Text to filter out must not have spaces.
+
+   _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] [query to select rows to delete] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] > [output table path]`_
+
 - [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
 
    _Usage: `perl concatenate_tables.pl [table1] [table2] [table3] etc. > [concatenated output table path]`_

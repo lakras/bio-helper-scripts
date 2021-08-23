@@ -82,7 +82,8 @@ while(<TABLE>) # for each row in the file
 			my $column_value = $items_in_line[$column_to_filter_by];
 			
 			# prints this line if the value of interest is in the column to filter by
-			if(!$column_value and !$column_value_to_select
+			if(!$column_value and !$column_value_to_select # both 0s
+				or !length($column_value) and !length($column_value_to_select) # both empty strings
 				or $column_value and $column_value_to_select and $column_value eq $column_value_to_select)
 			{
 				print $line.$NEWLINE;
