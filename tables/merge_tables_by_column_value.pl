@@ -54,8 +54,10 @@ if(-z $input_descriptions)
 
 # reads in input descriptions
 my %table_path_to_column_title_to_merge_by = (); # key: table path -> value: title of column to merge by
+my %table_path_to_order_of_appearance = (); # key: table path -> value: file count after this table was encountered
 my %table_path_to_include_all_columns = (); # key: table path -> value: 1 if we should include all columns from this table, 0 if not
-my %table_path_to_column_title_to_included = (); # key: table path -> key: column title -> value: 1 if column will be included in output, 0 if not
+my $column_title_count = 0; # number included column titles we have encountered
+my %table_path_to_column_title_to_included = (); # key: table path -> key: column title -> value: column title count after this column was encountered, or 0 or absent if column not included
 open INPUT_DESCRIPTIONS, "<$input_descriptions" || die "Could not open $input_descriptions to read; terminating =(\n";
 while(<INPUT_DESCRIPTIONS>) # for each row in the file
 {
@@ -101,12 +103,18 @@ while(<INPUT_DESCRIPTIONS>) # for each row in the file
 		
 		# saves values
 		$table_path_to_column_title_to_merge_by{$table_path} = $column_title_to_merge_by;
+		$table_path_to_order_of_appearance{$table_path} = scalar keys %table_path_to_column_title_to_merge_by;
+# 		print STDERR "count: ".$table_path_to_order_of_appearance{$table_path}."\n";
 		if(scalar @column_titles_to_include) # provided column titles to include
 		{
 			$table_path_to_include_all_columns{$table_path} = 0;
 			foreach my $column_title(@column_titles_to_include)
 			{
-				$table_path_to_column_title_to_included{$table_path}{$column_title} = 1;
+				if(!$table_path_to_column_title_to_included{$table_path}{$column_title})
+				{
+					$column_title_count++;
+					$table_path_to_column_title_to_included{$table_path}{$column_title} = $column_title_count;
+				}
 			}
 		}
 		else # no column titles to include--include them all
@@ -121,13 +129,14 @@ close INPUT_DESCRIPTIONS;
 # reads in input tables
 my %table_path_to_column_titles_to_print = (); # key: table path -> value: column titles to print
 my %table_path_to_empty_line_to_print = (); # key: table path -> value: what should be printed if there is nothing to print
+my %value_to_merge_by_to_order_of_appearance = (); # key: value to merge by -> value: number of values to merge by after this value was encountered
 my %value_to_merge_by_to_table_path_to_values_to_print = (); # key: value to merge by -> key: table path -> value: column values to print
 my $merged_column_title_of_value_to_merge_on = "";
-foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
+foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_path_to_order_of_appearance{$b}} keys %table_path_to_column_title_to_merge_by) # sorts tables by order of their appearance in description file
 {
 	my $first_line = 1;
 	my $column_to_merge_by = -1;
-	my %column_included = (); # key: column number (0-indexed) -> value: 1 if column will be included in output, 0 if not
+	my %column_included = (); # key: column number (0-indexed) -> value: column title count after this column was encountered, or 0 or absent if column not included
 	open TABLE, "<$table_path" || die "Could not open $table_path to read; terminating =(\n";
 	while(<TABLE>) # for each row in the file
 	{
@@ -161,10 +170,13 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 							}
 							$merged_column_title_of_value_to_merge_on .= $column_title;
 						}
-						if($table_path_to_include_all_columns{$table_path}
-							or $table_path_to_column_title_to_included{$table_path}{$column_title})
+						if($table_path_to_include_all_columns{$table_path})
 						{
 							$column_included{$column} = 1;
+						}
+						elsif($table_path_to_column_title_to_included{$table_path}{$column_title})
+						{
+							$column_included{$column} = $table_path_to_column_title_to_included{$table_path}{$column_title};
 						}
 					}
 					$column++;
@@ -183,7 +195,7 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 			# retrieves value to merge by and chunk of line to print
 			my $value_to_merge_by = $items_in_line[$column_to_merge_by];
 			my $to_print = "";
-			foreach my $included_column(sort keys %column_included)
+			foreach my $included_column(sort {$column_included{$a} <=> $column_included{$b}} keys %column_included) # sorts column titles by the order of their appearance in input description
 			{
 				$to_print .= $DELIMITER;
 				if($APPEND_FILENAME_TO_COLUMN_TITLES and $first_line)
@@ -202,7 +214,7 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 			# generates empty line to print if a value to merge on does not appear in this table
 			if($first_line)
 			{
-				foreach my $included_column(sort keys %column_included)
+				foreach my $included_column(keys %column_included)
 				{
 					$table_path_to_empty_line_to_print{$table_path} .= $DELIMITER;
 				}
@@ -217,7 +229,7 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 					{
 						print STDERR "Error: value to merge by ".$value_to_merge_by
 							." appears more than once in table:"."\n\t".$table_path
-							."\nValues are different. Exiting.\n";
+							."\nValues are different.\n";
 					}
 					else
 					{
@@ -226,6 +238,10 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 					}
 				}
 				$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
+				if(!$value_to_merge_by_to_order_of_appearance{$value_to_merge_by})
+				{
+					$value_to_merge_by_to_order_of_appearance{$value_to_merge_by} = scalar keys %value_to_merge_by_to_order_of_appearance;
+				}
 			}
 			$first_line = 0; # next line is not column titles
 		}
@@ -235,17 +251,18 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 
 # prints column titles
 print $merged_column_title_of_value_to_merge_on;
-foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
+foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_path_to_order_of_appearance{$b}} keys %table_path_to_column_title_to_merge_by) # sorts tables by order of their appearance in description file
 {
 	print $table_path_to_column_titles_to_print{$table_path};
 }
 print $NEWLINE;
 
 # prints merged output table values
-foreach my $value_to_merge_by(keys %value_to_merge_by_to_table_path_to_values_to_print)
+foreach my $value_to_merge_by(sort {$value_to_merge_by_to_order_of_appearance{$a} <=> $value_to_merge_by_to_order_of_appearance{$b}}
+	keys %value_to_merge_by_to_table_path_to_values_to_print) # value to merge by sorted by order of its appearance
 {
 	print $value_to_merge_by;
-	foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
+	foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_path_to_order_of_appearance{$b}} keys %table_path_to_column_title_to_merge_by) # sorts tables by order of their appearance in description file
 	{
 		if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
 		{
