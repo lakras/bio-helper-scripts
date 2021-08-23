@@ -54,7 +54,8 @@ foreach my $input_table(@input_tables)
 
 
 # reads in all column titles
-my %column_titles = (); # key: column title -> value: 1
+my $column_title_count = 0; # number column titles we have encountered
+my %column_titles = (); # key: column title -> value: column title count after this column was encountered
 foreach my $input_table(@input_tables)
 {
 	my $first_line = 1;
@@ -70,7 +71,11 @@ foreach my $input_table(@input_tables)
 			my $column = 0;
 			foreach my $column_title(@items_in_line)
 			{
-				$column_titles{$column_title} = 1;
+				if(!$column_titles{$column_title})
+				{
+					$column_title_count++;
+					$column_titles{$column_title} = $column_title_count;
+				}
 			}
 			
 			$first_line = 0;
@@ -82,7 +87,7 @@ foreach my $input_table(@input_tables)
 
 # prints column titles
 my $first_column_title_printed = 1;
-foreach my $column_title(keys %column_titles)
+foreach my $column_title(sort {$column_titles{$a} <=> $column_titles{$b}} keys %column_titles) # sorts column titles by the order of their appearance
 {
 	# prints delimiter (tab)
 	if(!$first_column_title_printed)
@@ -150,7 +155,7 @@ foreach my $input_table(@input_tables)
 			{
 				# prints concatenated table with blank values for columns that are not present
 				my $first_column_printed = 1;
-				foreach my $column_title(keys %column_titles)
+				foreach my $column_title(sort {$column_titles{$a} <=> $column_titles{$b}} keys %column_titles) # sorts column titles by the order of their appearance
 				{
 					# prints delimiter (tab)
 					if(!$first_column_printed)
