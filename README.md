@@ -64,6 +64,10 @@ Includes the following scripts—
 
    _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
 
+- [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
+
+   _Usage: `perl concatenate_tables.pl [table1] [table2] [table3] etc. > [concatenated output table path]`_
+
 - [`merge_two_tables_by_column_value.pl`](/tables/merge_two_tables_by_column_value.pl): Merges (takes union of) two tables by the values in the specified columns.
 
    _Usage: `perl merge_two_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]`_

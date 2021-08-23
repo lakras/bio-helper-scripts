@@ -96,6 +96,7 @@ while(<INPUT_DESCRIPTIONS>) # for each row in the file
 		{
 			print STDERR "Error: table path listed more than once in input:\n\t"
 				.$table_path."\nExiting.\n";
+			die;
 		}
 		
 		# saves values
@@ -189,10 +190,7 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 				{
 					$to_print .= filename($table_path)." ";
 				}
-				if($items_in_line[$included_column])
-				{
-					$to_print .= $items_in_line[$included_column];
-				}
+				$to_print .= $items_in_line[$included_column];
 			}
 			
 			# saves column titles to print if this line is column titles
@@ -213,24 +211,21 @@ foreach my $table_path(keys %table_path_to_column_title_to_merge_by)
 			# saves values to print if this line is values (rather than column titles)
 			else
 			{
-				if($value_to_merge_by and $value_to_merge_by ne $NO_DATA)
+				if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
 				{
-					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
 					{
-						if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
-						{
-							print STDERR "Error: value to merge by ".$value_to_merge_by
-								." appears more than once in table:"."\n\t".$table_path
-								."\nValues are different. Exiting.\n";
-						}
-						else
-						{
-							print STDERR "Warning: value to merge by ".$value_to_merge_by
-								." appears more than once in table:"."\n\t".$table_path."\n";
-						}
+						print STDERR "Error: value to merge by ".$value_to_merge_by
+							." appears more than once in table:"."\n\t".$table_path
+							."\nValues are different. Exiting.\n";
 					}
-					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
+					else
+					{
+						print STDERR "Warning: value to merge by ".$value_to_merge_by
+							." appears more than once in table:"."\n\t".$table_path."\n";
+					}
 				}
+				$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
 			}
 			$first_line = 0; # next line is not column titles
 		}

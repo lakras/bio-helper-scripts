@@ -95,22 +95,14 @@ while(<TABLE_1>) # for each row in the file
 		}
 		else # column values
 		{
-			if($items_in_line[$table_1_column_to_merge_by])
+			my $column_to_merge_by_value = $items_in_line[$table_1_column_to_merge_by];
+			if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
 			{
-				my $column_to_merge_by_value = $items_in_line[$table_1_column_to_merge_by];
-				if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
-				{
-					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-						."once in table 1. Printing final value encountered.\n";
-				}
-				$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value} = $line;
-				$column_to_merge_by_values{$column_to_merge_by_value} = 1;
+				print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
+					."once in table 1. Printing final value encountered.\n";
 			}
-			else
-			{
-				print STDERR "Warning: ignoring line with no value in column to merge "
-					."by:\n\t".$line."\n";
-			}
+			$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value} = $line;
+			$column_to_merge_by_values{$column_to_merge_by_value} = 1;
 		}
 	}
 }
@@ -152,22 +144,14 @@ while(<TABLE_2>) # for each row in the file
 		}
 		else # column values
 		{
-			if($items_in_line[$table_2_column_to_merge_by])
+			my $column_to_merge_by_value = $items_in_line[$table_2_column_to_merge_by];
+			if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
 			{
-				my $column_to_merge_by_value = $items_in_line[$table_2_column_to_merge_by];
-				if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
-				{
-					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-						."once in table 2. Printing final value encountered.\n";
-				}
-				$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value} = $line;
-				$column_to_merge_by_values{$column_to_merge_by_value} = 1;
+				print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
+					."once in table 2. Printing final value encountered.\n";
 			}
-			else
-			{
-				print STDERR "Warning: ignoring line with no value in column to merge "
-					."by:\n\t".$line."\n";
-			}
+			$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value} = $line;
+			$column_to_merge_by_values{$column_to_merge_by_value} = 1;
 		}
 	}
 }
