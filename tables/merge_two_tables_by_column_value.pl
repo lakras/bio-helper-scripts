@@ -99,9 +99,10 @@ while(<TABLE_1>) # for each row in the file
 			if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
 			{
 				print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-					."once in table 1. Printing final value encountered.\n";
+					."once in table 1. Merging rows.\n";
 			}
-			$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value} = $line;
+			$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}
+				= merge_values_to_print($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}, $line);
 			$column_to_merge_by_values{$column_to_merge_by_value} = 1;
 		}
 	}
@@ -148,9 +149,10 @@ while(<TABLE_2>) # for each row in the file
 			if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value})
 			{
 				print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-					."once in table 2. Printing final value encountered.\n";
+					."once in table 2. Merging rows.\n";
 			}
-			$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value} = $line;
+			$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value}
+				= merge_values_to_print($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value}, $line);
 			$column_to_merge_by_values{$column_to_merge_by_value} = 1;
 		}
 	}
@@ -217,6 +219,81 @@ foreach my $column_to_merge_by_value(sort keys %column_to_merge_by_values)
 	}
 	
 	print $NEWLINE;
+}
+
+# merges two rows into one row
+# for each column, adds both values if they are different, present value if one is absent,
+# or nothing if neither has a value
+sub merge_values_to_print
+{
+	my $to_print_1 = $_[0];
+	my $to_print_2 = $_[1];
+	
+	# splits values to print into their component parts
+	my @to_print_1_items = split($DELIMITER, $to_print_1, -1);
+	my @to_print_2_items = split($DELIMITER, $to_print_2, -1);
+	
+	if(scalar @to_print_1_items != scalar @to_print_2_items)
+	{
+		print STDERR "Error: output row chunks with duplicate values to merge by contain "
+			."unequal numbers of columns (".(scalar @to_print_1_items)." and "
+			.(scalar @to_print_2_items)."). Cannot merge properly:\n"
+			.$to_print_1."\n".$to_print_2."\n";
+	}
+	
+	# merges values
+	my @to_print = ();
+	for my $index(0..max($#to_print_1_items, $#to_print_2_items))
+	{
+    	my $to_print_1_item = $to_print_1_items[$index];
+    	my $to_print_2_item = $to_print_2_items[$index];
+    	
+    	# adds merged value
+    	if(!length($to_print_1_item) and !length($to_print_2_item)) # both items absent
+    	{
+    		push(@to_print, $to_print_1_item);
+    	}
+    	elsif(length($to_print_1_item) and !length($to_print_2_item)) # item 1 is present, item 2 is empty string
+    	{
+    		push(@to_print, $to_print_1_item);
+    	}
+    	elsif(length($to_print_2_item) and !length($to_print_1_item)) # item 2 is present, item 1 is empty string
+    	{
+    		push(@to_print, $to_print_2_item);
+    	}
+    	elsif(length($to_print_1_item) and length($to_print_2_item) and $to_print_1_item eq $to_print_2_item) # both items present and same value in both items
+    	{
+    		push(@to_print, $to_print_1_item);
+    	}
+    	elsif(length($to_print_1_item) and length($to_print_2_item) and $to_print_1_item ne $to_print_2_item) # both items present and different
+    	{
+    		push(@to_print, $to_print_1_item.", ".$to_print_2_item);
+    	}
+    	else # something else?
+    	{
+    		print STDERR "Error: unexpected possibility reached. Please check and fix code.\n";
+    		push(@to_print, $to_print_1_item.", ".$to_print_2_item);
+    	}
+	}
+	return join($DELIMITER, @to_print);
+}
+
+# returns the maximum of two values
+sub max
+{
+	my $value_1 = $_[0];
+	my $value_2 = $_[1];
+	
+	if($value_1 >= $value_2)
+	{
+		return $value_1;
+	}
+	if($value_2 > $value_1)
+	{
+		return $value_2;
+	}
+	print STDERR "Error: unexpected possibility reached. Please check and fix code.\n";
+	return $value_2;
 }
 
 

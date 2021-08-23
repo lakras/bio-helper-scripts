@@ -226,21 +226,19 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 			# saves values to print if this line is values (rather than column titles)
 			elsif(defined $value_to_merge_by and length $value_to_merge_by and $value_to_merge_by ne $NO_DATA)
 			{
-				if(defined $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path})
+				if(defined $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
+					and $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
 				{
-					if($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
-					{
-						print STDERR "Error: value to merge by ".$value_to_merge_by
-							." appears more than once in table:"."\n\t".$table_path
-							."\nValues are different.\n";
-					}
-					else
-					{
-						print STDERR "Warning: value to merge by ".$value_to_merge_by
-							." appears more than once in table:"."\n\t".$table_path."\n";
-					}
+					print STDERR "Warning: value to merge by ".$value_to_merge_by
+						." appears more than once in table with different values; merging values:\n\t"
+						.$table_path."\n";
+					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
+						= merge_values_to_print($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}, $to_print);
 				}
-				$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
+				else
+				{
+					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} = $to_print;
+				}
 				if(!$value_to_merge_by_to_order_of_appearance{$value_to_merge_by})
 				{
 					$value_to_merge_by_to_order_of_appearance{$value_to_merge_by} = scalar keys %value_to_merge_by_to_order_of_appearance;
@@ -291,6 +289,81 @@ sub filename
 		return $1;
 	}
 	return "";
+}
+
+# merges two rows into one row
+# for each column, adds both values if they are different, present value if one is absent,
+# or nothing if neither has a value
+sub merge_values_to_print
+{
+	my $to_print_1 = $_[0];
+	my $to_print_2 = $_[1];
+	
+	# splits values to print into their component parts
+	my @to_print_1_items = split($DELIMITER, $to_print_1, -1);
+	my @to_print_2_items = split($DELIMITER, $to_print_2, -1);
+	
+	if(scalar @to_print_1_items != scalar @to_print_2_items)
+	{
+		print STDERR "Error: output row chunks with duplicate values to merge by contain "
+			."unequal numbers of columns (".(scalar @to_print_1_items)." and "
+			.(scalar @to_print_2_items)."). Cannot merge properly:\n"
+			.$to_print_1."\n".$to_print_2."\n";
+	}
+	
+	# merges values
+	my @to_print = ();
+	for my $index(0..max($#to_print_1_items, $#to_print_2_items))
+	{
+    	my $to_print_1_item = $to_print_1_items[$index];
+    	my $to_print_2_item = $to_print_2_items[$index];
+    	
+    	# adds merged value
+    	if(!length($to_print_1_item) and !length($to_print_2_item)) # both items absent
+    	{
+    		push(@to_print, $to_print_1_item);
+    	}
+    	elsif(length($to_print_1_item) and !length($to_print_2_item)) # item 1 is present, item 2 is empty string
+    	{
+    		push(@to_print, $to_print_1_item);
+    	}
+    	elsif(length($to_print_2_item) and !length($to_print_1_item)) # item 2 is present, item 1 is empty string
+    	{
+    		push(@to_print, $to_print_2_item);
+    	}
+    	elsif(length($to_print_1_item) and length($to_print_2_item) and $to_print_1_item eq $to_print_2_item) # both items present and same value in both items
+    	{
+    		push(@to_print, $to_print_1_item);
+    	}
+    	elsif(length($to_print_1_item) and length($to_print_2_item) and $to_print_1_item ne $to_print_2_item) # both items present and different
+    	{
+    		push(@to_print, $to_print_1_item.", ".$to_print_2_item);
+    	}
+    	else # something else?
+    	{
+    		print STDERR "Error: unexpected possibility reached. Please check and fix code.\n";
+    		push(@to_print, $to_print_1_item.", ".$to_print_2_item);
+    	}
+	}
+	return join($DELIMITER, @to_print);
+}
+
+# returns the maximum of two values
+sub max
+{
+	my $value_1 = $_[0];
+	my $value_2 = $_[1];
+	
+	if($value_1 >= $value_2)
+	{
+		return $value_1;
+	}
+	if($value_2 > $value_1)
+	{
+		return $value_2;
+	}
+	print STDERR "Error: unexpected possibility reached. Please check and fix code.\n";
+	return $value_2;
 }
 
 # August 19, 2021
