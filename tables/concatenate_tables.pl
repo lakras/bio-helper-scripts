@@ -68,7 +68,6 @@ foreach my $input_table(@input_tables)
 			my @items_in_line = split($DELIMITER, $_);
 			
 			# identifies column to merge by and columns to include in output
-			my $column = 0;
 			foreach my $column_title(@items_in_line)
 			{
 				if(!$column_titles{$column_title})
