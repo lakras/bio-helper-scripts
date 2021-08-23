@@ -8,6 +8,8 @@
 # - optional: Remaining tab-separated columns list titles of columns to include in output.
 #   If no column titles are provided, all columns are printed in the output.
 
+# Lines starting with # in input table are treated as comments and ignored.
+
 # Usage:
 # perl merge_tables_by_column_value.pl [file describing input]
 
@@ -62,7 +64,8 @@ open INPUT_DESCRIPTIONS, "<$input_descriptions" || die "Could not open $input_de
 while(<INPUT_DESCRIPTIONS>) # for each row in the file
 {
 	chomp;
-	if($_ =~ /\S/) # if row not empty
+	if($_ =~ /\S/ # if line not empty
+		and $_ !~ /^\s*#/) # and line not a comment
 	{
 		my @items_in_line = split($DELIMITER, $_);
 		
