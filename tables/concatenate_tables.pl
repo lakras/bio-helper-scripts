@@ -22,6 +22,9 @@ my $DELIMITER = "\t";
 my $NO_DATA = "";
 
 
+my $ADD_SOURCE_FILE_AS_FIRST_COLUMN = 1; # if 1, prints name of source file as first column; if 0, does not
+
+
 # verifies that input tables exist and are non-empty
 if(!scalar @input_tables)
 {
@@ -84,16 +87,23 @@ foreach my $input_table(@input_tables)
 }
 
 
+# prints column name for file name of source file
+my $printing_first_column_title = 1;
+if($ADD_SOURCE_FILE_AS_FIRST_COLUMN)
+{
+	print "source_file";
+	$printing_first_column_title = 0;
+}
+
 # prints column titles
-my $first_column_title_printed = 1;
 foreach my $column_title(sort {$column_titles{$a} <=> $column_titles{$b}} keys %column_titles) # sorts column titles by the order of their appearance
 {
 	# prints delimiter (tab)
-	if(!$first_column_title_printed)
+	if(!$printing_first_column_title)
 	{
 		print $DELIMITER;
 	}
-	$first_column_title_printed = 0;
+	$printing_first_column_title = 0;
 	
 	# prints column title
 	print $column_title;
@@ -152,16 +162,23 @@ foreach my $input_table(@input_tables)
 			}
 			else # column values (not titles)
 			{
-				# prints concatenated table with blank values for columns that are not present
-				my $first_column_printed = 1;
+				# prints file name of source file
+				my $printing_first_column = 1;
+				if($ADD_SOURCE_FILE_AS_FIRST_COLUMN)
+				{
+					print filename($input_table);
+					$printing_first_column = 0;
+				}
+			
+				# prints row with blank values for columns that are not present
 				foreach my $column_title(sort {$column_titles{$a} <=> $column_titles{$b}} keys %column_titles) # sorts column titles by the order of their appearance
 				{
 					# prints delimiter (tab)
-					if(!$first_column_printed)
+					if(!$printing_first_column)
 					{
 						print $DELIMITER;
 					}
-					$first_column_printed = 0;
+					$printing_first_column = 0;
 	
 					# prints blank column if this column is not present
 					if($column_title_to_index{$column_title} == -1)
@@ -173,7 +190,10 @@ foreach my $input_table(@input_tables)
 					else
 					{
 						my $column = $column_title_to_index{$column_title};
-						print $items_in_line[$column];
+						if(defined $items_in_line[$column])
+						{
+							print $items_in_line[$column];
+						}
 					}
 				}
 				print $NEWLINE;
@@ -183,5 +203,18 @@ foreach my $input_table(@input_tables)
 	close INPUT_TABLE;
 }
 
+
+# example input:  /Users/lakras/my_file.txt
+# example output: my_file.txt
+sub filename
+{
+	my $filepath = $_[0];
+	
+	if($filepath =~ /^.*\/([^\/]+)$/)
+	{
+		return $1;
+	}
+	return "";
+}
 
 # August 22, 2021
