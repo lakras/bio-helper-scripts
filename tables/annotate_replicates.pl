@@ -41,65 +41,17 @@ if(!defined $replicate_ids_column_title or !length $replicate_ids_column_title)
 }
 
 
-# reads in replicates from same sources
-my %replicate_id_to_source_number = (); # key: replicate id -> value: unique source number
-my $source_number = 0;
-open REPLICATE_IDS, "<$replicate_ids_file" || die "Could not open $replicate_ids_file to read; terminating =(\n";
-while(<REPLICATE_IDS>) # for each row in the file
+# reads in table to annotate to retrieve included replicate names
+my $first_line = 1;
+my $replicate_ids_column = -1;
+my %replicate_id_included = (); # key: replicate id -> value: 1 if replicate id found in table to annotate
+open TABLE_TO_ANNOTATE, "<$table_to_annotate" || die "Could not open $table_to_annotate to read; terminating =(\n";
+while(<TABLE_TO_ANNOTATE>) # for each row in the file
 {
 	chomp;
 	if($_ =~ /\S/) # if row not empty
 	{
 		my @items_in_line = split($DELIMITER, $_);
-		
-		# retrieves included replicate ids for replicates from same source
-		my %replicate_ids_from_this_source_hash = (); # key: replicate id -> value: 1
-		foreach my $replicate_id(@items_in_line)
-		{
-			if(defined $replicate_id)
-			{
-				if($replicate_ids_from_this_source_hash{$replicate_id})
-				{
-					print STDERR "Warning: replicate id appears more than once "
-						."in a source's row in table of sources with multiple replicates: "
-						.$replicate_id.".\n";
-				}
-				$replicate_ids_from_this_source_hash{$replicate_id} = 1;
-			}
-		}
-		
-		# saves source number for all replicates from this source
-		$source_number++;
-		foreach my $replicate_id(keys %replicate_ids_from_this_source_hash)
-		{
-			if($replicate_id_to_source_number{$replicate_id})
-			{
-				print STDERR "Warning: replicate id ".$replicate_id." listed as belonging "
-					."to more than one source. Listing both sources.\n";
-				$replicate_id_to_source_number{$replicate_id} .= ", ".$source_number;
-			}
-			else
-			{
-				$replicate_id_to_source_number{$replicate_id} = $source_number;
-			}
-		}
-	}
-}
-close REPLICATE_IDS;
-
-
-# reads in table to annotate and annotates with source number
-# (replicates that are the only replicate for a source get their own source numbers)
-my $first_line = 1;
-my $replicate_ids_column = -1;
-open TABLE_TO_ANNOTATE, "<$table_to_annotate" || die "Could not open $table_to_annotate to read; terminating =(\n";
-while(<TABLE_TO_ANNOTATE>) # for each row in the file
-{
-	chomp;
-	my $line = $_;
-	if($line =~ /\S/) # if row not empty
-	{
-		my @items_in_line = split($DELIMITER, $line);
 		
 		if($first_line) # column titles
 		{
@@ -122,6 +74,83 @@ while(<TABLE_TO_ANNOTATE>) # for each row in the file
 				die;
 			}
 			
+			$first_line = 0; # next line is not column titles
+		}
+		else # column values
+		{
+			# retrieves replicate id
+			my $replicate_id = $items_in_line[$replicate_ids_column];
+			
+			# marks replicate id as found in table to annotate
+			$replicate_id_included{$replicate_id} = 1;
+		}
+	}
+}
+close TABLE_TO_ANNOTATE;
+
+
+# reads in replicates from same sources
+my %replicate_id_to_source_number = (); # key: replicate id -> value: unique source number
+my $source_number = 0;
+open REPLICATE_IDS, "<$replicate_ids_file" || die "Could not open $replicate_ids_file to read; terminating =(\n";
+while(<REPLICATE_IDS>) # for each row in the file
+{
+	chomp;
+	if($_ =~ /\S/) # if row not empty
+	{
+		my @items_in_line = split($DELIMITER, $_);
+		
+		# retrieves included replicate ids for replicates from same source
+		my %replicate_ids_from_this_source_hash = (); # key: replicate id -> value: 1
+		foreach my $replicate_id(@items_in_line)
+		{
+			if(defined $replicate_id and $replicate_id_included{$replicate_id})
+			{
+				if($replicate_ids_from_this_source_hash{$replicate_id})
+				{
+					print STDERR "Warning: replicate id appears more than once "
+						."in a source's row in table of sources with multiple replicates: "
+						.$replicate_id.".\n";
+				}
+				$replicate_ids_from_this_source_hash{$replicate_id} = 1;
+			}
+		}
+		
+		# saves source number for all replicates from this source
+		if(scalar keys %replicate_ids_from_this_source_hash > 1)
+		{
+			$source_number++;
+			foreach my $replicate_id(keys %replicate_ids_from_this_source_hash)
+			{
+				if($replicate_id_to_source_number{$replicate_id})
+				{
+					print STDERR "Warning: replicate id ".$replicate_id." listed as belonging "
+						."to more than one source. Listing both sources.\n";
+					$replicate_id_to_source_number{$replicate_id} .= ", ".$source_number;
+				}
+				else
+				{
+					$replicate_id_to_source_number{$replicate_id} = $source_number;
+				}
+			}
+		}
+	}
+}
+close REPLICATE_IDS;
+
+
+# reads in table to annotate and annotates with source number
+# (replicates that are the only replicate for a source get their own source numbers)
+$first_line = 1;
+open TABLE_TO_ANNOTATE, "<$table_to_annotate" || die "Could not open $table_to_annotate to read; terminating =(\n";
+while(<TABLE_TO_ANNOTATE>) # for each row in the file
+{
+	chomp;
+	my $line = $_;
+	if($line =~ /\S/) # if row not empty
+	{
+		if($first_line) # column titles
+		{
 			# prints header line with source number column title
 			if(defined $source_column_title and length $source_column_title)
 			{
@@ -138,6 +167,7 @@ while(<TABLE_TO_ANNOTATE>) # for each row in the file
 		else # column values
 		{
 			# retrieves replicate id
+			my @items_in_line = split($DELIMITER, $line);
 			my $replicate_id = $items_in_line[$replicate_ids_column];
 			
 			# retrieves or generates source number corresponding to this replicate
