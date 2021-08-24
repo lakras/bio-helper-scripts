@@ -153,7 +153,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 				my $column = 0;
 				foreach my $column_title(@items_in_line)
 				{
-					if($column_title)
+					if(defined $column_title)
 					{
 						if($column_title eq $table_path_to_column_title_to_merge_by{$table_path})
 						{
