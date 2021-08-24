@@ -64,8 +64,8 @@ while(<TABLE>) # for each row in the file
 			# verifies that we have found column to delete
 			if($column_to_delete == -1)
 			{
-				print STDERR "Error: could not find titel of column to delete "
-					.$column_to_delete." in table:\n\t".$table."\nExiting.\n";
+				print STDERR "Error: could not find title of column to delete "
+					.$title_of_column_to_delete." in table:\n\t".$table."\nExiting.\n";
 				die;
 			}
 			
@@ -84,6 +84,7 @@ while(<TABLE>) # for each row in the file
 				{
 					print $DELIMITER;
 				}
+				$printing_first_column = 0;
 				
 				# prints value
 				if(defined $value)
@@ -93,6 +94,7 @@ while(<TABLE>) # for each row in the file
 			}
 			$column++;
 		}
+		print $NEWLINE;
 	}
 }
 close TABLE;
