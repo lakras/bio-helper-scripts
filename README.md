@@ -84,6 +84,10 @@ Includes the following scripts—
 
    _Usage: `perl replace_column_values_with_other_column_where_present.pl [table] [title of column to fill in] [title of column with potential replacement values] > [output table path]`_
 
+- [`replace_column_values_where_other_column_present_and_nonzero.pl`](/tables/replace_column_values_where_other_column_present_and_nonzero.pl): In rows where a column has a present, non-zero value, replaces value in another column with parameter replacement value
+
+   _Usage: `perl replace_column_values_where_other_column_present_and_nonzero.pl [table] [title of column to check] [title of column to fill in] [replacement value] > [output table path]`_
+
 - [`retrieve_subset_of_columns.pl`](/tables/retrieve_subset_of_columns.pl): Subsets table to only columns of interest.
 
    _Usage: `perl retrieve_subset_of_columns.pl [table] [title of first column to include in output] [title of second column to include] [title of third column to include] [etc.] > [output table path]`_
