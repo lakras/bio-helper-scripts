@@ -72,6 +72,10 @@ Includes the following scripts—
 
    _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
 
+- [`fill_in_empty_column_values.pl`](/tables/fill_in_empty_column_values.pl): Fills in empty values in column of interest with specified value.
+
+   _Usage: `perl fill_in_empty_column_values.pl [table] [title of column to fill in (no spaces)] [value to replace empty values with] > [output table path]`_
+
 - [`retrieve_subset_of_columns.pl`](/tables/retrieve_subset_of_columns.pl): Subsets table to only columns of interest.
 
    _Usage: `perl retrieve_subset_of_columns.pl [table] [title of first column to include in output] [title of second column to include] [title of third column to include] [etc.] > [output table path]`_
