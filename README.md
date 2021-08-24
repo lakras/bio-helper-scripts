@@ -84,6 +84,10 @@ Includes the following scripts—
 
    _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
 
+- [`annotate_replicates.pl`](/tables/annotate_replicates.pl): Assigns a source number to all replicates from the same source. Adds source number as a column to table to annotate.
+
+   _Usage: `perl annotate_replicates.pl [tab-separated replicate ids, one line per source] [table to annotate] [title of column containing replicate ids in table to annotate] [optional source column title for output] > [annotated output table path]`_
+
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
