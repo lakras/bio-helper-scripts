@@ -253,6 +253,9 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 	close TABLE;
 }
 
+# replaces spaces with underscores in new column title
+$merged_column_title_of_value_to_merge_on =~ s/ /_/g;
+
 # prints column titles
 print $merged_column_title_of_value_to_merge_on;
 foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_path_to_order_of_appearance{$b}} keys %table_path_to_column_title_to_merge_by) # sorts tables by order of their appearance in description file
