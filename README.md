@@ -68,6 +68,10 @@ Includes the following scripts—
 
    _Usage: `perl delete_column.pl [table] [title of column to delete] > [output table path]`_
 
+- [`replace_column_title.pl`](/tables/replace_column_title.pl): Replaces column title with new column title.
+
+   _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
+
 - [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows with column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
 
    _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
