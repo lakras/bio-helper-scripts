@@ -128,6 +128,10 @@ Includes the following scripts—
 
    _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
 
+- [`add_difference_in_dates_column.pl`](/tables/add_difference_in_dates_column.pl): Adds column listing difference in dates between columns specified in parameter column titles. Dates must be in YYYY-MM-DD format. Column titles must not have spaces. Not guaranteed to work for dates outside of 2021 (sorry!).
+
+   _Usage: `perl add_difference_in_dates_column.pl [table] [title of column with dates] [title of another column with dates] > [output table path]`_
+
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
