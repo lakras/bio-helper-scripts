@@ -77,39 +77,41 @@ while(<TABLE>) # for each row in the file
 			
 			$first_line = 0; # next line is not column titles
 		}
-		
-		# prints all values, filling in empty values in column to fill in
-		my $column = 0;
-		foreach my $value(@items_in_line)
+		else # column values (not column titles)
 		{
-			# prints delimiter
-			if($column > 0)
+			# prints all values, filling in empty values in column to fill in
+			my $column = 0;
+			foreach my $value(@items_in_line)
 			{
-				print $DELIMITER;
-			}
-		
-			# prints value
-			if($column == $column_to_fill_in)
-			{
-				if(defined $value and length $value)
+				# prints delimiter
+				if($column > 0)
 				{
-					print $value;
+					print $DELIMITER;
+				}
+		
+				# prints value
+				if($column == $column_to_fill_in)
+				{
+					if(defined $value and length $value)
+					{
+						print $value;
+					}
+					else
+					{
+						print $replacement_value;
+					}
 				}
 				else
 				{
-					print $replacement_value;
+					if(defined $value and length $value)
+					{
+						print $value;
+					}
 				}
+				$column++;
 			}
-			else
-			{
-				if(defined $value and length $value)
-				{
-					print $value;
-				}
-			}
-			$column++;
+			print $NEWLINE;
 		}
-		print $NEWLINE;
 	}
 }
 close TABLE;
