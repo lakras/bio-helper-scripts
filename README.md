@@ -59,7 +59,11 @@ Includes the following scripts—
 - [`summarize_table_columns.pl`](/tables/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
    _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
- 
+
+- [`replace_all_spaces_in_column_titles.pl`](/tables/replace_all_spaces_in_column_titles.pl): Replaces all spaces in header line with provided replacement value, or underscore by default.
+
+   _Usage: `perl replace_all_spaces_in_column_titles.pl [table] [optional value to replace spaces with in header line] > [output table path]`_
+
 - [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows with column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
 
    _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
@@ -79,6 +83,10 @@ Includes the following scripts—
 - [`merge_tables_by_column_value.pl`](/tables/merge_tables_by_column_value.pl): Merges (takes union of) multiple tables by the values in the specified columns. See script for description of input file.
 
    _Usage: `perl merge_tables_by_column_value.pl [file describing input] > [merged output table path]`_
+
+- [`merge_rows_by_column_value.pl`](/tables/merge_rows_by_column_value.pl): Merges (takes union of) all columns in rows with shared value in column to merge by. If titles of columns not to merge by are provided, leaves one row per input row with all other columns identical. If no columns not to merge by provided, fully merges any rows sharing a value in column to merge by (one row per value).
+
+   _Usage: `perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by] [optional title of column not to merge] [optional title of another column not to merge] [etc.] > [output table path]`_
 
 - [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
