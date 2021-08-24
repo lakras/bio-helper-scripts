@@ -16,7 +16,7 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my @titles_of_columns_to_include = join(" ", @ARGV[1..$#ARGV]);
+my @titles_of_columns_to_include = @ARGV[1..$#ARGV];
 
 
 my $NEWLINE = "\n";
