@@ -74,8 +74,8 @@ while(<REPLICATE_IDS>) # for each row in the file
 		{
 			if($replicate_id_to_source_number{$replicate_id})
 			{
-				print STDERR "Warning: replicate id listed as belonging to more than one "
-					."source. Listing both sources.\n";
+				print STDERR "Warning: replicate id ".$replicate_id." listed as belonging "
+					."to more than one source. Listing both sources.\n";
 				$replicate_id_to_source_number{$replicate_id} .= ", ".$source_number;
 			}
 			else
