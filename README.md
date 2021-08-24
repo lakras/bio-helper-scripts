@@ -72,6 +72,10 @@ Includes the following scripts—
 
    _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
 
+- [`replace_values_in_columns.pl`](/tables/replace_values_in_columns.pl): Replaces query with replacement text in specified columns.
+
+   _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+
 - [`fill_in_empty_column_values.pl`](/tables/fill_in_empty_column_values.pl): Fills in empty values in column of interest with specified value.
 
    _Usage: `perl fill_in_empty_column_values.pl [table] [title of column to fill in (no spaces)] [value to replace empty values with] > [output table path]`_
