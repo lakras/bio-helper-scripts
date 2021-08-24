@@ -229,17 +229,33 @@ sub merge_values_to_print
 	my $to_print_1 = $_[0];
 	my $to_print_2 = $_[1];
 	
+	# if both empty, returns
+	if(!defined $to_print_1 and !defined $to_print_2)
+	{
+		return "";
+	}
+	
+	# defines empty strings
+	if(!defined $to_print_1)
+	{
+		$to_print_1 = "";
+	}
+	if(!defined $to_print_2)
+	{
+		$to_print_2 = "";
+	}
+	
 	# splits values to print into their component parts
 	my @to_print_1_items = split($DELIMITER, $to_print_1, -1);
 	my @to_print_2_items = split($DELIMITER, $to_print_2, -1);
 	
-	if(scalar @to_print_1_items != scalar @to_print_2_items)
-	{
-		print STDERR "Error: output row chunks with duplicate values to merge by contain "
-			."unequal numbers of columns (".(scalar @to_print_1_items)." and "
-			.(scalar @to_print_2_items)."). Cannot merge properly:\n"
-			.$to_print_1."\n".$to_print_2."\n";
-	}
+# 	if(scalar @to_print_1_items != scalar @to_print_2_items)
+# 	{
+# 		print STDERR "Error: output row chunks with duplicate values to merge by contain "
+# 			."unequal numbers of columns (".(scalar @to_print_1_items)." and "
+# 			.(scalar @to_print_2_items)."). Cannot merge properly:\n"
+# 			.$to_print_1."\n".$to_print_2."\n";
+# 	}
 	
 	# merges values
 	my @to_print = ();
@@ -251,7 +267,7 @@ sub merge_values_to_print
     	# adds merged value
     	if(!length($to_print_1_item) and !length($to_print_2_item)) # both items absent
     	{
-    		push(@to_print, $to_print_1_item);
+    		push(@to_print, "");
     	}
     	elsif(length($to_print_1_item) and !length($to_print_2_item)) # item 1 is present, item 2 is empty string
     	{
