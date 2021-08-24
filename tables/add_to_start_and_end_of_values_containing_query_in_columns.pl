@@ -1,14 +1,17 @@
 #!/usr/bin/env perl
 
-# Replaces query with replacement text in specified columns.
+# Pads values containing query in specified columns with parameter start and end text.
+# Start and end text, column titles, and query may not contain whitespace.
 
 # Usage:
-# perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] 
+# perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] [query text]
+# [text to add to start of each column value] [text to add to end of each column value]
 # [title of column to search] [title of another column to search]
 # [title of another column to search] [etc.]
 
 # Prints to console. To print to file, use
-# perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] 
+# perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] [query text]
+# [text to add to start of each column value] [text to add to end of each column value]
 # [title of column to search] [title of another column to search]
 # [title of another column to search] [etc.] > [output table path]
 
@@ -19,8 +22,9 @@ use warnings;
 
 my $table = $ARGV[0];
 my $query = $ARGV[1];
-my $replacement_text = $ARGV[2];
-my @titles_of_columns_to_search = @ARGV[3..$#ARGV];
+my $start_text = $ARGV[2];
+my $end_text = $ARGV[3];
+my @titles_of_columns_to_add_to = @ARGV[4..$#ARGV];
 
 
 my $NEWLINE = "\n";
@@ -36,7 +40,7 @@ if(!$table or !-e $table or -z $table)
 }
 
 # verifies that we have been provided column titles
-if(!scalar @titles_of_columns_to_search)
+if(!scalar @titles_of_columns_to_add_to)
 {
 	print STDERR "Error: no column titles provided. Exiting.\n";
 	die;
@@ -44,18 +48,18 @@ if(!scalar @titles_of_columns_to_search)
 
 
 # converts array of column titles to a hash
-my %title_is_of_column_to_search = (); # key: column title -> value: 1 if column has dates
+my %title_is_of_column_to_add_to = (); # key: column title -> value: 1 if column has dates
 my %column_title_to_column = (); # key: included column title -> value: column
-foreach my $column_title(@titles_of_columns_to_search)
+foreach my $column_title(@titles_of_columns_to_add_to)
 {
-	$title_is_of_column_to_search{$column_title} = 1;
+	$title_is_of_column_to_add_to{$column_title} = 1;
 	$column_title_to_column{$column_title} = -1;
 }
 
 
 # reads in and processes input table
 my $first_line = 1;
-my %column_is_column_to_search = (); # key: column (0-indexed) -> value: 1 if column has dates
+my %column_is_column_to_add_to = (); # key: column (0-indexed) -> value: 1 if column has dates
 open TABLE, "<$table" || die "Could not open $table to read; terminating =(\n";
 while(<TABLE>) # for each row in the file
 {
@@ -66,19 +70,19 @@ while(<TABLE>) # for each row in the file
 		my @items_in_line = split($DELIMITER, $line, -1);
 		if($first_line) # column titles
 		{
-			# identifies columns to include
+			# identifies columns to add to
 			my $column = 0;
 			foreach my $column_title(@items_in_line)
 			{
-				if(defined $column_title and $title_is_of_column_to_search{$column_title})
+				if(defined $column_title and $title_is_of_column_to_add_to{$column_title})
 				{
-					$column_is_column_to_search{$column} = 1;
+					$column_is_column_to_add_to{$column} = 1;
 					$column_title_to_column{$column_title} = $column;
 				}
 				$column++;
 			}
 			
-			# verifies that we have found all columns to include
+			# verifies that we have found all columns to add to
 			foreach my $column_title(keys %column_title_to_column)
 			{
 				if($column_title_to_column{$column_title} == -1)
@@ -96,7 +100,7 @@ while(<TABLE>) # for each row in the file
 		}
 		else # column values (not column titles)
 		{
-			# prints all values, replacing values in columns to search
+			# prints all values, padding non-empty values in columns to add to
 			my $column = 0;
 			foreach my $value(@items_in_line)
 			{
@@ -106,10 +110,12 @@ while(<TABLE>) # for each row in the file
 					print $DELIMITER;
 				}
 				
-				# replaces values if this is a column to search
-				if($column_is_column_to_search{$column})
+				# pads values if this is a column to search and value is non-empty
+				if($column_is_column_to_add_to{$column}
+					and defined $value and length $value and $value =~ /\S/
+					and $value =~ /$query/)
 				{
-					$value =~ s/$query/$replacement_text/g;
+					$value = $start_text.$value.$end_text;
 				}
 		
 				# prints value

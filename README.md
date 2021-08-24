@@ -76,6 +76,10 @@ Includes the following scripts—
 
    _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
 
+- [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text. Start and end text may not contain whitespace.
+
+   _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] [text to add to start of each column value] [text to add to end of each column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+
 - [`fill_in_empty_column_values.pl`](/tables/fill_in_empty_column_values.pl): Fills in empty values in column of interest with specified value.
 
    _Usage: `perl fill_in_empty_column_values.pl [table] [title of column to fill in (no spaces)] [value to replace empty values with] > [output table path]`_
