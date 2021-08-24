@@ -115,13 +115,13 @@ while(<TABLE>) # for each row in the file
 				# prints value
 				if($column == $column_to_fill_in
 					and defined $value_to_check
-					and length $value_to_check or $value_to_check > 0)
+					and (length $value_to_check or $value_to_check))
 				{
 					print $replacement_value;
 				}
 				else
 				{
-					if(defined $value and length $value)
+					if(defined $value and (length $value or $value))
 					{
 						print $value;
 					}

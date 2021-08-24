@@ -124,6 +124,10 @@ Includes the following scripts—
 
    _Usage: `perl annotate_replicates.pl [tab-separated replicate ids, one line per source] [table to annotate] [title of column containing replicate ids in table to annotate] [optional source column title for output] > [annotated output table path]`_
 
+- [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Column titles must not have spaces.
+
+   _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
