@@ -140,6 +140,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 	my $first_line = 1;
 	my $column_to_merge_by = -1;
 	my %column_included = (); # key: column number (0-indexed) -> value: column title count after this column was encountered, or 0 or absent if column not included
+	my $column_title_count = 0;
 	open TABLE, "<$table_path" || die "Could not open $table_path to read; terminating =(\n";
 	while(<TABLE>) # for each row in the file
 	{
@@ -175,7 +176,8 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 						}
 						if($table_path_to_include_all_columns{$table_path})
 						{
-							$column_included{$column} = 1;
+							$column_title_count++;
+							$column_included{$column} = $column_title_count;
 						}
 						elsif($table_path_to_column_title_to_included{$table_path}{$column_title})
 						{
@@ -371,5 +373,6 @@ sub max
 	print STDERR "Error: unexpected possibility reached. Please check and fix code.\n";
 	return $value_2;
 }
+
 
 # August 19, 2021
