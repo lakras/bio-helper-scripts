@@ -222,6 +222,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 			# generates empty line to print if a value to merge on does not appear in this table
 			if($first_line)
 			{
+				$table_path_to_empty_line_to_print{$table_path} = "";
 				foreach my $included_column(keys %column_included)
 				{
 					$table_path_to_empty_line_to_print{$table_path} .= $DELIMITER;
