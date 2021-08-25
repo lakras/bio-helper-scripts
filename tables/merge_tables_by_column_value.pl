@@ -55,6 +55,7 @@ if(-z $input_descriptions)
 
 
 # reads in input descriptions
+my %table_path_key_to_table_path = (); # key: saved table path (with extension added to duplicates) -> value: true table path that can be opened
 my %table_path_to_column_title_to_merge_by = (); # key: table path -> value: title of column to merge by
 my %table_path_to_order_of_appearance = (); # key: table path -> value: file count after this table was encountered
 my %table_path_to_include_all_columns = (); # key: table path -> value: 1 if we should include all columns from this table, 0 if not
@@ -96,13 +97,16 @@ while(<INPUT_DESCRIPTIONS>) # for each row in the file
 			die;
 		}
 		
-		# verifies that we haven't already seen this table path
-		if($table_path_to_column_title_to_merge_by{$table_path})
+		# verifies that we haven't already seen this table path; adds extension to it until we haven't to allow for duplicate table paths
+		my $table_path_true_path = $table_path;
+		while($table_path_to_column_title_to_merge_by{$table_path})
 		{
-			print STDERR "Error: table path listed more than once in input:\n\t"
-				.$table_path."\nExiting.\n";
-			die;
+			$table_path .= "__DUPLICATE__";
+# 			print STDERR "Error: table path listed more than once in input:\n\t"
+# 				.$table_path."\nExiting.\n";
+# 			die;
 		}
+		$table_path_key_to_table_path{$table_path} = $table_path_true_path;
 		
 		# saves values
 		$table_path_to_column_title_to_merge_by{$table_path} = $column_title_to_merge_by;
@@ -141,7 +145,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 	my $column_to_merge_by = -1;
 	my %column_included = (); # key: column number (0-indexed) -> value: column title count after this column was encountered, or 0 or absent if column not included
 	my $column_title_count = 0;
-	open TABLE, "<$table_path" || die "Could not open $table_path to read; terminating =(\n";
+	open TABLE, "<".$table_path_key_to_table_path{$table_path} || die "Could not open ".$table_path_key_to_table_path{$table_path}." to read; terminating =(\n";
 	while(<TABLE>) # for each row in the file
 	{
 		chomp;
@@ -205,7 +209,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 				$to_print .= $DELIMITER;
 				if($APPEND_FILENAME_TO_COLUMN_TITLES and $first_line)
 				{
-					$to_print .= filename($table_path)." ";
+					$to_print .= filename($table_path_key_to_table_path{$table_path})." ";
 				}
 				if(defined $items_in_line[$included_column])
 				{
@@ -237,7 +241,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 				{
 					print STDERR "Warning: value to merge by ".$value_to_merge_by
 						." appears more than once in table with different values; merging values:\n\t"
-						.$table_path."\n";
+						.$table_path_key_to_table_path{$table_path}."\n";
 					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
 						= merge_values_to_print($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}, $to_print);
 				}
