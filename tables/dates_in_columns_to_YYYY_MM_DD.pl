@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
-# Converts dates in specified columns to YYYY-MM-DD format. Column titles must not have
-# spaces.
+# Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be
+# separated by a ", ". Column titles must not have spaces.
 
 # Usage:
 # perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates]
@@ -22,6 +22,7 @@ my @titles_of_columns_with_dates = @ARGV[1..$#ARGV];
 
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
+my $DATE_LIST_DELIMITER = ", ";
 
 
 # verifies that input file exists and is not empty
@@ -106,7 +107,12 @@ while(<TABLE>) # for each row in the file
 				# if this is a column with dates, converts to YYYY-MM-DD format
 				if($column_has_dates{$column})
 				{
-					$value = date_to_YYYY_MM_DD($value);
+					my @YYYY_MM_DD_dates = ();
+					foreach my $sub_value(split($DATE_LIST_DELIMITER, $value))
+					{
+						push(@YYYY_MM_DD_dates, date_to_YYYY_MM_DD($sub_value))
+					}
+					$value = join($DATE_LIST_DELIMITER, @YYYY_MM_DD_dates);
 				}
 		
 				# prints value
