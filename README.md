@@ -80,6 +80,10 @@ Includes the following scripts—
 
    _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
 
+- [`delete_values_in_columns.pl`](/tables/delete_values_in_columns.pl): Deletes query in specified columns.
+
+   _Usage: `perl delete_values_in_columns.pl [table] [query text to delete] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+
 - [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text. Start and end text may not contain whitespace.
 
    _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] [text to add to start of each column value] [text to add to end of each column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
