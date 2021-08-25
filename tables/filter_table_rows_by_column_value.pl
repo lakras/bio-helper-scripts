@@ -17,8 +17,9 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my $title_of_column_to_filter_by = $ARGV[1]; # no spaces
-my $column_value_to_select = join(" ", @ARGV[2..$#ARGV]);
+my $option = $ARGV[1]; # 0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to
+my $title_of_column_to_filter_by = $ARGV[2]; # no spaces
+my $column_value_to_select = join(" ", @ARGV[3..$#ARGV]);
 
 
 my $NEWLINE = "\n";
@@ -84,7 +85,11 @@ while(<TABLE>) # for each row in the file
 			# prints this line if the value of interest is in the column to filter by
 			if(!$column_value and !$column_value_to_select # both 0s
 				or !length($column_value) and !length($column_value_to_select) # both empty strings
-				or $column_value and $column_value_to_select and $column_value eq $column_value_to_select)
+				or $column_value and $column_value_to_select
+					and ($option == 3 and $column_value eq $column_value_to_select    # 3 to match cells equal to query
+					or $option == 0 and $column_value =~ /$column_value_to_select/    # 0 to match cells containing query
+					or $option == 1 and $column_value =~ /^$column_value_to_select/   # 1 to match cells beginning with query
+					or $option == 2 and $column_value =~ /$column_value_to_select$/)) # 2 to match cells ending with query
 			{
 				print $line.$NEWLINE;
 			}
@@ -94,3 +99,4 @@ while(<TABLE>) # for each row in the file
 close TABLE;
 
 # August 12, 2021
+# August 25, 2021
