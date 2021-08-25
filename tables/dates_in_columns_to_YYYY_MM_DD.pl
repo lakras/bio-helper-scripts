@@ -183,8 +183,9 @@ sub date_to_YYYY_MM_DD
 			."YYYY-MM-DD format. Please fix code. Exiting.\n";
 		die;
 	}
-	print STDERR "Error: date not in recognized format: ".$date
-		.". Please fix input or code. Exiting.\n";
+	print STDERR "Error: date ".$date." not in recognized format while converting format "
+		."in column(s) ".join(", ", @titles_of_columns_with_dates)." in table:\n\t".$table
+		."\nPlease fix input or code. Exiting.\n";
 	die;
 }
 
