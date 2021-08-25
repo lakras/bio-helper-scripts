@@ -104,9 +104,9 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_subset_of_columns.pl [table] [title of first column to include in output] [title of second column to include] [title of third column to include] [etc.] > [output table path]`_
 
-- [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows with column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
+- [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows matching (containing, beginning with, ending with, or equal to) column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
 
-   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [title of column to filter by] [value of column to select] > [output table path]`_
+   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] [value of column to select] > [output table path]`_
 
 - [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive. Text to filter out must not have spaces.
 
