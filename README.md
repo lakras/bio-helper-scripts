@@ -68,6 +68,10 @@ Includes the following scripts—
 
    _Usage: `perl delete_column.pl [table] [title of column to delete] > [output table path]`_
 
+- [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
+
+   _Usage: `perl merge_columns.pl [table to merge] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
+
 - [`replace_column_title.pl`](/tables/replace_column_title.pl): Replaces column title with new column title.
 
    _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
