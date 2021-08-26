@@ -1,6 +1,20 @@
 # bio-helper-scripts
 Helper scripts for processing genomic sequence data.
 
+## Contents
+- [SARS-CoV-2 or other genome lineages](#sars-cov-2-or-other-genome-lineages-lineages)
+- [FASTA file processing](#fasta-file-processing-fasta)
+- [FASTA alignment file processing](#fasta-alignment-file-processing-aligned-fasta)
+- [Tables](#tables-tables)
+   - [Column title manipulation](#column-title-manipulation)
+   - [Column manipulation](#column-manipulation)
+   - [Column manipulation with dates](#column-manipulation-with-dates)
+   - [Row manipulation](#row-manipulation)
+   - [Table manipulation](#table-manipulation)
+   - [Replicates](#replicates)
+   - [Other](#other)
+- [Miscellaneous](#miscellaneous-misc)
+
 Includes the following scripts—
 
 ## SARS-CoV-2 or other genome lineages ([`lineages`](/lineages))
