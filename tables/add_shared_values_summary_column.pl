@@ -39,7 +39,7 @@ if(!$table or !-e $table or -z $table)
 }
 
 # verifies that titles of column to merge on are provided and make sense
-if(!defined or !length $title_of_column_with_shared_values)
+if(!defined $title_of_column_with_shared_values or !length $title_of_column_with_shared_values)
 {
 	print STDERR "Error: title of column with shared values not provided. Exiting.\n";
 	die;
@@ -90,7 +90,7 @@ while(<TABLE>) # for each row in the file
 							."than once in table ".$table."\n";
 					}
 				}
-				elsif($column_title eq $title_of_column_with_merge_details)
+				elsif($column_title eq $title_of_column_with_shared_values)
 				{
 					$column_with_shared_values = $column;
 				}
@@ -110,7 +110,7 @@ while(<TABLE>) # for each row in the file
 				elsif($column_with_shared_values == -1)
 				{
 					print STDERR "Error: expected column title "
-						.$title_of_column_with_merge_details." not found in table "
+						.$title_of_column_with_shared_values." not found in table "
 						.$table."\nExiting.\n";
 					die;
 				}

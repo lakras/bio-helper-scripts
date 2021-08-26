@@ -117,16 +117,14 @@ while(<TABLE>) # for each row in the file
 				my $column = $column_title_to_column{$column_title};
 				my $value = $items_in_line[$column];
 				
-				if(defined $value and length $value)
+				if(defined $value and length $value
+					and ($PRINT_DUPLICATE_VALUES or !$column_value_included{$value}))
 				{
 					if($concatenated_values)
 					{
 						$concatenated_values .= " ";
 					}
-					if($PRINT_DUPLICATE_VALUES or !$column_value_included{$value})
-					{
-						$concatenated_values .= $value;
-					}
+					$concatenated_values .= $value;
 					$column_value_included{$value} = 1;
 				}
 			}
