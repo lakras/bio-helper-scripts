@@ -110,7 +110,12 @@ while(<TABLE>) # for each row in the file
 					my @YYYY_MM_DD_dates = ();
 					foreach my $sub_value(split($DATE_LIST_DELIMITER, $value))
 					{
-						push(@YYYY_MM_DD_dates, date_to_YYYY_MM_DD($sub_value))
+						my $processed_date = date_to_YYYY_MM_DD($sub_value);
+						if(defined $processed_date and length $processed_date
+							and $processed_date =~ /\S/)
+						{
+							push(@YYYY_MM_DD_dates, $processed_date);
+						}
 					}
 					$value = join($DATE_LIST_DELIMITER, @YYYY_MM_DD_dates);
 				}
@@ -141,6 +146,13 @@ sub date_to_YYYY_MM_DD
 		or $date !~ /\S/)
 	{
 		return "";
+	}
+	
+	# removes timestamp from date
+	# 7/17/21 12:21
+	if($date =~ /^(.*)\s+\d+:\d+$/)
+	{
+		$date = $1;
 	}
 	
 	# if date is already in output format, returns it as is

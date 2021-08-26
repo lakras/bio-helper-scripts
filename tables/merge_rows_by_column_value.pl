@@ -59,7 +59,7 @@ while(<TABLE>) # for each row in the file
 	my $line = $_;
 	if($line =~ /\S/) # if row not empty
 	{
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $line, -1);
 		if($first_line) # column titles
 		{
 			# identifies column to merge by and columns not to merge
@@ -157,9 +157,9 @@ for my $value_to_merge_by( # sort by order of appearance
 		my $column = 0;
 		foreach my $value(@items_in_line)
 		{
-			if(defined $value and length $value and !$dont_merge_column{$column})
+			if(value_present($value) and !$dont_merge_column{$column})
 			{
-				if(!defined $merged_values[$column] or $merged_values[$column] ne $value)
+				if(!value_present($merged_values[$column]) or $merged_values[$column] ne $value)
 				{
 					if(length $merged_values[$column])
 					{
@@ -217,6 +217,29 @@ for my $value_to_merge_by( # sort by order of appearance
 			print $NEWLINE;
 		}
 	}
+}
+
+
+sub value_present
+{
+	my $value = $_[0];
+	
+	# checks in various ways if value is empty
+	if(!defined $value)
+	{
+		return 0;
+	}
+	if(!length $value)
+	{
+		return 0;
+	}
+	if($value !~ /\S/)
+	{
+		return 0;
+	}
+	
+	# value not empty!
+	return 1;
 }
 
 

@@ -58,7 +58,7 @@ while(<TABLE>) # for each row in the file
 	if($_ =~ /\S/) # if row not empty
 	{
 		my $line = $_;
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $line, -1);
 	
 		if($first_line) # column titles
 		{

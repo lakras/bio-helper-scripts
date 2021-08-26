@@ -77,7 +77,7 @@ while(<TABLE_1>) # for each row in the file
 		{
 			$line = $1;
 		}
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $line, -1);
 		
 		if($first_line) # column titles
 		{
@@ -127,7 +127,7 @@ while(<TABLE_2>) # for each row in the file
 		{
 			$line = $1;
 		}
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $line, -1);
 		
 		if($first_line) # column titles
 		{

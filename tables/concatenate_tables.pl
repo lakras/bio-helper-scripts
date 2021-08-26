@@ -130,7 +130,7 @@ foreach my $input_table(@input_tables)
 		chomp;
 		if($_ =~ /\S/) # if row not empty
 		{
-			my @items_in_line = split($DELIMITER, $_);
+			my @items_in_line = split($DELIMITER, $_, -1);
 			if($first_line) # column titles
 			{
 				# identifies columns with column titles we are printing

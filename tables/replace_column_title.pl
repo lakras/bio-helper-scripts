@@ -46,7 +46,7 @@ while(<TABLE>) # for each row in the file
 		{
 			my $column_title_to_replace_found = 0;
 			my $header_line_to_print = "";
-			my @items_in_line = split($DELIMITER, $line);
+			my @items_in_line = split($DELIMITER, $line, -1);
 			foreach my $column_title(@items_in_line)
 			{
 				# adds delimiter (tab)

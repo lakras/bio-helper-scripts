@@ -40,7 +40,7 @@ while(<TABLE>) # for each row in the file
 	my $line = $_;
 	if($line =~ /\S/) # if row not empty
 	{
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $line, -1);
 		if($first_line) # column titles
 		{
 			# identifies column to delete

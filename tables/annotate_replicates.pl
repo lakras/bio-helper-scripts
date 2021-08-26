@@ -51,7 +51,7 @@ while(<TABLE_TO_ANNOTATE>) # for each row in the file
 	chomp;
 	if($_ =~ /\S/) # if row not empty
 	{
-		my @items_in_line = split($DELIMITER, $_);
+		my @items_in_line = split($DELIMITER, $_, -1);
 		
 		if($first_line) # column titles
 		{
@@ -98,7 +98,7 @@ while(<REPLICATE_IDS>) # for each row in the file
 	chomp;
 	if($_ =~ /\S/) # if row not empty
 	{
-		my @items_in_line = split($DELIMITER, $_);
+		my @items_in_line = split($DELIMITER, $_, -1);
 		
 		# retrieves included replicate ids for replicates from same source
 		my %replicate_ids_from_this_source_hash = (); # key: replicate id -> value: 1
@@ -167,7 +167,7 @@ while(<TABLE_TO_ANNOTATE>) # for each row in the file
 		else # column values
 		{
 			# retrieves replicate id
-			my @items_in_line = split($DELIMITER, $line);
+			my @items_in_line = split($DELIMITER, $line, -1);
 			my $replicate_id = $items_in_line[$replicate_ids_column];
 			
 			# retrieves or generates source number corresponding to this replicate

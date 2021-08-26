@@ -68,7 +68,7 @@ while(<INPUT_DESCRIPTIONS>) # for each row in the file
 	if($_ =~ /\S/ # if line not empty
 		and $_ !~ /^\s*#/) # and line not a comment
 	{
-		my @items_in_line = split($DELIMITER, $_);
+		my @items_in_line = split($DELIMITER, $_, -1);
 		
 		# retrieves values
 		my $table_path = $items_in_line[$INPUT_DESCRIPTIONS_TABLE_PATH_COLUMN];
@@ -151,7 +151,7 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 		chomp;
 		if($_ =~ /\S/) # if row not empty
 		{
-			my @items_in_line = split($DELIMITER, $_);
+			my @items_in_line = split($DELIMITER, $_, -1);
 			if($first_line) # column titles
 			{
 				# identifies column to merge by and columns to include in output
@@ -239,9 +239,13 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 				if(defined $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
 					and $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
 				{
-					print STDERR "Warning: value to merge by ".$value_to_merge_by
-						." appears more than once in table with different values; merging values:\n\t"
-						.$table_path_key_to_table_path{$table_path}."\n";
+					if(difference_in_item_by_item_present_only_comparison($to_print,
+						$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}))
+					{
+						print STDERR "Warning: value to merge by ".$value_to_merge_by
+							." appears more than once in table with different values; merging values:\n\t"
+							.$table_path_key_to_table_path{$table_path}."\n";
+					}
 					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
 						= merge_values_to_print($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}, $to_print);
 				}
@@ -304,6 +308,42 @@ sub filename
 	return "";
 }
 
+# compares the two rows
+# returns 1 if there is a difference between two non-empty values
+sub difference_in_item_by_item_present_only_comparison
+{
+	my $to_print_1 = $_[0];
+	my $to_print_2 = $_[1];
+	
+	# splits values to print into their component parts
+	my @to_print_1_items = split($DELIMITER, $to_print_1, -1);
+	my @to_print_2_items = split($DELIMITER, $to_print_2, -1);
+	
+	if(scalar @to_print_1_items != scalar @to_print_2_items)
+	{
+		print STDERR "Error: output row chunks with duplicate values to merge by contain "
+			."unequal numbers of columns (".(scalar @to_print_1_items)." and "
+			.(scalar @to_print_2_items)."). Cannot merge properly:\n"
+			.$to_print_1."\n".$to_print_2."\n";
+	}
+	
+	# merges values
+	my @to_print = ();
+	for my $index(0..max($#to_print_1_items, $#to_print_2_items))
+	{
+    	my $to_print_1_item = $to_print_1_items[$index];
+    	my $to_print_2_item = $to_print_2_items[$index];
+    	
+    	# compares values
+    	if(value_present($to_print_1_item) and value_present($to_print_2_item)
+    		and $to_print_1_item ne $to_print_2_item) # both items present and different
+    	{
+    		return 1;
+    	}
+	}
+	return 0;
+}
+
 # merges two rows into one row
 # for each column, adds both values if they are different, present value if one is absent,
 # or nothing if neither has a value
@@ -332,23 +372,25 @@ sub merge_values_to_print
     	my $to_print_2_item = $to_print_2_items[$index];
     	
     	# adds merged value
-    	if(!length($to_print_1_item) and !length($to_print_2_item)) # both items absent
+    	if(!value_present($to_print_1_item) and !value_present($to_print_2_item)) # both items absent
     	{
     		push(@to_print, $to_print_1_item);
     	}
-    	elsif(length($to_print_1_item) and !length($to_print_2_item)) # item 1 is present, item 2 is empty string
+    	elsif(value_present($to_print_1_item) and !value_present($to_print_2_item)) # item 1 is present, item 2 is empty string
     	{
     		push(@to_print, $to_print_1_item);
     	}
-    	elsif(length($to_print_2_item) and !length($to_print_1_item)) # item 2 is present, item 1 is empty string
+    	elsif(value_present($to_print_2_item) and !value_present($to_print_1_item)) # item 2 is present, item 1 is empty string
     	{
     		push(@to_print, $to_print_2_item);
     	}
-    	elsif(length($to_print_1_item) and length($to_print_2_item) and $to_print_1_item eq $to_print_2_item) # both items present and same value in both items
+    	elsif(value_present($to_print_1_item) and value_present($to_print_2_item)
+    		and $to_print_1_item eq $to_print_2_item) # both items present and same value in both items
     	{
     		push(@to_print, $to_print_1_item);
     	}
-    	elsif(length($to_print_1_item) and length($to_print_2_item) and $to_print_1_item ne $to_print_2_item) # both items present and different
+    	elsif(value_present($to_print_1_item) and value_present($to_print_2_item)
+    		and $to_print_1_item ne $to_print_2_item) # both items present and different
     	{
     		push(@to_print, $to_print_1_item.", ".$to_print_2_item);
     	}
@@ -359,6 +401,28 @@ sub merge_values_to_print
     	}
 	}
 	return join($DELIMITER, @to_print);
+}
+
+sub value_present
+{
+	my $value = $_[0];
+	
+	# checks in various ways if value is empty
+	if(!defined $value)
+	{
+		return 0;
+	}
+	if(!length $value)
+	{
+		return 0;
+	}
+	if($value !~ /\S/)
+	{
+		return 0;
+	}
+	
+	# value not empty!
+	return 1;
 }
 
 # returns the maximum of two values

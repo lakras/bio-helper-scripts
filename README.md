@@ -60,9 +60,9 @@ Includes the following scripts—
 
    _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
 
-- [`replace_all_spaces_in_column_titles.pl`](/tables/replace_all_spaces_in_column_titles.pl): Replaces all spaces in header line with provided replacement value, or underscore by default.
+- [`replace_all_spaces_parens_in_column_titles.pl`](/tables/replace_all_spaces_parens_in_column_titles.pl): Replaces all spaces and parentheses in header line with provided replacement value, or underscore by default.
 
-   _Usage: `perl replace_all_spaces_in_column_titles.pl [table] [optional value to replace spaces with in header line] > [output table path]`_
+   _Usage: `perl replace_all_spaces_parens_in_column_titles.pl [table] [optional value to replace spaces with in header line] > [output table path]`_
 
 - [`delete_column.pl`](/tables/delete_column.pl): Deletes column with input column title.
 
@@ -87,6 +87,10 @@ Includes the following scripts—
 - [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text. Start and end text may not contain whitespace.
 
    _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] [text to add to start of each column value] [text to add to end of each column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+
+- [`change_capitalization_in_columns.pl`](/tables/change_capitalization_in_columns.pl): Changes capitalization of values in specified columns: all capitalized, all lowercase, or first letter capitalized.
+
+   _Usage: `perl change_capitalization_in_columns.pl [table] [uc to make all values uppercase, lc to make all values lowercase, first to capitalize first letter] [title of column to capitalize] [title of another column to capitalize] [title of another column to capitalize] [etc.] > [output table path]`_
 
 - [`fill_in_empty_column_values.pl`](/tables/fill_in_empty_column_values.pl): Fills in empty values in column of interest with specified value.
 

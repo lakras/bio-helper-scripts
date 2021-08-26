@@ -13,6 +13,7 @@
 
 use strict;
 use warnings;
+use Scalar::Util qw(looks_like_number);
 
 
 my $table = $ARGV[0];
@@ -22,6 +23,9 @@ my @titles_of_columns_to_merge = @ARGV[1..$#ARGV];
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 my $NO_DATA = "";
+
+
+my $NUMERIC_VALUE_ALLOWED_DIFFERENCE = 1;
 
 
 # verifies that input file exists and is not empty
@@ -118,41 +122,72 @@ while(<TABLE>) # for each row in the file
 			foreach my $column_title(sort keys %column_title_to_column)
 			{
 				my $value_to_merge = $items_in_line[$column_title_to_column{$column_title}];
-				if(defined $value_to_merge and length $value_to_merge)
+				if(value_present($value_to_merge))
 				{
 					if($value_to_merge_to_source{$value_to_merge})
 					{
-						$value_to_merge_to_source{$value_to_merge} = ", ".$column_title
+						$value_to_merge_to_source{$value_to_merge} .= ", ";
 					}
-					else
+					$value_to_merge_to_source{$value_to_merge} .= $column_title;
+				}
+			}
+			
+			# if values are numerical and all within a buffer of each other
+			my $all_numeric = 1;
+			foreach my $value(keys %value_to_merge_to_source)
+			{
+				if(!looks_like_number($value))
+				{
+					$all_numeric = 0;
+				}
+			}
+			
+			my $values_all_close_enough = 1;
+			if($all_numeric)
+			{
+				foreach my $value_1(keys %value_to_merge_to_source)
+				{
+					foreach my $value_2(keys %value_to_merge_to_source)
 					{
-						$value_to_merge_to_source{$value_to_merge} = $column_title;
+						if($value_2 - $value_1 > $NUMERIC_VALUE_ALLOWED_DIFFERENCE
+							or $value_2 - $value_1 < -1 * $NUMERIC_VALUE_ALLOWED_DIFFERENCE)
+						{
+							$values_all_close_enough = 0;
+						}
 					}
 				}
 			}
 			
 			# prints a warning if values disagree
-			if(scalar keys %value_to_merge_to_source > 1)
+			if(scalar keys %value_to_merge_to_source > 1
+				or $all_numeric and !$values_all_close_enough)
 			{
 				print STDERR "Warning: merge conflict:";
 				foreach my $value(keys %value_to_merge_to_source)
 				{
-					print "\n\t".$value."\t".$value_to_merge_to_source{$value}
+					print STDERR "\n\t".$value."\t".$value_to_merge_to_source{$value}
 				}
-				print "\n";
+				print STDERR "\n";
 			}
 			
 			# determines merged value
 			my $merged_value = "";
-			foreach my $value(keys %value_to_merge_to_source)
+			if($all_numeric and $values_all_close_enough
+				and scalar keys %value_to_merge_to_source > 1)
 			{
-				if(defined $merged_value and length $merged_value)
+				# if all values numerical and close enough, just takes the first one
+				$merged_value = (keys %value_to_merge_to_source)[0];
+			}
+			else
+			{
+				# lists all values
+				foreach my $value(sort keys %value_to_merge_to_source)
 				{
-					$merged_value = ", ".$value;
-				}
-				else
-				{
-					$merged_value = $value;
+					if($merged_value)
+					{
+						$merged_value .= ", ";
+					}
+					$merged_value .= $value;
 				}
 			}
 			
@@ -173,6 +208,29 @@ while(<TABLE>) # for each row in the file
 	}
 }
 close TABLE;
+
+
+sub value_present
+{
+	my $value = $_[0];
+	
+	# checks in various ways if value is empty
+	if(!defined $value)
+	{
+		return 0;
+	}
+	if(!length $value)
+	{
+		return 0;
+	}
+	if($value !~ /\S/)
+	{
+		return 0;
+	}
+	
+	# value not empty!
+	return 1;
+}
 
 
 # August 24, 2021

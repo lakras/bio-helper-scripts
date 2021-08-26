@@ -64,7 +64,7 @@ while(<TABLE>) # for each row in the file
 	my $line = $_;
 	if($line =~ /\S/) # if row not empty
 	{
-		my @items_in_line = split($DELIMITER, $line);
+		my @items_in_line = split($DELIMITER, $line, -1);
 		if($first_line) # column titles
 		{
 			# identifies columns to include
@@ -230,18 +230,18 @@ sub date_difference
 	}
 	else
 	{
-		print STDERR "Error: could not parse date: ".$date_1.". Exiting.\n";
-		die;
+		print STDERR "Error: could not parse date: ".$date_1.".\n";
+		return "";
 	}
 	if(!$NON_LEAP_DAYS_IN_MONTHS{$month_1})
 	{
-		print STDERR "Error: month not recognized: ".$month_1." Exiting.\n";
-		die;
+		print STDERR "Error: month not recognized: ".$month_1.".\n";
+		return "";
 	}
 	if($year_1 != 2020 and $year_1 != 2021)
 	{
-		print STDERR "Error: year not 2020 or 2021: ".$year_1.". Exiting.\n";
-		die;
+		print STDERR "Error: year not 2020 or 2021: ".$year_1.".\n";
+		return "";
 	}
 	
 	# parses date 2
@@ -257,18 +257,18 @@ sub date_difference
 	}
 	else
 	{
-		print STDERR "Error: could not parse date: ".$date_2.". Exiting.\n";
-		die;
+		print STDERR "Error: could not parse date: ".$date_2.".\n";
+		return "";
 	}
 	if(!$NON_LEAP_DAYS_IN_MONTHS{$month_2})
 	{
-		print STDERR "Error: month not recognized: ".$month_2." Exiting.\n";
-		die;
+		print STDERR "Error: month not recognized: ".$month_2.".\n";
+		return "";
 	}
 	if($year_2 != 2020 and $year_2 != 2021)
 	{
-		print STDERR "Error: year not 2020 or 2021: ".$year_2.". Exiting.\n";
-		die;
+		print STDERR "Error: year not 2020 or 2021: ".$year_2.".\n";
+		return "";
 	}
 	
 	# converts months to days
