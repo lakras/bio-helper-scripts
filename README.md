@@ -95,6 +95,10 @@ Includes the following scripts—
 
    _Usage: `perl merge_columns.pl [table to merge] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
 
+- [`merge_columns_with_conflict_detail_column.pl`](/tables/merge_columns_with_conflict_detail_column.pl): Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
+
+   _Usage: `perl merge_columns_with_conflict_detail_column.pl [table to merge] [title of column to print with merge conflict] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
+
 - [`replace_values_in_columns.pl`](/tables/replace_values_in_columns.pl): Replaces query with replacement text in specified columns.
 
    _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [1 to exactly match full column value only, 0 to allow search and replace within text of column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
