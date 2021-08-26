@@ -145,6 +145,10 @@ Includes the following scripts—
 
    _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] [query to select rows to delete] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] > [output table path]`_
 
+- [`merge_rows_by_column_value.pl`](/tables/merge_rows_by_column_value.pl): Merges (takes union of) all columns in rows with shared value in column to merge by. If titles of columns not to merge by are provided, leaves one row per input row with all other columns identical. If no columns not to merge by provided, fully merges any rows sharing a value in column to merge by (one row per value).
+
+   _Usage: `perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by] [optional title of column not to merge] [optional title of another column not to merge] [etc.] > [output table path]`_
+
 ### Table manipulation
 
 - [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
@@ -158,10 +162,6 @@ Includes the following scripts—
 - [`merge_tables_by_column_value.pl`](/tables/merge_tables_by_column_value.pl): Merges (takes union of) multiple tables by the values in the specified columns. See script for description of input file.
 
    _Usage: `perl merge_tables_by_column_value.pl [file describing input] > [merged output table path]`_
-
-- [`merge_rows_by_column_value.pl`](/tables/merge_rows_by_column_value.pl): Merges (takes union of) all columns in rows with shared value in column to merge by. If titles of columns not to merge by are provided, leaves one row per input row with all other columns identical. If no columns not to merge by provided, fully merges any rows sharing a value in column to merge by (one row per value).
-
-   _Usage: `perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by] [optional title of column not to merge] [optional title of another column not to merge] [etc.] > [output table path]`_
 
 ### Replicates
 
