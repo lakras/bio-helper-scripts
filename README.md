@@ -144,6 +144,10 @@ Includes the following scripts—
 
    _Usage: `perl annotate_replicates.pl [tab-separated replicate ids, one line per source] [table to annotate] [title of column containing replicate ids in table to annotate] [optional source column title for output] > [annotated output table path]`_
 
+- [`add_shared_values_summary_column.pl`](/tables/add_shared_values_summary_column.pl): Summarizes all values appearing in columns to summarize (sample ids and dates, for example) for each shared value (patient id, for example). Adds summary in new column.
+
+   _Usage: `perl add_shared_values_summary_column.pl [tab-separated table] [title of column containing values shared by rows] [title of column to include in summary of shared values] [title of another column to include in summary of shared values] [etc.] > [output table path]`_
+
 - [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
 
    _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
