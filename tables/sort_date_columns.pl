@@ -193,6 +193,14 @@ sub sort_dates
 # 		$date_to_distance{$date} = $distance_from_base_date;
 # 	}
 # 	my @sorted_dates = sort {$date_to_distance{$a} <=> $date_to_distance{$b}} keys %date_to_distance;
+
+	if(scalar @dates != scalar @sorted_dates)
+	{
+		print STDERR "Error: number dates and number sorted dates not the same. Fix code "
+			."and try again. Exiting.\n";
+		die;
+	}
+
 	return @sorted_dates;
 }
 
