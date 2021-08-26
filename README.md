@@ -156,6 +156,10 @@ Includes the following scripts—
 
    _Usage: `perl sort_date_columns.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
 
+- [`sort_date_columns_with_paired_label_columns.pl`](/tables/sort_date_columns_with_paired_label_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
+
+   _Usage: `perl sort_date_columns_with_paired_label_columns.pl [table] [title of column with dates] [title of label column that should travel with paired dates] [title of another column with dates] [title of label column that should travel with those paired dates] [etc.] > [output table path]`_
+
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
