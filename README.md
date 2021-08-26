@@ -78,7 +78,7 @@ Includes the following scripts—
 
 - [`replace_values_in_columns.pl`](/tables/replace_values_in_columns.pl): Replaces query with replacement text in specified columns.
 
-   _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+   _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [1 to exactly match full column value only, 0 to allow search and replace within text of column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
 
 - [`delete_values_in_columns.pl`](/tables/delete_values_in_columns.pl): Deletes query in specified columns.
 

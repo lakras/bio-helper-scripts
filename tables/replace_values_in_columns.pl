@@ -4,11 +4,13 @@
 
 # Usage:
 # perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] 
+# [1 to exactly match full column value only, 0 to allow search and replace within text of column value]
 # [title of column to search] [title of another column to search]
 # [title of another column to search] [etc.]
 
 # Prints to console. To print to file, use
-# perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] 
+# perl replace_values_in_columns.pl [table] [query text to replace] [replacement text]
+# [1 to exactly match full column value only, 0 to allow search and replace within text of column value] 
 # [title of column to search] [title of another column to search]
 # [title of another column to search] [etc.] > [output table path]
 
@@ -20,7 +22,8 @@ use warnings;
 my $table = $ARGV[0];
 my $query = $ARGV[1];
 my $replacement_text = $ARGV[2];
-my @titles_of_columns_to_search = @ARGV[3..$#ARGV];
+my $full_cell_match = $ARGV[3]; # if 1, matches only full column value exact match; if 0, replaces within text of column
+my @titles_of_columns_to_search = @ARGV[4..$#ARGV];
 
 
 my $NEWLINE = "\n";
@@ -109,7 +112,17 @@ while(<TABLE>) # for each row in the file
 				# replaces values if this is a column to search
 				if($column_is_column_to_search{$column})
 				{
-					$value =~ s/$query/$replacement_text/g;
+					if($full_cell_match)
+					{
+						if($value eq $query)
+						{
+							$value = $replacement_text;
+						}
+					}
+					else
+					{
+						$value =~ s/$query/$replacement_text/g;
+					}
 				}
 		
 				# prints value
