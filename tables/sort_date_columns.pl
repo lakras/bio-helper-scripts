@@ -185,13 +185,14 @@ sub sort_dates
 	
 	# calculates distance from base date for each date
 	my $base_date = "2021-01-01";
-	my %date_to_distance = (); # key: date -> value: distance from base date
-	foreach my $date(@dates)
-	{
-		my $distance_from_base_date = date_difference($date, $base_date);
-		$date_to_distance{$date} = $distance_from_base_date;
-	}
-	my @sorted_dates = sort {$date_to_distance{$a} <=> $date_to_distance{$b}} keys %date_to_distance;
+	my @sorted_dates = sort {date_difference($a, $base_date) <=> date_difference($b, $base_date)} @dates;
+# 	my %date_to_distance = (); # key: date -> value: distance from base date
+# 	foreach my $date(@dates)
+# 	{
+# 		my $distance_from_base_date = date_difference($date, $base_date);
+# 		$date_to_distance{$date} = $distance_from_base_date;
+# 	}
+# 	my @sorted_dates = sort {$date_to_distance{$a} <=> $date_to_distance{$b}} keys %date_to_distance;
 	return @sorted_dates;
 }
 
