@@ -68,6 +68,10 @@ Includes the following scripts—
 
    _Usage: `perl delete_column.pl [table] [title of column to delete] > [output table path]`_
 
+- [`concatenate_columns.pl`](/tables/concatenate_columns.pl): Concatenates selected columns. Adds concatenated values in new column.
+
+   _Usage: `perl concatenate_columns.pl [tab-separated table] [column title] [another column title] [etc.] > [output table path]`_
+
 - [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
 
    _Usage: `perl merge_columns.pl [table to merge] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
