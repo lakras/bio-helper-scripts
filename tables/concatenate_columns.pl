@@ -25,6 +25,9 @@ my $NO_DATA = "";
 
 
 my $PRINT_DUPLICATE_VALUES = 0;
+my $SORT_VALUES = 1;
+my $CONCATENATED_VALUE_SEPARATOR = " ";
+my $CONCATENATED_COLUMN_TITLE_SEPARATOR = "_";
 
 
 # verifies that input file exists and is not empty
@@ -96,7 +99,7 @@ while(<TABLE>) # for each row in the file
 			}
 			
 			# generates concatenated column title
-			my $concatenated_column_title = join("_", @titles_of_columns_to_concatenate);
+			my $concatenated_column_title = join($CONCATENATED_COLUMN_TITLE_SEPARATOR, @titles_of_columns_to_concatenate);
 			
 			# prints existing column titles
 			print $line.$DELIMITER;
@@ -108,32 +111,34 @@ while(<TABLE>) # for each row in the file
 		}
 		else # column values (not titles)
 		{
-			# retrieves column values to concatenate, in order of their column titles
-			# provided in input
-			my $concatenated_values = "";
+			# retrieves column values to concatenate
+			# in order of their column titles provided in input
 			my %column_value_included = (); # key: column value -> value: 1 if already included in concatenated value
+			my @concatenated_values = ();
 			foreach my $column_title(@titles_of_columns_to_concatenate)
 			{
 				my $column = $column_title_to_column{$column_title};
 				my $value = $items_in_line[$column];
-				
+			
 				if(defined $value and length $value
 					and ($PRINT_DUPLICATE_VALUES or !$column_value_included{$value}))
 				{
-					if($concatenated_values)
-					{
-						$concatenated_values .= " ";
-					}
-					$concatenated_values .= $value;
+					push(@concatenated_values, $value);
 					$column_value_included{$value} = 1;
 				}
+			}
+			
+			# sorts if sorting is asked for
+			if($SORT_VALUES)
+			{
+				@concatenated_values = sort @concatenated_values;
 			}
 			
 			# prints existing column titles
 			print $line.$DELIMITER;
 			
 			# prints concatenated column title
-			print $concatenated_values.$NEWLINE;
+			print join($CONCATENATED_VALUE_SEPARATOR, @concatenated_values).$NEWLINE;
 		}
 	}
 }
