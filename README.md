@@ -56,13 +56,18 @@ Includes the following scripts—
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
 
 ## Tables ([`tables`](/tables))
-- [`summarize_table_columns.pl`](/tables/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
-   _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
+### Column title manipulation
 
 - [`replace_all_spaces_parens_in_column_titles.pl`](/tables/replace_all_spaces_parens_in_column_titles.pl): Replaces all spaces and parentheses in header line with provided replacement value, or underscore by default.
 
    _Usage: `perl replace_all_spaces_parens_in_column_titles.pl [table] [optional value to replace spaces with in header line] > [output table path]`_
+
+- [`replace_column_title.pl`](/tables/replace_column_title.pl): Replaces column title with new column title.
+
+   _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
+
+### Column manipulation
 
 - [`delete_column.pl`](/tables/delete_column.pl): Deletes column with input column title.
 
@@ -75,10 +80,6 @@ Includes the following scripts—
 - [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
 
    _Usage: `perl merge_columns.pl [table to merge] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
-
-- [`replace_column_title.pl`](/tables/replace_column_title.pl): Replaces column title with new column title.
-
-   _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
 
 - [`replace_values_in_columns.pl`](/tables/replace_values_in_columns.pl): Replaces query with replacement text in specified columns.
 
@@ -116,6 +117,26 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_subset_of_columns.pl [table] [title of first column to include in output] [title of second column to include] [title of third column to include] [etc.] > [output table path]`_
 
+### Column manipulation with dates
+
+- [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
+
+   _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+
+- [`add_difference_in_dates_column.pl`](/tables/add_difference_in_dates_column.pl): Adds column listing difference in dates between columns specified in parameter column titles. Dates must be in YYYY-MM-DD format. Column titles must not have spaces. Not guaranteed to work for dates outside of 2021 (sorry!).
+
+   _Usage: `perl add_difference_in_dates_column.pl [table] [title of column with dates] [title of another column with dates] > [output table path]`_
+
+- [`sort_date_columns.pl`](/tables/sort_date_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
+
+   _Usage: `perl sort_date_columns.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+
+- [`sort_date_columns_with_paired_label_columns.pl`](/tables/sort_date_columns_with_paired_label_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
+
+   _Usage: `perl sort_date_columns_with_paired_label_columns.pl [table] [title of column with dates] [title of label column that should travel with paired dates] [title of another column with dates] [title of label column that should travel with those paired dates] [etc.] > [output table path]`_
+
+### Row manipulation
+
 - [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows matching (containing, beginning with, ending with, or equal to) column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
 
    _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] [value of column to select] > [output table path]`_
@@ -123,6 +144,8 @@ Includes the following scripts—
 - [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive. Text to filter out must not have spaces.
 
    _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] [query to select rows to delete] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] > [output table path]`_
+
+### Table manipulation
 
 - [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
 
@@ -140,9 +163,7 @@ Includes the following scripts—
 
    _Usage: `perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by] [optional title of column not to merge] [optional title of another column not to merge] [etc.] > [output table path]`_
 
-- [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
-
-   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
+### Replicates
 
 - [`annotate_replicates.pl`](/tables/annotate_replicates.pl): Assigns a source number to all replicates from the same source. Adds source number as a column to table to annotate.
 
@@ -152,21 +173,15 @@ Includes the following scripts—
 
    _Usage: `perl add_shared_values_summary_column.pl [tab-separated table] [title of column containing values shared by rows] [title of column to include in summary of shared values] [title of another column to include in summary of shared values] [etc.] > [output table path]`_
 
-- [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
+### Other
 
-   _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+- [`summarize_table_columns.pl`](/tables/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
-- [`add_difference_in_dates_column.pl`](/tables/add_difference_in_dates_column.pl): Adds column listing difference in dates between columns specified in parameter column titles. Dates must be in YYYY-MM-DD format. Column titles must not have spaces. Not guaranteed to work for dates outside of 2021 (sorry!).
+   _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
 
-   _Usage: `perl add_difference_in_dates_column.pl [table] [title of column with dates] [title of another column with dates] > [output table path]`_
+- [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
-- [`sort_date_columns.pl`](/tables/sort_date_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
-
-   _Usage: `perl sort_date_columns.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
-
-- [`sort_date_columns_with_paired_label_columns.pl`](/tables/sort_date_columns_with_paired_label_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
-
-   _Usage: `perl sort_date_columns_with_paired_label_columns.pl [table] [title of column with dates] [title of label column that should travel with paired dates] [title of another column with dates] [title of label column that should travel with those paired dates] [etc.] > [output table path]`_
+   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
