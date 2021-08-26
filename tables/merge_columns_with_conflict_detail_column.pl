@@ -197,7 +197,7 @@ while(<TABLE>) # for each row in the file
 				and scalar keys %value_to_merge_to_source > 1)
 			{
 				# if all values numerical and close enough, just takes the first one
-				$merged_value = (keys %value_to_merge_to_source)[0];
+				$merged_value = (sort keys %value_to_merge_to_source)[0];
 			}
 			else
 			{

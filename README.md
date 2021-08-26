@@ -105,7 +105,7 @@ Includes the following scripts—
 
 - [`delete_values_in_columns.pl`](/tables/delete_values_in_columns.pl): Deletes query in specified columns.
 
-   _Usage: `perl delete_values_in_columns.pl [table] [query text to delete] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+   _Usage: `perl delete_values_in_columns.pl [table] [query text to delete] # [1 to exactly match full column value only, 0 to allow search within text of column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
 
 - [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text. Start and end text may not contain whitespace.
 
