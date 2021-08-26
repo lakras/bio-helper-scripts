@@ -145,6 +145,9 @@ Includes the following scripts—
 
    _Usage: `perl add_difference_in_dates_column.pl [table] [title of column with dates] [title of another column with dates] > [output table path]`_
 
+- [`add_earliest_or_latest_date_column.pl`](/tables/add_earliest_or_latest_date_column.pl): Adds column listing the latest or earliest of the specified columns. Dates must be in YYYY-MM-DD format.
+   _Usage: `perl add_earliest_or_latest_date_column.pl [table] [0 to select earliest date, 1 to select latest date] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+
 - [`sort_date_columns.pl`](/tables/sort_date_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
 
    _Usage: `perl sort_date_columns.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_

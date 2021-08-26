@@ -1,18 +1,19 @@
 #!/usr/bin/env perl
 
-# Sorts the dates in the specified columns. For each row, of the dates in the specified
-# columns, the earliest date will go in the first specified column, the second-earliest
-# in the second specified column, etc. Empty values go last. Dates provided must be
-# in YYYY-MM-DD format.
+# Adds column listing the latest or earliest of the specified columns. Dates must be in
+# YYYY-MM-DD format.
 
 # Usage:
-# perl sort_date_columns.pl [table] [title of column with dates]
-# [title of another column with dates] [title of another column with dates] [etc.]
+# perl add_earliest_or_latest_date_column.pl [table]
+# [0 to select earliest date, 1 to select latest date]
+# [title of column with dates] [title of another column with dates]
+# [title of another column with dates] [etc.]
 
 # Prints to console. To print to file, use
-# perl sort_date_columns.pl [table] [title of column with dates]
-# [title of another column with dates] [title of another column with dates] [etc.]
-# > [output table path]
+# perl add_earliest_or_latest_date_column.pl [table]
+# [0 to select earliest date, 1 to select latest date]
+# [title of column with dates] [title of another column with dates]
+# [title of another column with dates] [etc.] > [output table path]
 
 
 use strict;
@@ -20,7 +21,8 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my @titles_of_columns_with_dates = @ARGV[1..$#ARGV];
+my $selecting_latest_date = $ARGV[1];
+my @titles_of_columns_with_dates = @ARGV[2..$#ARGV];
 
 
 my $NEWLINE = "\n";
@@ -48,6 +50,19 @@ if(scalar @titles_of_columns_with_dates < 2)
 }
 
 
+# names new date column
+my $new_date_column_title = "";
+if($selecting_latest_date)
+{
+	$new_date_column_title .= "latest";
+}
+else
+{
+	$new_date_column_title .= "earliest";
+}
+$new_date_column_title .= "_of_".join("_", @titles_of_columns_with_dates);
+
+
 # converts array of column titles to a hash
 my %title_is_of_column_with_date = (); # key: column title -> value: 1 if column has dates
 my %column_title_to_column = (); # key: included column title -> value: column
@@ -60,7 +75,6 @@ foreach my $column_title(@titles_of_columns_with_dates)
 
 # reads in and processes input table
 my $first_line = 1;
-my %column_is_column_with_dates = (); # key: column (0-indexed) -> value: 1 if column has dates
 open TABLE, "<$table" || die "Could not open $table to read; terminating =(\n";
 while(<TABLE>) # for each row in the file
 {
@@ -94,8 +108,8 @@ while(<TABLE>) # for each row in the file
 				}
 			}
 			
-			# print header line as is
-			print $line.$NEWLINE;
+			# print header line with new column title
+			print $line.$DELIMITER.$new_date_column_title.$NEWLINE;
 			
 			$first_line = 0; # next line is not column titles
 		}
@@ -110,92 +124,25 @@ while(<TABLE>) # for each row in the file
 					push(@date_values, $items_in_line[$column_with_dates]);
 				}
 			}
-			
-			# sorts date column values
-			my @sorted_date_values = sort_dates(@date_values);
-			
-			# replaces date column values with sorted dates
-			my $sorted_date_index = 0;
-			foreach my $column_title(@titles_of_columns_with_dates)
-			{
-				# retrieves column to edit
-				my $column = $column_title_to_column{$column_title};
-				
-				# retrieves date value that should go in that column
-				my $date_value = "";
-				if($sorted_date_index < scalar @sorted_date_values)
-				{
-					$date_value = $sorted_date_values[$sorted_date_index];
-				}
-				
-				# edits column value
-				$items_in_line[$column] = $date_value;
-				
-				$sorted_date_index++;
-			}
 		
-			# prints all values, including the already replaced values in columns with dates
-			my $column = 0;
-			foreach my $value(@items_in_line)
+			# retrieves latest or earliest date
+			$result_date_value = "";
+			if($selecting_latest_date)
 			{
-				# prints delimiter
-				if($column > 0)
-				{
-					print $DELIMITER;
-				}
-		
-				# prints value
-				if(defined $value and length $value)
-				{
-					print $value;
-				}
-				$column++;
+				$result_date_value = get_latest_date(@date_values);
 			}
-			print $NEWLINE;
+			else
+			{
+				$result_date_value = get_earliest_date(@date_values);
+			}
+			
+			# print line with new column
+			print $line.$DELIMITER.$result_date_value.$NEWLINE;
 		}
 	}
 }
 close TABLE;
 
-
-# sorts dates from earliest to latest
-sub sort_dates
-{
-	my @input_dates = @_;
-	
-	# removes empty dates
-	my @dates = ();
-	foreach my $input_date(@input_dates)
-	{
-		if(defined $input_date and length $input_date)
-		{
-			push(@dates, $input_date);
-		}
-	}
-	
-	# verifies that we are comparing at least two dates
-	if(scalar @dates == 0) # no dates
-	{
-		return "";
-	}
-	if(scalar @dates == 1) # only one date
-	{
-		return $dates[0];
-	}
-	
-	# calculates distance from base date for each date
-	my $base_date = "2021-01-01";
-	my @sorted_dates = sort {date_difference($a, $base_date) <=> date_difference($b, $base_date)} @dates;
-
-	if(scalar @dates != scalar @sorted_dates)
-	{
-		print STDERR "Error: number dates and number sorted dates not the same. Fix code "
-			."and try again. Exiting.\n";
-		die;
-	}
-
-	return @sorted_dates;
-}
 
 # collection date - vaccine dose date >= 14
 # input format example: 2021-07-24
@@ -327,5 +274,75 @@ sub value_present
 	return 1;
 }
 
+# given a list of dates, returns the earliest one
+# input format example: 2021-07-24
+sub get_earliest_date
+{
+	my @input_dates = @_;
+	
+	# removes empty dates
+	my @dates = ();
+	foreach my $input_date(@input_dates)
+	{
+		if(defined $input_date and length $input_date)
+		{
+			push(@dates, $input_date);
+		}
+	}
+	
+	# verifies that we are comparing at least two dates
+	if(scalar @dates == 0) # no dates
+	{
+		return "";
+	}
+	if(scalar @dates == 1) # only one date
+	{
+		return $dates[0];
+	}
+	
+	# finds earliest date
+	my $base_date = "2021-01-01";
+	my $earliest_date = $dates[0];
+	my $earliest_date_distance_from_base_date = date_difference($earliest_date, $base_date);
+	foreach my $date(@dates)
+	{
+		my $distance_from_base_date = date_difference($date, $base_date);
+		if($distance_from_base_date < $earliest_date_distance_from_base_date)
+		{
+			$earliest_date = $date;
+			$earliest_date_distance_from_base_date = $distance_from_base_date;
+		}
+	}
+	return $earliest_date;
+}
+
+# given a list of dates, returns the latest one
+# input format example: 2021-07-24
+sub get_latest_date
+{
+	my @dates = @_;
+	if(scalar @dates == 0)
+	{
+		return "";
+	}
+	if(scalar @dates == 1)
+	{
+		return $dates[0];
+	}
+	
+	my $base_date = "2021-01-01";
+	my $latest_date = $dates[0];
+	my $latest_date_distance_from_base_date = date_difference($latest_date, $base_date);
+	foreach my $date(@dates)
+	{
+		my $distance_from_base_date = date_difference($date, $base_date);
+		if($distance_from_base_date > $latest_date_distance_from_base_date)
+		{
+			$latest_date = $date;
+			$latest_date_distance_from_base_date = $distance_from_base_date;
+		}
+	}
+	return $latest_date;
+}
 
 # August 26, 2021
