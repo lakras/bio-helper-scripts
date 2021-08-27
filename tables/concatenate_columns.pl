@@ -134,10 +134,10 @@ while(<TABLE>) # for each row in the file
 				@concatenated_values = sort @concatenated_values;
 			}
 			
-			# prints existing column titles
+			# prints existing column values
 			print $line.$DELIMITER;
 			
-			# prints concatenated column title
+			# prints concatenated column value
 			print join($CONCATENATED_VALUE_SEPARATOR, @concatenated_values).$NEWLINE;
 		}
 	}
