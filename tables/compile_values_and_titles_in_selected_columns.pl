@@ -97,7 +97,7 @@ while(<TABLE>) # for each row in the file
 			}
 			
 			# generates concatenated column title
-			my $concatenated_column_title = join($CONCATENATED_COLUMN_TITLE_SEPARATOR, @titles_of_columns_to_concatenate);
+			my $concatenated_column_title = join("_", @titles_of_columns_to_concatenate);
 			
 			# prints existing column titles
 			print $line.$DELIMITER;
