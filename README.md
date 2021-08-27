@@ -87,6 +87,10 @@ Includes the following scripts—
 
    _Usage: `perl delete_column.pl [table] [title of column to delete] > [output table path]`_
 
+- [`duplicate_columns.pl`](/tables/duplicate_columns.pl): Duplicates selected columns.
+
+   _Usage: `perl duplicate_columns.pl [tab-separated table] [column title] [another column title] [etc.] > [output table path]`_
+
 - [`concatenate_columns.pl`](/tables/concatenate_columns.pl): Concatenates selected columns. Adds concatenated values in new column.
 
    _Usage: `perl concatenate_columns.pl [tab-separated table] [column title] [another column title] [etc.] > [output table path]`_
