@@ -75,6 +75,7 @@ foreach my $column_title(@titles_of_columns_with_dates)
 
 # reads in and processes input table
 my $first_line = 1;
+my %column_is_column_with_dates = (); # key: column (0-indexed) -> value: 1 if column has dates
 open TABLE, "<$table" || die "Could not open $table to read; terminating =(\n";
 while(<TABLE>) # for each row in the file
 {
@@ -121,12 +122,27 @@ while(<TABLE>) # for each row in the file
 			{
 				if(value_present($items_in_line[$column_with_dates]))
 				{
-					push(@date_values, $items_in_line[$column_with_dates]);
+					# splits date into multiple dates if there are multiple dates
+					if($items_in_line[$column_with_dates] =~ /, /)
+					{
+						my @date_sub_values = split(", ", $items_in_line[$column_with_dates]);
+						foreach my $date_sub_value( @date_sub_values)
+						{
+							if(value_present($date_sub_value))
+							{
+								push(@date_values, $date_sub_value);
+							}
+						}
+					}
+					else
+					{
+						push(@date_values, $items_in_line[$column_with_dates]);
+					}
 				}
 			}
 		
 			# retrieves latest or earliest date
-			$result_date_value = "";
+			my $result_date_value = "";
 			if($selecting_latest_date)
 			{
 				$result_date_value = get_latest_date(@date_values);
