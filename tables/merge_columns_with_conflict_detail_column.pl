@@ -189,6 +189,14 @@ while(<TABLE>) # for each row in the file
 					print STDERR "\n\t".$value."\t".$value_to_merge_to_source{$value}
 				}
 				print STDERR "\n";
+				
+				# prints table row version of merge conflict details
+				print STDERR "merge_conflict\t".$merge_details;
+				foreach my $value(keys %value_to_merge_to_source)
+				{
+					print STDERR "\t".$value."\t".$value_to_merge_to_source{$value}
+				}
+				print STDERR "\n";
 			}
 			
 			# determines merged value

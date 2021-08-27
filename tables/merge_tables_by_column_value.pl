@@ -239,12 +239,14 @@ foreach my $table_path(sort {$table_path_to_order_of_appearance{$a} <=> $table_p
 				if(defined $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
 					and $value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path} ne $to_print)
 				{
-					if(difference_in_item_by_item_present_only_comparison($to_print,
-						$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}))
+					my $differences = difference_in_item_by_item_present_only_comparison($to_print,
+						$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path});
+					if($differences)
 					{
 						print STDERR "Warning: value to merge by ".$value_to_merge_by
 							." appears more than once in table with different values; merging values:\n\t"
 							.$table_path_key_to_table_path{$table_path}."\n";
+						print STDERR "table_merge_differences\t".$differences."\n";
 					}
 					$value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}
 						= merge_values_to_print($value_to_merge_by_to_table_path_to_values_to_print{$value_to_merge_by}{$table_path}, $to_print);
@@ -309,7 +311,7 @@ sub filename
 }
 
 # compares the two rows
-# returns 1 if there is a difference between two non-empty values
+# returns differences if there is a difference between two non-empty values
 sub difference_in_item_by_item_present_only_comparison
 {
 	my $to_print_1 = $_[0];
@@ -327,8 +329,8 @@ sub difference_in_item_by_item_present_only_comparison
 			.$to_print_1."\n".$to_print_2."\n";
 	}
 	
-	# merges values
-	my @to_print = ();
+	# compares values
+	my @differences = ();
 	for my $index(0..max($#to_print_1_items, $#to_print_2_items))
 	{
     	my $to_print_1_item = $to_print_1_items[$index];
@@ -338,8 +340,14 @@ sub difference_in_item_by_item_present_only_comparison
     	if(value_present($to_print_1_item) and value_present($to_print_2_item)
     		and $to_print_1_item ne $to_print_2_item) # both items present and different
     	{
-    		return 1;
+    		push(@differences, $to_print_1_item." vs. ".$to_print_2_item);
     	}
+	}
+	
+	# returns differences if there are any, 0 if not
+	if(scalar @differences)
+	{
+		return join(", ", @differences);
 	}
 	return 0;
 }
