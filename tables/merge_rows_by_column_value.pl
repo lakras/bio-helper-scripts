@@ -98,7 +98,7 @@ while(<TABLE>) # for each row in the file
 			# verifies that we have found column to merge by
 			if($column_to_merge_by == -1)
 			{
-				print STDERR "Error: could not find titel of column to merge by "
+				print STDERR "Error: could not find title of column to merge by "
 					.$title_of_column_to_merge_by." in table:\n\t".$table."\nExiting.\n";
 				die;
 			}
