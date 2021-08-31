@@ -232,6 +232,10 @@ Not guaranteed to work for dates outside of 2021 (sorry!):
 
    _Usage: `perl bulk_grep_is_detected.pl [file listing queries, one per line] [file to grep] [another file to grep] [etc.] > [output file path]`_
 
+- [`bulk_grep_is_detected_table.pl`](/misc/bulk_grep_is_detected_table.pl): Searches all input files for queries listed in query list file. Outputs a table with detection of all queries in all files, tab-separated, one row per query, one column per file.
+
+   _Usage: `perl bulk_grep_is_detected_table.pl [file listing queries, one per line] [file to grep] [another file to grep] [etc.] > [output file path]`_
+
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
