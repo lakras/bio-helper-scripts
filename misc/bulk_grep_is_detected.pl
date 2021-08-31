@@ -1,12 +1,15 @@
 #!/usr/bin/env perl
 
-# Searches all input files for queries listed in query list file.
+# Searches all input files for queries listed in query list file. Outputs query and each
+# file it was found in, tab-separated, one line per query-file pair where query is detected.
+# If query is not detected in any file, prints query followed by "not detected".
 
 # Usage:
-# perl bulk_grep.pl [file listing queries, one per line] [file to grep] [another file to grep] [etc.]
+# perl bulk_grep_is_detected.pl [file listing queries, one per line] [file to grep]
+# [another file to grep] [etc.]
 
 # Prints to console. To print to file, use
-# perl bulk_grep.pl [file listing queries, one per line] [file to grep]
+# perl bulk_grep_is_detected.pl [file listing queries, one per line] [file to grep]
 # [another file to grep] [etc.] > [output file path]
 
 
@@ -19,6 +22,7 @@ my @files_to_grep = @ARGV[1..$#ARGV];
 
 
 my $NEWLINE = "\n";
+my $DELIMITER = "\t";
 
 
 # verifies that input files exist and is not empty
@@ -43,12 +47,23 @@ open QUERY_LIST, "<$query_list_file" || die "Could not open $query_list_file to 
 while(<QUERY_LIST>) # for each line in the file
 {
 	chomp;
-	print $_."\n";
 	if($_ =~ /\S/)
 	{
+		my $detected_in_at_least_one_file = 0;
 		foreach my $file_to_grep(@files_to_grep)
 		{
-			print `grep "$_" $file_to_grep`;
+			print $_.$DELIMITER.$file_to_grep.$NEWLINE;
+			if(`grep "$_" $file_to_grep`)
+			{
+				
+				$detected_in_at_least_one_file = 1;
+			}
+		}
+		
+		# not detected in any file
+		if(!$detected_in_at_least_one_file)
+		{
+			print $_.$DELIMITER."not detected".$NEWLINE;
 		}
 	}
 }
@@ -56,3 +71,4 @@ close QUERY_LIST;
 
 
 # August 17, 2021
+# August 31, 2021
