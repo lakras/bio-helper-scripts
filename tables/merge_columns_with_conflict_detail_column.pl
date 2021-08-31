@@ -29,6 +29,7 @@ my $NO_DATA = "";
 
 
 my $NUMERIC_VALUE_ALLOWED_DIFFERENCE = 1;
+my $PRINT_MERGED_COLUMNS = 1;
 
 
 # verifies that input file exists and is not empty
@@ -119,7 +120,7 @@ while(<TABLE>) # for each row in the file
 			$column = 0;
 			foreach my $column_title(@items_in_line)
 			{
-				if(!$column_to_merge{$column})
+				if(!$column_to_merge{$column} or $PRINT_MERGED_COLUMNS)
 				{
 					print $column_title.$DELIMITER;
 				}
@@ -224,7 +225,7 @@ while(<TABLE>) # for each row in the file
 			my $column = 0;
 			foreach my $value(@items_in_line)
 			{
-				if(!$column_to_merge{$column})
+				if(!$column_to_merge{$column} or $PRINT_MERGED_COLUMNS)
 				{
 					print $value.$DELIMITER;
 				}
