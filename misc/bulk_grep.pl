@@ -43,7 +43,6 @@ open QUERY_LIST, "<$query_list_file" || die "Could not open $query_list_file to 
 while(<QUERY_LIST>) # for each line in the file
 {
 	chomp;
-	print $_."\n";
 	if($_ =~ /\S/)
 	{
 		foreach my $file_to_grep(@files_to_grep)

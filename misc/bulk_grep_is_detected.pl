@@ -25,6 +25,9 @@ my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 
 
+my $PRINT_FULL_FILEPATH = 0; # if 1, prints full file path; if 0, prints filename only
+
+
 # verifies that input files exist and is not empty
 if(!$query_list_file or !-e $query_list_file or -z $query_list_file)
 {
@@ -42,6 +45,12 @@ foreach my $file_to_grep(@files_to_grep)
 	}
 }
 
+
+# prints header line
+print "query".$DELIMITER;
+print "file".$NEWLINE;
+
+
 # read in query list and grep each query
 open QUERY_LIST, "<$query_list_file" || die "Could not open $query_list_file to read; terminating =(\n";
 while(<QUERY_LIST>) # for each line in the file
@@ -52,9 +61,18 @@ while(<QUERY_LIST>) # for each line in the file
 		my $detected_in_at_least_one_file = 0;
 		foreach my $file_to_grep(@files_to_grep)
 		{
-			print $_.$DELIMITER.$file_to_grep.$NEWLINE;
 			if(`grep "$_" $file_to_grep`)
 			{
+				print $_.$DELIMITER;
+				if($PRINT_FULL_FILEPATH)
+				{
+					print $file_to_grep;
+				}
+				else
+				{
+					print filename($file_to_grep);
+				}
+				print $NEWLINE;
 				
 				$detected_in_at_least_one_file = 1;
 			}
@@ -68,6 +86,20 @@ while(<QUERY_LIST>) # for each line in the file
 	}
 }
 close QUERY_LIST;
+
+
+# example input:  /Users/lakras/my_file.txt
+# example output: my_file.txt
+sub filename
+{
+	my $filepath = $_[0];
+	
+	if($filepath =~ /^.*\/([^\/]+)$/)
+	{
+		return $1;
+	}
+	return "";
+}
 
 
 # August 17, 2021
