@@ -153,8 +153,6 @@ Includes the following scripts—
 
    _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] "[title of column with dates]" "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]`_
 
-Not guaranteed to work for dates outside of 2021 (sorry!):
-
 - [`add_difference_in_dates_column.pl`](/tables/add_difference_in_dates_column.pl): Adds column listing difference in dates (in days) between columns specified in parameter column titles. Dates must be in YYYY-MM-DD format.
 
    _Usage: `perl add_difference_in_dates_column.pl [table] "[title of column with dates]" "[title of another column with dates]" "[optional title of new column]" > [output table path]`_

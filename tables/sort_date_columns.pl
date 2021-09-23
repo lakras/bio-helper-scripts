@@ -197,19 +197,40 @@ sub sort_dates
 	return @sorted_dates;
 }
 
-# collection date - vaccine dose date >= 14
+# returns 1 if input year is a leap year, 0 if not
+# input example: 2001
+sub is_leap_year
+{
+	my $year = $_[0];
+	if($year % 4 == 0)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+# returns date 2 - date 1, in days
+# for a use case like checking collection date - vaccine dose date >= 14
 # input format example: 2021-07-24
 sub date_difference
 {
 	my $date_1 = $_[0];
 	my $date_2 = $_[1];
 	
-	my %NON_LEAP_DAYS_IN_MONTHS = (1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31,
+	my %days_in_months = (1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31,
 		6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31);
-	my $DAYS_IN_2020 = 366;
+	my $days_in_year = 365;
 	
-	if(!$date_1 or $date_1 eq "NA" or $date_1 eq "N/A"
-		or !$date_2 or $date_2 eq "NA" or $date_2 eq "N/A")
+	# verifies that we have two non-empty dates to compare
+	if(!defined $date_1 or !length $date_1 or !$date_1
+		or $date_1 eq "NA" or $date_1 eq "N/A" or $date_1 eq "NaN"
+		or $date_1 !~ /\S/)
+	{
+		return "";
+	}
+	if(!defined $date_2 or !length $date_2 or !$date_2
+		or $date_2 eq "NA" or $date_2 eq "N/A" or $date_2 eq "NaN"
+		or $date_2 !~ /\S/)
 	{
 		return "";
 	}
@@ -227,18 +248,13 @@ sub date_difference
 	}
 	else
 	{
-		print STDERR "Error: could not parse date: ".$date_1.". Exiting.\n";
-		die;
+		print STDERR "Error: could not parse date: ".$date_1.".\n";
+		return "";
 	}
-	if(!$NON_LEAP_DAYS_IN_MONTHS{$month_1})
+	if(!$days_in_months{$month_1})
 	{
-		print STDERR "Error: month not recognized: ".$month_1." Exiting.\n";
-		die;
-	}
-	if($year_1 != 2020 and $year_1 != 2021)
-	{
-		print STDERR "Error: year not 2020 or 2021: ".$year_1.". Exiting.\n";
-		die;
+		print STDERR "Error: month not recognized: ".$month_1.".\n";
+		return "";
 	}
 	
 	# parses date 2
@@ -254,54 +270,69 @@ sub date_difference
 	}
 	else
 	{
-		print STDERR "Error: could not parse date: ".$date_2.". Exiting.\n";
-		die;
+		print STDERR "Error: could not parse date: ".$date_2.".\n";
+		return "";
 	}
-	if(!$NON_LEAP_DAYS_IN_MONTHS{$month_2})
+	if(!$days_in_months{$month_2})
 	{
-		print STDERR "Error: month not recognized: ".$month_2." Exiting.\n";
-		die;
-	}
-	if($year_2 != 2020 and $year_2 != 2021)
-	{
-		print STDERR "Error: year not 2020 or 2021: ".$year_2.". Exiting.\n";
-		die;
+		print STDERR "Error: month not recognized: ".$month_2.".\n";
+		return "";
 	}
 	
 	# converts months to days
 	$month_1--;
 	while($month_1)
 	{
-		if($year_1 == 2020 and $month_1 == 2)
+		if(is_leap_year($year_1) and $month_1 == 2)
 		{
 			$day_1 ++;
 		}
-		$day_1 += $NON_LEAP_DAYS_IN_MONTHS{$month_1};
+		$day_1 += $days_in_months{$month_1};
 		$month_1--;
 	}
 	$month_2--;
 	while($month_2)
 	{
-		if($year_2 == 2020 and $month_2 == 2)
+		if(is_leap_year($year_2) and $month_2 == 2)
 		{
 			$day_2 ++;
 		}
-		$day_2 += $NON_LEAP_DAYS_IN_MONTHS{$month_2};
+		$day_2 += $days_in_months{$month_2};
 		$month_2--;
 	}
 	
-	# converts 2021 to +366 days (for full 2020 passed)
-	if($year_1 == 2021)
+	# retrieves smallest of the two years
+	my $smallest_year = $year_2;
+	if($year_1 < $year_2)
 	{
-		$day_1 += $DAYS_IN_2020;
-	}
-	if($year_2 == 2021)
-	{
-		$day_2 += $DAYS_IN_2020;
+		$smallest_year = $year_1;
 	}
 	
-	# calculates difference between dates
-	return $day_1 - $day_2;
+	# converts years to days since smallest year
+	$year_1--;
+	while($year_1 >= $smallest_year)
+	{
+		if(is_leap_year($year_1))
+		{
+			$day_1 += 1;
+		}
+		$day_1 += $days_in_year;
+		$year_1--;
+	}
+	$year_2--;
+	while($year_2 >= $smallest_year)
+	{
+		if(is_leap_year($year_2))
+		{
+			$day_2 += 1;
+		}
+		$day_2 += $days_in_year;
+		$year_2--;
+	}
+	
+	# calculates and returns difference between dates
+	my $difference = $day_2 - $day_1;
+	return $difference;
 }
 
 # returns 1 if input is non-empty, 0 if not
@@ -329,3 +360,4 @@ sub value_present
 
 
 # August 26, 2021
+# September 23, 2021
