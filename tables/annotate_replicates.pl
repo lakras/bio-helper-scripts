@@ -4,12 +4,12 @@
 # as a column to table to annotate.
 
 # Usage:
-# perl annotate_replicates.pl [tab-separated replicate ids, one line per source]
+# perl annotate_replicates.pl [file listing replicate ids from same source, tab-separated, one line per source]
 # [table to annotate] "[title of column containing replicate ids in table to annotate]"
 # "[optional source column title for output]"
 
 # Prints to console. To print to file, use
-# perl annotate_replicates.pl [tab-separated replicate ids, one line per source]
+# perl annotate_replicates.pl [file listing replicate ids from same source, tab-separated, one line per source]
 # [table to annotate] "[title of column containing replicate ids in table to annotate]"
 # "[optional source column title for output]" > [annotated output table path]
 

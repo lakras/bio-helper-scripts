@@ -201,7 +201,7 @@ Includes the following scripts—
 
 - [`annotate_replicates.pl`](/tables/annotate_replicates.pl): Assigns a source number to all replicates from the same source. Adds source number as a column to table to annotate.
 
-   _Usage: `perl annotate_replicates.pl [tab-separated replicate ids, one line per source] [table to annotate] "[title of column containing replicate ids in table to annotate]" "[optional source column title for output]" > [annotated output table path]`_
+   _Usage: `perl annotate_replicates.pl [file listing replicate ids from same source, tab-separated, one line per source] [table to annotate] "[title of column containing replicate ids in table to annotate]" "[optional source column title for output]" > [annotated output table path]`_
 
 - [`add_shared_values_summary_column.pl`](/tables/add_shared_values_summary_column.pl): Summarizes all values appearing in columns to summarize (sample ids and dates, for example) for each shared value (patient id, for example). Adds summary in new column.
 
