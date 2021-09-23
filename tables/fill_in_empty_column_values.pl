@@ -3,12 +3,12 @@
 # Fills in empty values in column of interest with specified value.
 
 # Usage:
-# perl fill_in_empty_column_values.pl [table] [title of column to fill in (no spaces)]
-# [value to replace empty values with]
+# perl fill_in_empty_column_values.pl [table] "[title of column to fill in]"
+# "[value to replace empty values with]"
 
 # Prints to console. To print to file, use
-# perl fill_in_empty_column_values.pl [table] [title of column to fill in (no spaces)]
-# [value to replace empty values with] > [output table path]
+# perl fill_in_empty_column_values.pl [table] "[title of column to fill in]"
+# "[value to replace empty values with]" > [output table path]
 
 
 use strict;

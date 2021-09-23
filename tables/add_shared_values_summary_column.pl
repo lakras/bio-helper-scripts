@@ -5,15 +5,15 @@
 
 # Usage:
 # perl add_shared_values_summary_column.pl [tab-separated table]
-# [title of column containing values shared by rows]
-# [title of column to include in summary of shared values]
-# [title of another column to include in summary of shared values] [etc.]
+# "[title of column containing values shared by rows]"
+# "[title of column to include in summary of shared values]"
+# "[title of another column to include in summary of shared values]" [etc.]
 
 # Prints to console. To print to file, use
 # perl add_shared_values_summary_column.pl [tab-separated table]
-# [title of column containing values shared by rows]
-# [title of column to include in summary of shared values]
-# [title of another column to include in summary of shared values] [etc.] > [output table path]
+# "[title of column containing values shared by rows]"
+# "[title of column to include in summary of shared values]"
+# "[title of another column to include in summary of shared values]" [etc.] > [output table path]
 
 
 use strict;

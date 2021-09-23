@@ -3,16 +3,16 @@
 # Replaces query with replacement text in specified columns.
 
 # Usage:
-# perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] 
+# perl replace_values_in_columns.pl [table] "[query text to replace]" "[replacement text]"
 # [1 to exactly match full column value only, 0 to allow search and replace within text of column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.]
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.]
 
 # Prints to console. To print to file, use
-# perl replace_values_in_columns.pl [table] [query text to replace] [replacement text]
-# [1 to exactly match full column value only, 0 to allow search and replace within text of column value] 
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.] > [output table path]
+# perl replace_values_in_columns.pl [table] "[query text to replace]" "[replacement text]"
+# [1 to exactly match full column value only, 0 to allow search and replace within text of column value]
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.] > [output table path]
 
 
 use strict;

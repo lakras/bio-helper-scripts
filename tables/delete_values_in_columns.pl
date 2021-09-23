@@ -3,16 +3,16 @@
 # Deletes query in specified columns.
 
 # Usage:
-# perl delete_values_in_columns.pl [table] [query text to delete]
+# perl delete_values_in_columns.pl [table] "[query text to delete]"
 # [1 to exactly match full column value only, 0 to allow search within text of column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.]
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.]
 
 # Prints to console. To print to file, use
-# perl delete_values_in_columns.pl [table] [query text to delete]
+# perl delete_values_in_columns.pl [table] "[query text to delete]"
 # [1 to exactly match full column value only, 0 to allow search within text of column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.] > [output table path]
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.] > [output table path]
 
 
 use strict;

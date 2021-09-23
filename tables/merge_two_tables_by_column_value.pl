@@ -3,10 +3,13 @@
 # Merges (takes union of) two tables by the values in the specified columns.
 
 # Usage:
-# perl merge_two_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)]
+# perl merge_two_tables_by_column_value.pl [table1 file path]
+# [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)]
 
 # Prints to console. To print to file, use
-# perl merge_two_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]
+# perl merge_two_tables_by_column_value.pl [table1 file path]
+# [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)]
+# > [output table path]
 
 
 use strict;

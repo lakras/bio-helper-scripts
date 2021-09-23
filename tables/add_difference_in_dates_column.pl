@@ -1,16 +1,16 @@
 #!/usr/bin/env perl
 
-# Adds column listing difference in dates between columns specified in parameter column
-# titles. Dates must be in YYYY-MM-DD format. Column titles must not have spaces.
+# Adds column listing difference in dates (in days) between columns specified in parameter
+# column titles. Dates must be in YYYY-MM-DD format.
 # Not guaranteed to work for dates outside of 2021 (sorry!).
 
 # Usage:
-# perl add_difference_in_dates_column.pl [table] [title of column with dates]
-# [title of another column with dates] [optional title of new column]
+# perl add_difference_in_dates_column.pl [table] "[title of column with dates]"
+# "[title of another column with dates]" "[optional title of new column]"
 
 # Prints to console. To print to file, use
-# perl add_difference_in_dates_column.pl [table] [title of column with dates]
-# [title of another column with dates] > [output table path]
+# perl add_difference_in_dates_column.pl [table] "[title of column with dates]"
+# "[title of another column with dates]" "[optional title of new column]" > [output table path]
 
 
 use strict;

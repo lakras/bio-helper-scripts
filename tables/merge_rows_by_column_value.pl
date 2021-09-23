@@ -6,12 +6,13 @@
 # rows sharing a value in column to merge by (one row per value).
 
 # Usage:
-# perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by]
-# [optional title of column not to merge] [optional title of another column not to merge] [etc.]
+# perl merge_rows_by_column_value.pl [table to merge] "[title of column to merge by]"
+# "[optional title of column not to merge]" "[optional title of another column not to merge]"
+# [etc.]
 
 # Prints to console. To print to file, use
-# perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by]
-# [optional title of column not to merge] [optional title of another column not to merge]
+# perl merge_rows_by_column_value.pl [table to merge] "[title of column to merge by]"
+# "[optional title of column not to merge]" "[optional title of another column not to merge]"
 # [etc.] > [output table path]
 
 

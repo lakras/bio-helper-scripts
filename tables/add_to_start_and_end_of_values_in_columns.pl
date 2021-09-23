@@ -1,19 +1,18 @@
 #!/usr/bin/env perl
 
-# Pads non-empty values in specified columns with parameter start and end text. Start and
-# end text and column titles may not contain whitespace.
+# Pads non-empty values in specified columns with parameter start and end text.
 
 # Usage:
 # perl add_to_start_and_end_of_values_in_columns.pl [table]
-# [text to add to start of each column value] [text to add to end of each column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.]
+# "[text to add to start of each column value]" "[text to add to end of each column value]"
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.]
 
 # Prints to console. To print to file, use
 # perl add_to_start_and_end_of_values_in_columns.pl [table]
-# [text to add to start of each column value] [text to add to end of each column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.] > [output table path]
+# "[text to add to start of each column value]" "[text to add to end of each column value]"
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.] > [output table path]
 
 
 use strict;

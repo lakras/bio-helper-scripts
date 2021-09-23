@@ -4,12 +4,12 @@
 # separated by a ", ". Column titles must not have spaces.
 
 # Usage:
-# perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates]
-# [title of another column with dates] [title of another column with dates] [etc.]
+# perl dates_in_columns_to_YYYY_MM_DD.pl [table] "[title of column with dates]"
+# "[title of another column with dates]" "[title of another column with dates]" [etc.]
 
 # Prints to console. To print to file, use
-# perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates]
-# [title of another column with dates] [title of another column with dates] [etc.] > [output table path]
+# perl dates_in_columns_to_YYYY_MM_DD.pl [table] "[title of column with dates]"
+# "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]
 
 
 use strict;

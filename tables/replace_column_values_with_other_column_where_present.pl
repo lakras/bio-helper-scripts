@@ -1,15 +1,14 @@
 #!/usr/bin/env perl
 
 # Fills in values in column of interest with values from other column when they are present.
-# No spaces allowed in parameter column titles.
 
 # Usage:
-# perl replace_column_values_with_other_column_where_present.pl [table] [title of column to fill in]
-# [title of column with potential replacement values]
+# perl replace_column_values_with_other_column_where_present.pl [table] "[title of column to fill in]"
+# "[title of column with potential replacement values]"
 
 # Prints to console. To print to file, use
-# perl replace_column_values_with_other_column_where_present.pl [table] [title of column to fill in]
-# [title of column with potential replacement values] > [output table path]
+# perl replace_column_values_with_other_column_where_present.pl [table] "[title of column to fill in]"
+# "[title of column with potential replacement values]" > [output table path]
 
 
 use strict;

@@ -1,16 +1,15 @@
 #!/usr/bin/env perl
 
 # Deletes rows in table by column values. Only includes rows without column value
-# containing text to filter out in column to filter by. Case-sensitive. Text to filter out
-# must not have spaces.
+# containing text to filter out in column to filter by. Case-sensitive.
 
 # Usage:
-# perl delete_table_rows_with_column_value.pl [tab-separated table] [query to select rows to delete]
-# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by]
+# perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]"
+# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]"
 
 # Prints to console. To print to file, use
-# perl delete_table_rows_with_column_value.pl [tab-separated table] [query to select rows to delete]
-# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by]
+# perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]"
+# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]"
 # > [output table path]
 
 
@@ -21,7 +20,7 @@ use warnings;
 my $table = $ARGV[0];
 my $column_value_to_select = $ARGV[1]; # no spaces
 my $option = $ARGV[2]; # 0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to
-my $title_of_column_to_filter_by = join(" ", @ARGV[3..$#ARGV]);
+my $title_of_column_to_filter_by = $ARGV[3];
 
 
 my $NEWLINE = "\n";

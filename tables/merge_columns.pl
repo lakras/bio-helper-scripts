@@ -1,14 +1,14 @@
 #!/usr/bin/env perl
 
-# Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
+# Merges selected columns. Reports any conflicts.
 
 # Usage:
-# perl merge_columns.pl [table to merge] [title of column to merge]
-# [title of another column to merge] [title of another column to merge] [etc.]
+# perl merge_columns.pl [table to merge] "[title of column to merge]"
+# "[title of another column to merge]" "[title of another column to merge]" [etc.]
 
 # Prints to console. To print to file, use
-# perl merge_columns.pl [table to merge] [title of column to merge]
-# [title of another column to merge] [title of another column to merge] [etc.] > [output table path]
+# perl merge_columns.pl [table to merge] "[title of column to merge]"
+# "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]
 
 
 use strict;

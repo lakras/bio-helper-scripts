@@ -3,10 +3,10 @@
 # Retrieves query sequences by name from fasta file.
 
 # Usage:
-# perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.]
+# perl retrieve_sequences_by_name.pl [fasta file path] "[query sequence name 1]" "[query sequence name 2]" [etc.]
 
 # Prints to console. To print to file, use
-# perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.] > [output fasta file path]
+# perl retrieve_sequences_by_name.pl [fasta file path] "[query sequence name 1]" "[query sequence name 2]" [etc.] > [output fasta file path]
 
 
 use strict;

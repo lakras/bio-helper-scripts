@@ -3,12 +3,12 @@
 # Replaces column title with new column title.
 
 # Usage:
-# perl replace_column_title.pl [table] [current title of column to replace (no spaces)]
-# [replacement column title]
+# perl replace_column_title.pl [table] "[current title of column to replace]"
+# "[replacement column title]"
 
 # Prints to console. To print to file, use
-# perl replace_column_title.pl [table] [current title of column to replace (no spaces)]
-# [replacement column title] > [output table path]
+# perl replace_column_title.pl [table] "[current title of column to replace]"
+# "[replacement column title]" > [output table path]
 
 
 use strict;
@@ -17,7 +17,7 @@ use warnings;
 
 my $table = $ARGV[0];
 my $column_title_to_replace = $ARGV[1];
-my $new_column_title = join(" ", @ARGV[2..$#ARGV]);
+my $new_column_title = $ARGV[2];
 
 
 my $NEWLINE = "\n";

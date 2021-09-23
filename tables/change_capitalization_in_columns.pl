@@ -6,14 +6,14 @@
 # Usage:
 # perl change_capitalization_in_columns.pl [table]
 # [uc to make all values uppercase, lc to make all values lowercase, first to capitalize first letter]
-# [title of column to capitalize] [title of another column to capitalize]
-# [title of another column to capitalize] [etc.]
+# "[title of column to capitalize]" "[title of another column to capitalize]"
+# "[title of another column to capitalize]" [etc.]
 
 # Prints to console. To print to file, use
 # perl change_capitalization_in_columns.pl [table]
 # [uc to make all values uppercase, lc to make all values lowercase, first to capitalize first letter]
-# [title of column to capitalize] [title of another column to capitalize]
-# [title of another column to capitalize] [etc.] > [output table path]
+# "[title of column to capitalize]" "[title of another column to capitalize]"
+# "[title of another column to capitalize]" [etc.] > [output table path]
 
 
 use strict;

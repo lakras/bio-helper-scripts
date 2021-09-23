@@ -6,14 +6,14 @@
 # Usage:
 # perl add_earliest_or_latest_date_column.pl [table]
 # [0 to select earliest date, 1 to select latest date]
-# [title of column with dates] [title of another column with dates]
-# [title of another column with dates] [etc.]
+# "[title of column with dates]" "[title of another column with dates]"
+# "[title of another column with dates]" [etc.]
 
 # Prints to console. To print to file, use
 # perl add_earliest_or_latest_date_column.pl [table]
 # [0 to select earliest date, 1 to select latest date]
-# [title of column with dates] [title of another column with dates]
-# [title of another column with dates] [etc.] > [output table path]
+# "[title of column with dates]" "[title of another column with dates]"
+# "[title of another column with dates]" [etc.] > [output table path]
 
 
 use strict;

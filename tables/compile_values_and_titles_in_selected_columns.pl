@@ -5,11 +5,11 @@
 
 # Usage:
 # perl compile_values_and_titles_in_selected_columns.pl [tab-separated table]
-# [column title] [another column title] [etc.]
+# "[column title]" "[another column title]" [etc.]
 
 # Prints to console. To print to file, use
 # perl compile_values_and_titles_in_selected_columns.pl [tab-separated table]
-# [column title] [another column title] [etc.] > [output table path]
+# "[column title]" "[another column title]" [etc.] > [output table path]
 
 
 use strict;

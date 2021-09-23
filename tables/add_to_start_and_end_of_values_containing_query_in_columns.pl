@@ -1,19 +1,18 @@
 #!/usr/bin/env perl
 
 # Pads values containing query in specified columns with parameter start and end text.
-# Start and end text, column titles, and query may not contain whitespace.
 
 # Usage:
-# perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] [query text]
-# [text to add to start of each column value] [text to add to end of each column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.]
+# perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] "[query text]"
+# "[text to add to start of each column value]" "[text to add to end of each column value]"
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.]
 
 # Prints to console. To print to file, use
-# perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] [query text]
-# [text to add to start of each column value] [text to add to end of each column value]
-# [title of column to search] [title of another column to search]
-# [title of another column to search] [etc.] > [output table path]
+# perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] "[query text]"
+# "[text to add to start of each column value]" "[text to add to end of each column value]"
+# "[title of column to search]" "[title of another column to search]"
+# "[title of another column to search]" [etc.] > [output table path]
 
 
 use strict;

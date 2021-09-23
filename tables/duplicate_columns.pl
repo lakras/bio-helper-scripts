@@ -3,11 +3,11 @@
 # Duplicates selected columns.
 
 # Usage:
-# perl duplicate_columns.pl [tab-separated table] [column title] [another column title]
+# perl duplicate_columns.pl [tab-separated table] "[column title]" "[another column title]"
 # [etc.]
 
 # Prints to console. To print to file, use
-# perl duplicate_columns.pl [tab-separated table] [column title] [another column title]
+# perl duplicate_columns.pl [tab-separated table] "[column title]" "[another column title]"
 # [etc.] > [output table path]
 
 

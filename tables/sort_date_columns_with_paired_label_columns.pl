@@ -6,14 +6,14 @@
 # in YYYY-MM-DD format.
 
 # Usage:
-# perl sort_date_columns_with_paired_label_columns.pl [table] [title of column with dates]
-# [title of label column that should travel with paired dates] [title of another column with dates]
-# [title of label column that should travel with those paired dates] [etc.]
+# perl sort_date_columns_with_paired_label_columns.pl [table] "[title of column with dates]"
+# "[title of label column that should travel with paired dates]" "[title of another column with dates]"
+# "[title of label column that should travel with those paired dates]" [etc.]
 
 # Prints to console. To print to file, use
-# perl sort_date_columns_with_paired_label_columns.pl [table] [title of column with dates]
-# [title of label column that should travel with paired dates] [title of another column with dates]
-# [title of label column that should travel with those paired dates] [etc.] > [output table path]
+# perl sort_date_columns_with_paired_label_columns.pl [table] "[title of column with dates]"
+# "[title of label column that should travel with paired dates]" "[title of another column with dates]"
+# "[title of label column that should travel with those paired dates]" [etc.] > [output table path]
 
 
 use strict;

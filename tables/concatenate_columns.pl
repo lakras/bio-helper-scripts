@@ -3,11 +3,11 @@
 # Concatenates selected columns. Adds concatenated values in new column.
 
 # Usage:
-# perl concatenate_columns.pl [tab-separated table] [column title] [another column title]
+# perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]"
 # [etc.]
 
 # Prints to console. To print to file, use
-# perl concatenate_columns.pl [tab-separated table] [column title] [another column title]
+# perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]"
 # [etc.] > [output table path]
 
 

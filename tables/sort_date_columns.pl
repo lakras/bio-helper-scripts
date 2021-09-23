@@ -6,12 +6,12 @@
 # in YYYY-MM-DD format.
 
 # Usage:
-# perl sort_date_columns.pl [table] [title of column with dates]
-# [title of another column with dates] [title of another column with dates] [etc.]
+# perl sort_date_columns.pl [table] "[title of column with dates]"
+# "[title of another column with dates]" "[title of another column with dates]" [etc.]
 
 # Prints to console. To print to file, use
-# perl sort_date_columns.pl [table] [title of column with dates]
-# [title of another column with dates] [title of another column with dates] [etc.]
+# perl sort_date_columns.pl [table] "[title of column with dates]"
+# "[title of another column with dates]" "[title of another column with dates]" [etc.]
 # > [output table path]
 
 

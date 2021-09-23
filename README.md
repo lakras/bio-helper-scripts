@@ -34,7 +34,7 @@ Includes the following scripts—
 
 - [`retrieve_sequences_by_name.pl`](/fasta/retrieve_sequences_by_name.pl): Retrieves query sequences by name from fasta file.
 
-   _Usage: `perl retrieve_sequences_by_name.pl [fasta file path] [query sequence name 1] [query sequence name 2] [etc.] > [output fasta file path]`_
+   _Usage: `perl retrieve_sequences_by_name.pl [fasta file path] "[query sequence name 1]" "[query sequence name 2]" [etc.] > [output fasta file path]`_
 
 - [`retrieve_sequences_by_names_listed_in_file.pl`](/fasta/retrieve_sequences_by_names_listed_in_file.pl): Retrieves query sequences by name from fasta file, taking query sequence names from a list in a file, one sequence name per line.
 
@@ -79,107 +79,111 @@ Includes the following scripts—
 
 - [`replace_column_title.pl`](/tables/replace_column_title.pl): Replaces column title with new column title.
 
-   _Usage: `perl replace_column_title.pl [table] [current title of column to replace (no spaces)] [replacement column title] > [output table path]`_
+   _Usage: `perl replace_column_title.pl [table] "[current title of column to replace]" "[replacement column title]" > [output table path]`_
 
 ### Column manipulation
 
 - [`delete_column.pl`](/tables/delete_column.pl): Deletes column with input column title.
 
-   _Usage: `perl delete_column.pl [table] [title of column to delete] > [output table path]`_
+   _Usage: `perl delete_column.pl [table] "[title of column to delete]" > [output table path]`_
 
 - [`duplicate_columns.pl`](/tables/duplicate_columns.pl): Duplicates selected columns.
 
-   _Usage: `perl duplicate_columns.pl [tab-separated table] [column title] [another column title] [etc.] > [output table path]`_
+   _Usage: `perl duplicate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
 - [`concatenate_columns.pl`](/tables/concatenate_columns.pl): Concatenates selected columns. Adds concatenated values in new column.
 
-   _Usage: `perl concatenate_columns.pl [tab-separated table] [column title] [another column title] [etc.] > [output table path]`_
+   _Usage: `perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
-- [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
+- [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts.
 
-   _Usage: `perl merge_columns.pl [table to merge] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
+   _Usage: `perl merge_columns.pl [table to merge] "[title of column to merge]" "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]`_
 
-- [`merge_columns_with_conflict_detail_column.pl`](/tables/merge_columns_with_conflict_detail_column.pl): Merges selected columns. Reports any conflicts. Input column titles cannot have whitespace.
+- [`merge_columns_with_conflict_detail_column.pl`](/tables/merge_columns_with_conflict_detail_column.pl): Merges selected columns. Reports any conflicts.
 
-   _Usage: `perl merge_columns_with_conflict_detail_column.pl [table to merge] [title of column to print with merge conflict] [title of column to merge] [title of another column to merge] [title of another column to merge] [etc.] > [output table path]`_
+   _Usage: `perl merge_columns_with_conflict_detail_column.pl [table to merge] "[title of column to print in merge conflict message]" "[title of column to merge]" "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]`_
 
 - [`replace_values_in_columns.pl`](/tables/replace_values_in_columns.pl): Replaces query with replacement text in specified columns.
 
-   _Usage: `perl replace_values_in_columns.pl [table] [query text to replace] [replacement text] [1 to exactly match full column value only, 0 to allow search and replace within text of column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+   _Usage: `perl replace_values_in_columns.pl [table] "[query text to replace]" "[replacement text]" [1 to exactly match full column value only, 0 to allow search and replace within text of column value] "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
 
 - [`delete_values_in_columns.pl`](/tables/delete_values_in_columns.pl): Deletes query in specified columns.
 
-   _Usage: `perl delete_values_in_columns.pl [table] [query text to delete] # [1 to exactly match full column value only, 0 to allow search within text of column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+   _Usage: `perl delete_values_in_columns.pl [table] "[query text to delete]" # [1 to exactly match full column value only, 0 to allow search within text of column value] "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
 
-- [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text. Start and end text may not contain whitespace.
+- [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text.
 
-   _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] [text to add to start of each column value] [text to add to end of each column value] [title of column to search] [title of another column to search] [title of another column to search] [etc.] > [output table path]`_
+   _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] "[text to add to start of each column value]" "[text to add to end of each column value]" "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
+
+- [`add_to_start_and_end_of_values_containing_query_in_columns.pl`](/tables/add_to_start_and_end_of_values_containing_query_in_columns.pl): Pads values containing query in specified columns with parameter start and end text.
+
+   _Usage: `perl add_to_start_and_end_of_values_containing_query_in_columns.pl [table] "[query text]" "[text to add to start of each column value]" "[text to add to end of each column value]" "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
 
 - [`change_capitalization_in_columns.pl`](/tables/change_capitalization_in_columns.pl): Changes capitalization of values in specified columns: all capitalized, all lowercase, or first letter capitalized.
 
-   _Usage: `perl change_capitalization_in_columns.pl [table] [uc to make all values uppercase, lc to make all values lowercase, first to capitalize first letter] [title of column to capitalize] [title of another column to capitalize] [title of another column to capitalize] [etc.] > [output table path]`_
+   _Usage: `perl change_capitalization_in_columns.pl [table] [uc to make all values uppercase, lc to make all values lowercase, first to capitalize first letter] "[title of column to capitalize]" "[title of another column to capitalize]" "[title of another column to capitalize]" [etc.] > [output table path]`_
 
 - [`fill_in_empty_column_values.pl`](/tables/fill_in_empty_column_values.pl): Fills in empty values in column of interest with specified value.
 
-   _Usage: `perl fill_in_empty_column_values.pl [table] [title of column to fill in (no spaces)] [value to replace empty values with] > [output table path]`_
+   _Usage: `perl fill_in_empty_column_values.pl [table] "[title of column to fill in]" "[value to replace empty values with]" > [output table path]`_
 
-- [`fill_in_empty_column_values_from_other_column.pl`](/tables/fill_in_empty_column_values_from_other_column.pl): Fills in empty values in column of interest with values from other column. No spaces allowed in parameter column titles.
+- [`fill_in_empty_column_values_from_other_column.pl`](/tables/fill_in_empty_column_values_from_other_column.pl): Fills in empty values in column of interest with values from other column.
 
-   _Usage: `perl fill_in_empty_column_values_from_other_column.pl [table] [title of column to fill in] [title of column with potential replacement values] > [output table path]`_
+   _Usage: `perl fill_in_empty_column_values_from_other_column.pl [table] "[title of column to fill in]" "[title of column with potential replacement values]" > [output table path]`_
 
-- [`replace_column_values_with_other_column_where_present.pl`](/tables/replace_column_values_with_other_column_where_present.pl): Fills in values in column of interest with values from other column when they are present. No spaces allowed in parameter column titles.
+- [`replace_column_values_with_other_column_where_present.pl`](/tables/replace_column_values_with_other_column_where_present.pl): Fills in values in column of interest with values from other column when they are present.
 
-   _Usage: `perl replace_column_values_with_other_column_where_present.pl [table] [title of column to fill in] [title of column with potential replacement values] > [output table path]`_
+   _Usage: `perl replace_column_values_with_other_column_where_present.pl [table] "[title of column to fill in]" "[title of column with potential replacement values]" > [output table path]`_
 
-- [`replace_column_values_where_other_column_present_and_nonzero.pl`](/tables/replace_column_values_where_other_column_present_and_nonzero.pl): In rows where a column has a present, non-zero value, replaces value in another column with parameter replacement value
+- [`replace_column_values_where_other_column_present_and_nonzero.pl`](/tables/replace_column_values_where_other_column_present_and_nonzero.pl): In rows where a column has a present, non-zero value, replaces value in another column with parameter replacement value.
 
-   _Usage: `perl replace_column_values_where_other_column_present_and_nonzero.pl [table] [title of column to check] [title of column to fill in] [replacement value] > [output table path]`_
+   _Usage: `perl replace_column_values_where_other_column_present_and_nonzero.pl [table] "[title of column to check]" "[title of column to fill in]" "[replacement value]" > [output table path]`_
 
 - [`retrieve_subset_of_columns.pl`](/tables/retrieve_subset_of_columns.pl): Subsets table to only columns of interest.
 
-   _Usage: `perl retrieve_subset_of_columns.pl [table] [title of first column to include in output] [title of second column to include] [title of third column to include] [etc.] > [output table path]`_
+   _Usage: `perl retrieve_subset_of_columns.pl [table] "[title of first column to include in output]" "[title of second column to include]" "[title of third column to include]" [etc.] > [output table path]`_
 
 - [`compile_values_and_titles_in_selected_columns.pl`](/tables/compile_values_and_titles_in_selected_columns.pl): Generates a new column with the values in selected columns and their column titles, where values are present.
 
-   _Usage: `perl compile_values_and_titles_in_selected_columns.pl [tab-separated table] [column title] [another column title] [etc.] > [output table path]`_
+   _Usage: `perl compile_values_and_titles_in_selected_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
 ### Column manipulation with dates
 
 - [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
 
-   _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+   _Usage: `perl dates_in_columns_to_YYYY_MM_DD.pl [table] "[title of column with dates]" "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]`_
 
 Not guaranteed to work for dates outside of 2021 (sorry!):
 
-- [`add_difference_in_dates_column.pl`](/tables/add_difference_in_dates_column.pl): Adds column listing difference in dates between columns specified in parameter column titles. Dates must be in YYYY-MM-DD format. Column titles must not have spaces.
+- [`add_difference_in_dates_column.pl`](/tables/add_difference_in_dates_column.pl): Adds column listing difference in dates (in days) between columns specified in parameter column titles. Dates must be in YYYY-MM-DD format.
 
-   _Usage: `perl add_difference_in_dates_column.pl [table] [title of column with dates] [title of another column with dates] > [output table path]`_
+   _Usage: `perl add_difference_in_dates_column.pl [table] "[title of column with dates]" "[title of another column with dates]" "[optional title of new column]" > [output table path]`_
 
 - [`add_earliest_or_latest_date_column.pl`](/tables/add_earliest_or_latest_date_column.pl): Adds column listing the latest or earliest of the specified columns. Dates must be in YYYY-MM-DD format.
 
-   _Usage: `perl add_earliest_or_latest_date_column.pl [table] [0 to select earliest date, 1 to select latest date] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+   _Usage: `perl add_earliest_or_latest_date_column.pl [table] [0 to select earliest date, 1 to select latest date] "[title of column with dates]" "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]`_
 
 - [`sort_date_columns.pl`](/tables/sort_date_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
 
-   _Usage: `perl sort_date_columns.pl [table] [title of column with dates] [title of another column with dates] [title of another column with dates] [etc.] > [output table path]`_
+   _Usage: `perl sort_date_columns.pl [table] "[title of column with dates]" "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]`_
 
 - [`sort_date_columns_with_paired_label_columns.pl`](/tables/sort_date_columns_with_paired_label_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
 
-   _Usage: `perl sort_date_columns_with_paired_label_columns.pl [table] [title of column with dates] [title of label column that should travel with paired dates] [title of another column with dates] [title of label column that should travel with those paired dates] [etc.] > [output table path]`_
+   _Usage: `perl sort_date_columns_with_paired_label_columns.pl [table] "[title of column with dates]" "[title of label column that should travel with paired dates]" "[title of another column with dates]" "[title of label column that should travel with those paired dates]" [etc.] > [output table path]`_
 
 ### Row manipulation
 
-- [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows matching (containing, beginning with, ending with, or equal to) column value of interest in column to filter by. Case-sensitive. Column title must not have spaces.
+- [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows matching (containing, beginning with, ending with, or equal to) column value of interest in column to filter by. Case-sensitive.
 
-   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] [value of column to select] > [output table path]`_
+   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]" "[column value to select]" > [output table path]`_
 
-- [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive. Text to filter out must not have spaces.
+- [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive.
 
-   _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] [query to select rows to delete] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] [title of column to filter by] > [output table path]`_
+   _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]" [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]" > [output table path]`_
 
 - [`merge_rows_by_column_value.pl`](/tables/merge_rows_by_column_value.pl): Merges (takes union of) all columns in rows with shared value in column to merge by. If titles of columns not to merge by are provided, leaves one row per input row with all other columns identical. If no columns not to merge by provided, fully merges any rows sharing a value in column to merge by (one row per value).
 
-   _Usage: `perl merge_rows_by_column_value.pl [table to merge] [title of column to merge by] [optional title of column not to merge] [optional title of another column not to merge] [etc.] > [output table path]`_
+   _Usage: `perl merge_rows_by_column_value.pl [table to merge] "[title of column to merge by]" "[optional title of column not to merge]" "[optional title of another column not to merge]" [etc.] > [output table path]`_
 
 ### Table manipulation
 
@@ -199,11 +203,11 @@ Not guaranteed to work for dates outside of 2021 (sorry!):
 
 - [`annotate_replicates.pl`](/tables/annotate_replicates.pl): Assigns a source number to all replicates from the same source. Adds source number as a column to table to annotate.
 
-   _Usage: `perl annotate_replicates.pl [tab-separated replicate ids, one line per source] [table to annotate] [title of column containing replicate ids in table to annotate] [optional source column title for output] > [annotated output table path]`_
+   _Usage: `perl annotate_replicates.pl [tab-separated replicate ids, one line per source] [table to annotate] "[title of column containing replicate ids in table to annotate]" "[optional source column title for output]" > [annotated output table path]`_
 
 - [`add_shared_values_summary_column.pl`](/tables/add_shared_values_summary_column.pl): Summarizes all values appearing in columns to summarize (sample ids and dates, for example) for each shared value (patient id, for example). Adds summary in new column.
 
-   _Usage: `perl add_shared_values_summary_column.pl [tab-separated table] [title of column containing values shared by rows] [title of column to include in summary of shared values] [title of another column to include in summary of shared values] [etc.] > [output table path]`_
+   _Usage: `perl add_shared_values_summary_column.pl [tab-separated table] "[title of column containing values shared by rows]" "[title of column to include in summary of shared values]" "[title of another column to include in summary of shared values]" [etc.] > [output table path]`_
 
 ### Other
 
@@ -213,7 +217,7 @@ Not guaranteed to work for dates outside of 2021 (sorry!):
 
 - [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
-   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]`_
+   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column index] > [output table path]`_
 
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.

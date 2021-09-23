@@ -3,10 +3,10 @@
 # Deletes column with input column title.
 
 # Usage:
-# perl delete_column.pl [table] [title of column to delete]
+# perl delete_column.pl [table] "[title of column to delete]"
 
 # Prints to console. To print to file, use
-# perl delete_column.pl [table] [title of column to delete] > [output table path]
+# perl delete_column.pl [table] "[title of column to delete]" > [output table path]
 
 
 use strict;
@@ -14,7 +14,7 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my $title_of_column_to_delete = join(" ", @ARGV[1..$#ARGV]);
+my $title_of_column_to_delete = $ARGV[1];
 
 
 my $NEWLINE = "\n";

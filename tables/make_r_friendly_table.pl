@@ -31,10 +31,10 @@
 # 1B	3	10: root;cellular organisms;	0
 
 # Usage:
-# perl make_r_friendly_table.pl [table file path] [first data column]
+# perl make_r_friendly_table.pl [table file path] [first data column index]
 
 # Prints to console. To print to file, use
-# perl make_r_friendly_table.pl [table file path] [first data column] > [output table path]
+# perl make_r_friendly_table.pl [table file path] [first data column index] > [output table path]
 
 
 use strict;

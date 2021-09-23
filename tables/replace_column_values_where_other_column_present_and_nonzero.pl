@@ -5,11 +5,11 @@
 
 # Usage:
 # perl replace_column_values_where_other_column_present_and_nonzero.pl [table]
-# [title of column to check] [title of column to fill in] [replacement value]
+# "[title of column to check]" "[title of column to fill in]" "[replacement value]"
 
 # Prints to console. To print to file, use
 # perl replace_column_values_where_other_column_present_and_nonzero.pl [table]
-# [title of column to check] [title of column to fill in] [replacement value]
+# "[title of column to check]" "[title of column to fill in]" "[replacement value]"
 # > [output table path]
 
 
@@ -20,7 +20,7 @@ use warnings;
 my $table = $ARGV[0];
 my $title_of_column_to_check = $ARGV[1];
 my $title_of_column_to_fill_in = $ARGV[2];
-my $replacement_value = join(" ", @ARGV[3..$#ARGV]);
+my $replacement_value = $ARGV[3];
 
 
 my $NEWLINE = "\n";

@@ -1,15 +1,14 @@
 #!/usr/bin/env perl
 
-# Fills in empty values in column of interest with values from other column. No spaces
-# allowed in parameter column titles.
+# Fills in empty values in column of interest with values from other column.
 
 # Usage:
-# perl fill_in_empty_column_values_from_other_column.pl [table] [title of column to fill in]
-# [title of column with potential replacement values]
+# perl fill_in_empty_column_values_from_other_column.pl [table] "[title of column to fill in]"
+# "[title of column with potential replacement values]"
 
 # Prints to console. To print to file, use
-# perl fill_in_empty_column_values_from_other_column.pl [table] [title of column to fill in]
-# [title of column with potential replacement values] > [output table path]
+# perl fill_in_empty_column_values_from_other_column.pl [table] "[title of column to fill in]"
+# "[title of column with potential replacement values]" > [output table path]
 
 
 use strict;
