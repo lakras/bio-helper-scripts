@@ -83,9 +83,9 @@ Includes the following scripts—
 
 ### Column manipulation
 
-- [`delete_column.pl`](/tables/delete_column.pl): Deletes column with input column title.
+- [`delete_columns.pl`](/tables/delete_columns.pl): Deletes columns with specified column titles.
 
-   _Usage: `perl delete_column.pl [table] "[title of column to delete]" > [output table path]`_
+   _Usage: `perl delete_columns.pl [table] "[title of column to delete]" "[title of another column to delete]" "[title of another column to delete]" [etc.] > [output table path]`_
 
 - [`duplicate_columns.pl`](/tables/duplicate_columns.pl): Duplicates selected columns.
 
