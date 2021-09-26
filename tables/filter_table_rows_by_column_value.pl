@@ -88,7 +88,7 @@ while(<TABLE>) # for each row in the file
 			# prints this line if the value of interest is in the column to filter by
 			if($option == 4) # 4 to match cells not equal to query)
 			{
-				if($column_value ne $column_value_to_select)
+				if(defined $column_value and $column_value ne $column_value_to_select)
 				{
 					print $line.$NEWLINE;
 				}
