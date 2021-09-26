@@ -197,6 +197,10 @@ Includes the following scripts—
 
    _Usage: `perl concatenate_tables.pl [table1] [table2] [table3] etc. > [concatenated output table path]`_
 
+- [`add_columns_from_other_table.pl`](/tables/add_columns_from_other_table.pl): Adds columns from another table, matching rows in the two tables by selected columns to merge by.
+
+   _Usage: `perl add_columns_from_other_table.pl [table to add columns to] "[title of column in first table to identify rows by]" [table to add columns from] "[title of column in second table to identify rows by]" "[title of column to add]" "[title of another column to add]" [etc.] > [output table path]`_
+
 - [`merge_two_tables_by_column_value.pl`](/tables/merge_two_tables_by_column_value.pl): Merges (takes union of) two tables by the values in the specified columns.
 
    _Usage: `perl merge_two_tables_by_column_value.pl [table1 file path] [table1 column number (0-indexed)] [table2 file path] [table2 column number (0-indexed)] > [output table path]`_
