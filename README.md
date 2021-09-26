@@ -95,6 +95,10 @@ Includes the following scripts—
 
    _Usage: `perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
+- [`summarize_numerical_columns.pl`](/tables/summarize_numerical_columns.pl): Summarizes selected numerical columns. Adds new columns with: mean, standard deviation, median, range, min, max, and all values sorted in a comma-separated list.
+
+   _Usage: `perl summarize_numerical_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
+
 - [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts.
 
    _Usage: `perl merge_columns.pl [table to merge] "[title of column to merge]" "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]`_
