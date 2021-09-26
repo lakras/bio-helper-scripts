@@ -179,6 +179,10 @@ Includes the following scripts—
 
    _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]" "[column value to select]" > [output table path]`_
 
+- [`filter_table_rows_by_numerical_column_value.pl`](/tables/filter_table_rows_by_numerical_column_value.pl): Filters table by column values. Only includes rows equal to, greater than, or less than column value of interest in column to filter by.
+
+   _Usage: `perl filter_table_rows_by_numerical_column_value.pl [tab-separated table] [0 to match cells equal to query, 1: less than, 2: greater than] "[title of column to filter by]" "[column value to select]" > [output table path]`_
+
 - [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive.
 
    _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]" [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]" > [output table path]`_
