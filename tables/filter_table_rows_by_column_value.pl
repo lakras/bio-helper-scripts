@@ -21,8 +21,8 @@ use warnings;
 
 my $table = $ARGV[0];
 my $option = $ARGV[1]; # 0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to
-my $title_of_column_to_filter_by = $ARGV[2]; # no spaces
-my $column_value_to_select = join(" ", @ARGV[3..$#ARGV]);
+my $title_of_column_to_filter_by = $ARGV[2];
+my $column_value_to_select = $ARGV[3];
 
 
 my $NEWLINE = "\n";
