@@ -5,12 +5,12 @@
 
 # Usage:
 # perl filter_table_rows_by_numerical_column_value.pl [tab-separated table]
-# [0 to match cells equal to query, 1: less than, 2: greater than]
+# [0 to match cells equal to query, 1: less than, 2: less than or equal to, 3: greater than, 4: greater than or equal to]
 # "[title of column to filter by]" "[column value to select]"
 
 # Prints to console. To print to file, use
 # perl filter_table_rows_by_numerical_column_value.pl [tab-separated table]
-# [0 to match cells equal to query, 1: less than, 2: greater than]
+# [0 to match cells equal to query, 1: less than, 2: less than or equal to, 3: greater than, 4: greater than or equal to]
 # "[title of column to filter by]" "[column value to select]" > [output table path]
 
 
@@ -19,7 +19,7 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my $option = $ARGV[1]; # 0 to match cells equal to query, 1: less than, 2: greater than
+my $option = $ARGV[1]; # 0 to match cells equal to query, 1: less than, 2: less than or equal to, 3: greater than, 4: greater than or equal to
 my $title_of_column_to_filter_by = $ARGV[2]; # no spaces
 my $query = $ARGV[3];
 
@@ -85,9 +85,11 @@ while(<TABLE>) # for each row in the file
 			my $column_value = $items_in_line[$column_to_filter_by];
 			
 			# prints this line if the value of interest is in the column to filter by
-			if($option == 0 and $column_value == $query    # 0 to match cells equal to query, 1: less than, 2: greater than
-				or $option == 1 and $column_value < $query # 1 to match cells less than query
-				or $option == 2 and $column_value > $query)# 2 to match cells greater than query
+			if($option == 0 and $column_value == $query     # 0 to match cells equal to query,
+				or $option == 1 and $column_value < $query  # 1 to match cells less than query
+				or $option == 2 and $column_value <= $query # 2 to match cells less than or equal to query
+				or $option == 3 and $column_value > $query  # 3 to match cells greater than query
+				or $option == 4 and $column_value >= $query)# 4 to match cells greater than or equal to query
 			{
 				print $line.$NEWLINE;
 			}

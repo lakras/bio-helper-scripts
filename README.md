@@ -181,7 +181,7 @@ Includes the following scripts—
 
 - [`filter_table_rows_by_numerical_column_value.pl`](/tables/filter_table_rows_by_numerical_column_value.pl): Filters table by column values. Only includes rows equal to, greater than, or less than column value of interest in column to filter by.
 
-   _Usage: `perl filter_table_rows_by_numerical_column_value.pl [tab-separated table] [0 to match cells equal to query, 1: less than, 2: greater than] "[title of column to filter by]" "[column value to select]" > [output table path]`_
+   _Usage: `perl filter_table_rows_by_numerical_column_value.pl [tab-separated table] [0 to match cells equal to query, 1: less than, 2: less than or equal to, 3: greater than, 4: greater than or equal to] "[title of column to filter by]" "[column value to select]" > [output table path]`_
 
 - [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive.
 
