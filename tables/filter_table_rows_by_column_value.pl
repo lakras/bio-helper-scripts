@@ -86,11 +86,14 @@ while(<TABLE>) # for each row in the file
 			my $column_value = $items_in_line[$column_to_filter_by];
 			
 			# prints this line if the value of interest is in the column to filter by
-			if($option == 4 and $column_value ne $column_value_to_select) # 4 to match cells not equal to query)
+			if($option == 4) # 4 to match cells not equal to query)
 			{
-				print $line.$NEWLINE;
+				if($column_value ne $column_value_to_select)
+				{
+					print $line.$NEWLINE;
+				}
 			}
-			if(!$column_value and !$column_value_to_select # both 0s
+			elsif(!$column_value and !$column_value_to_select # both 0s
 				or !length($column_value) and !length($column_value_to_select) # both empty strings
 				or $column_value and $column_value_to_select
 					and ($option == 3 and $column_value eq $column_value_to_select    # 3 to match cells equal to query
