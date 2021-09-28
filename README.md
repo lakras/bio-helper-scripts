@@ -215,6 +215,10 @@ Includes the following scripts—
 
    _Usage: `perl annotate_replicates.pl [file listing replicate ids from same source, tab-separated, one line per source] [table to annotate] "[title of column containing replicate ids in table to annotate]" "[optional source column title for output]" > [annotated output table path]`_
 
+- [`select_one_replicate.pl`](/tables/select_one_replicate.pl): Given a table with multiple replicates from the same source, selects one replicate per source, using selected column to select replicate. In the event of a tie, selects first appearing replicate.
+
+   _Usage: `perl select_one_replicate.pl [tab-separated table] "[title of column containing source of each replicate (same value for every replicate from the same source)]" "[title of column to use to select replicate]" [0 to select replicate with smallest numerical value, 1 to select replicate with largest numerical value] > [annotated output table path]`_
+
 - [`add_shared_values_summary_column.pl`](/tables/add_shared_values_summary_column.pl): Summarizes all values appearing in columns to summarize (sample ids and dates, for example) for each shared value (patient id, for example). Adds summary in new column.
 
    _Usage: `perl add_shared_values_summary_column.pl [tab-separated table] "[title of column containing values shared by rows]" "[title of column to include in summary of shared values]" "[title of another column to include in summary of shared values]" [etc.] > [output table path]`_
