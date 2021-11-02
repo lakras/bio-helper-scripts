@@ -99,14 +99,17 @@ while(<TABLE_1>) # for each row in the file
 		else # column values
 		{
 			my $column_to_merge_by_value = $items_in_line[$table_1_column_to_merge_by];
-			if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
+			if(defined $column_to_merge_by_value)
 			{
-				print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
-					."once in table 1. Merging rows.\n";
+				if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value})
+				{
+					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
+						."once in table 1. Merging rows.\n";
+				}
+				$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}
+					= merge_values_to_print($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}, $line);
+				$column_to_merge_by_values{$column_to_merge_by_value} = 1;
 			}
-			$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}
-				= merge_values_to_print($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}, $line);
-			$column_to_merge_by_values{$column_to_merge_by_value} = 1;
 		}
 	}
 }
