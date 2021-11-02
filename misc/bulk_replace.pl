@@ -109,10 +109,17 @@ foreach my $input_file(@input_files)
 		{
 			my $new_value = $current_value_to_new_value{$current_value};
 
+			# whitespace-separated
 			$line =~ s/^$current_value$/$new_value/g; # full line
 			$line =~ s/^$current_value(\s)/$new_value$1/g; # start of line
 			$line =~ s/(\s)$current_value$/$1$new_value/g; # end of line
 			$line =~ s/(\s)$current_value(\s)/$1$new_value$2/g; # middle of line
+			
+			# comma-separated
+# 			$line =~ s/^$current_value$/$new_value/g; # full line
+# 			$line =~ s/^$current_value(,)/$new_value$1/g; # start of line
+# 			$line =~ s/(,)$current_value$/$1$new_value/g; # end of line
+# 			$line =~ s/(,)$current_value(,)/$1$new_value$2/g; # middle of line
 		}
 		
 		# prints replaced line in output line
