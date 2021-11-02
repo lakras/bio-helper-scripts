@@ -134,7 +134,12 @@ while(<TABLE_2>) # for each row in the file
 			foreach my $title_of_columns_to_add(@table_2_titles_of_columns_to_add)
 			{
 				my $column = $column_title_to_column{$title_of_columns_to_add};
-				push(@values_to_save, $items_in_line[$column]);
+				my $value_to_save = $items_in_line[$column];
+				if(!defined $value_to_save)
+				{
+					$value_to_save = "";
+				}
+				push(@values_to_save, $value_to_save);
 			}
 			my $values_to_save_string = join($DELIMITER, @values_to_save);
 			
