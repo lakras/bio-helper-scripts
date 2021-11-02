@@ -18,7 +18,7 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my $column_value_to_select = $ARGV[1]; # no spaces
+my $column_value_to_select = $ARGV[1];
 my $option = $ARGV[2]; # 0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to
 my $title_of_column_to_filter_by = $ARGV[3];
 
