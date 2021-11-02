@@ -5,6 +5,7 @@ Helper scripts for processing genomic sequence data.
 - [SARS-CoV-2 or other genome lineages](#sars-cov-2-or-other-genome-lineages-lineages)
 - [FASTA file processing](#fasta-file-processing-fasta)
 - [FASTA alignment file processing](#fasta-alignment-file-processing-aligned-fasta)
+- [VCF file processing](#vcf-file-processing-vcf-files)
 - [Tables](#tables-tables)
    - [Column title manipulation](#column-title-manipulation)
    - [Column manipulation](#column-manipulation)
@@ -68,6 +69,11 @@ Includes the following scripts—
 - [`remove_reference_gaps_in_alignment.pl`](/aligned-fasta/remove_reference_gaps_in_alignment.pl): Removes gaps in reference (first sequence) in alignment and bases or gaps at the corresponding positions in all other sequences in the alignment.
 
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
+
+## VCF file processing ([`vcf-files`](/vcf-files))
+- [`vcf_file_to_heterozygosity_table.pl`](/vcf-files/vcf_file_to_heterozygosity_table.pl): Reads in vcf file output produced by LoFreq and prints human-readable heterozygosity table. Optionally filters output by read depth and minor allele readcount and frequency. See code for output table format and hardcoded filtering thresholds.
+
+   _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 if not] > [output file path]`_
 
 ## Tables ([`tables`](/tables))
 
