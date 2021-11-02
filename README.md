@@ -71,7 +71,7 @@ Includes the following scripts—
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
-- [`vcf_file_to_heterozygosity_table.pl`](/vcf-files/vcf_file_to_heterozygosity_table.pl): Reads in vcf file output produced by LoFreq and prints human-readable heterozygosity table. Optionally filters output by read depth and minor allele readcount and frequency. See code for output table format and hardcoded filtering thresholds.
+- [`vcf_file_to_heterozygosity_table.pl`](/vcf-files/vcf_file_to_heterozygosity_table.pl): Reads in vcf file output produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call) and prints human-readable heterozygosity table. Optionally filters output by read depth and minor allele readcount and frequency. See code for output table format and hardcoded filtering thresholds.
 
    _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 if not] > [output file path]`_
 
