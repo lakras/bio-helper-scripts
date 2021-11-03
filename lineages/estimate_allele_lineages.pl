@@ -11,8 +11,10 @@
 # sequence. If heterozygosity tables are provided, positions must be relative to same
 # reference as the two alignment fastas.
 
-# Optional input heterozygosity table is in same format as that used in polyphonia:
+# Optional input heterozygosity table is in same format as that used in polyphonia
 # (see https://github.com/broadinstitute/polyphonia#--het)
+# or output by vcf-files/vcf_file_to_heterozygosity_table.pl
+# (https://github.com/lakras/bio-helper-scripts/blob/main/vcf-files/vcf_file_to_heterozygosity_table.pl):
 # - name of reference genome (e.g., NC_045512.2)
 # - position of locus relative to reference genome, 1-indexed (e.g., 28928)
 # - major allele at that position (e.g., C)
@@ -37,10 +39,13 @@
 # - minor_allele_frequency
 
 # Usage:
-# perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
+$ [consensus genomes aligned to reference] [optional list of heterozygosity tables]
 
 # Prints to console. To print to file, use
-# perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] > [output table path]
+# perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
+# [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# > [output table path]
 
 
 use strict;

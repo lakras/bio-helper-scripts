@@ -6,6 +6,8 @@
 
 # See https://csb5.github.io/lofreq/commands/#call for information on LoFreq call.
 
+# This script is also used in polyphonia (https://github.com/broadinstitute/polyphonia).
+
 # Output columns, tab-separated:
 # - Reference
 # - Position (relative to reference, 1-indexed)
