@@ -40,7 +40,7 @@
 
 # Usage:
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
-$ [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# [consensus genomes aligned to reference] [optional list of heterozygosity tables]
 
 # Prints to console. To print to file, use
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
