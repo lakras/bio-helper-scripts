@@ -73,7 +73,7 @@ Includes the following scripts—
 ## VCF file processing ([`vcf-files`](/vcf-files))
 - [`vcf_file_to_heterozygosity_table.pl`](/vcf-files/vcf_file_to_heterozygosity_table.pl): Reads in vcf file output produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call) and prints human-readable heterozygosity table. Optionally filters output by read depth, minor allele readcount, and minor allele frequency. See code for output table format and hardcoded filtering thresholds.
 
-   _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 if not] > [output file path]`_
+   _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 to not filter] > [output file path]`_
 
 ## Tables ([`tables`](/tables))
 

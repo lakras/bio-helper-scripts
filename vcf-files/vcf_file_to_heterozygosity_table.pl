@@ -20,11 +20,11 @@
 
 # Usage:
 # perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq]
-# [1 to filter output, 0 if not]
+# [1 to filter output, 0 to not filter]
 
 # Prints to console. To print to file, use
 # perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq]
-# [1 to filter output, 0 if not] > [output file path]
+# [1 to filter output, 0 to not filter] > [output file path]
 
 
 use strict;

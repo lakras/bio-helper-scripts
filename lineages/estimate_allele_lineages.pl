@@ -3,7 +3,7 @@
 # Generates table listing lineage(s) consistent with each sample's consensus and minor
 # alleles.
 
-# Output table includes only Lineage-defining positions: positions at which the aligned
+# Output table includes only lineage-defining positions: positions at which the aligned
 # lineage sequences have non-identical unambiguous (A, T, C, or G) bases.
 
 # Reference sequence must be first sequence in both alignment fastas. Both alignment
@@ -525,7 +525,7 @@ sub is_unambiguous_base
 	return 0;
 }
 
-# returns 1 if base is not gap, 0 if not
+# returns 1 if base is not gap, 0 if base is a gap
 sub is_base
 {
 	my $base = $_[0];
