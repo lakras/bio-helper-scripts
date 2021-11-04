@@ -40,7 +40,11 @@ Includes the following scripts—
 - [`retrieve_sequences_by_names_listed_in_file.pl`](/fasta/retrieve_sequences_by_names_listed_in_file.pl): Retrieves query sequences by name from fasta file, taking query sequence names from a list in a file, one sequence name per line.
 
    _Usage: `perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of query sequence names] > [output fasta file path]`_
-   
+
+- [`retrieve_sequences_containing_queries.pl`](/fasta/retrieve_sequences_containing_queries.pl): Prints all sequences from fasta file that contain at least one provided query in the sequence name. Case sensitive.
+
+   _Usage: `perl retrieve_sequences_containing_queries.pl [fasta file path] "[query 1]" "[query 2]" "[query 3]" [etc.] > [output fasta file path]`_
+
 - [`add_prefix_to_fasta_headers.pl`](/fasta/add_prefix_to_fasta_headers.pl): Adds prefix to each header line in fasta file(s).
 
    _Usage: `perl add_prefix_to_fasta_headers.pl [fasta file path] > [output fasta file path]`_
