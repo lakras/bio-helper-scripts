@@ -8,7 +8,8 @@
 
 # Prints to console. To print to file, use
 # perl merge_columns.pl [table to merge] "[title of column to merge]"
-# "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]
+# "[title of another column to merge]" "[title of another column to merge]" [etc.]
+# > [output table path]
 
 
 use strict;

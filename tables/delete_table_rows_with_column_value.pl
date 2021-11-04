@@ -5,12 +5,13 @@
 
 # Usage:
 # perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]"
-# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]"
+# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to]
+# "[title of column to filter by]"
 
 # Prints to console. To print to file, use
 # perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]"
-# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]"
-# > [output table path]
+# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to]
+# "[title of column to filter by]" > [output table path]
 
 
 use strict;

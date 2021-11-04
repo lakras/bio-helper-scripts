@@ -9,7 +9,8 @@
 
 # Prints to console. To print to file, use
 # perl add_difference_in_dates_column.pl [table] "[title of column with dates]"
-# "[title of another column with dates]" "[optional title of new column]" > [output table path]
+# "[title of another column with dates]" "[optional title of new column]"
+# > [output table path]
 
 
 use strict;

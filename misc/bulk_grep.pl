@@ -3,7 +3,8 @@
 # Searches all input files for queries listed in query list file.
 
 # Usage:
-# perl bulk_grep.pl [file listing queries, one per line] [file to grep] [another file to grep] [etc.]
+# perl bulk_grep.pl [file listing queries, one per line] [file to grep]
+# [another file to grep] [etc.]
 
 # Prints to console. To print to file, use
 # perl bulk_grep.pl [file listing queries, one per line] [file to grep]

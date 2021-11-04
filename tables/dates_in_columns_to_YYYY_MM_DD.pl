@@ -9,7 +9,8 @@
 
 # Prints to console. To print to file, use
 # perl dates_in_columns_to_YYYY_MM_DD.pl [table] "[title of column with dates]"
-# "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]
+# "[title of another column with dates]" "[title of another column with dates]" [etc.]
+# > [output table path]
 
 
 use strict;

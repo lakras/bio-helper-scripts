@@ -8,7 +8,8 @@
 
 # Prints to console. To print to file, use
 # perl retrieve_subset_of_columns.pl [table] "[title of first column to include in output]"
-# "[title of second column to include]" "[title of third column to include]" [etc.] > [output table path]
+# "[title of second column to include]" "[title of third column to include]" [etc.]
+# > [output table path]
 
 
 use strict;

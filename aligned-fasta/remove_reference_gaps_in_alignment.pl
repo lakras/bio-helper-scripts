@@ -7,7 +7,8 @@
 # perl remove_reference_gaps_in_alignment.pl [alignment fasta file path]
 
 # Prints to console. To print to file, use
-# perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]
+# perl remove_reference_gaps_in_alignment.pl [alignment fasta file path]
+# > [output fasta file path]
 
 
 use strict;

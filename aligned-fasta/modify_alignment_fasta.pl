@@ -16,7 +16,8 @@
 # perl modify_alignment_fasta.pl [alignment fasta file path] [changes table]
 
 # Prints to console. To print to file, use
-# perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]
+# perl modify_alignment_fasta.pl [alignment fasta file path] [changes table]
+# > [output fasta file path]
 
 
 use strict;

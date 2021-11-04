@@ -1,12 +1,15 @@
 #!/usr/bin/env perl
 
-# Retrieves query sequences by name from fasta file, taking query sequence names from a list in a file, one sequence name per line.
+# Retrieves query sequences by name from fasta file, taking query sequence names from a
+# list in a file, one sequence name per line.
 
 # Usage:
-# perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of query sequence names]
+# perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of
+# query sequence names]
 
 # Prints to console. To print to file, use
-# perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of query sequence names] > [output fasta file path]
+# perl retrieve_sequences_by_names_listed_in_file.pl [fasta file path] [file with list of
+# query sequence names] > [output fasta file path]
 
 
 use strict;
