@@ -256,6 +256,10 @@ Includes the following scripts—
 
    _Usage: `perl bulk_grep.pl [file listing queries, one per line] [file to grep] [another file to grep] [etc.] > [output file path]`_
 
+- [`bulk_grep_one_file.pl`](/misc/bulk_grep_one_file.pl): Searches input file for queries. Prints lines containing queries.
+
+   _Usage: `perl bulk_grep_one_file.pl [file to grep] "[query 1]" "[query 2]" "[query 3]" [etc.] > [output file path]`_
+
 - [`bulk_grep_is_detected.pl`](/misc/bulk_grep_is_detected.pl): Searches all input files for queries listed in query list file. Outputs query and each file it was found in, tab-separated, one line per query-file pair where query is detected. If query is not detected in any file, prints query followed by "not detected".
 
    _Usage: `perl bulk_grep_is_detected.pl [file listing queries, one per line] [file to grep] [another file to grep] [etc.] > [output file path]`_
