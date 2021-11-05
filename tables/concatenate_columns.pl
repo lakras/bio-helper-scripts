@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Concatenates selected columns. Adds concatenated values in new column.
+# Concatenates values in selected columns. Adds concatenated values in new column.
 
 # Usage:
 # perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]"
