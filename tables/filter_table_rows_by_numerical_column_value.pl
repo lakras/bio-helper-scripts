@@ -83,6 +83,10 @@ while(<TABLE>) # for each row in the file
 		{
 			# retrieves value in column of interest
 			my $column_value = $items_in_line[$column_to_filter_by];
+			if(!$column_value)
+			{
+				$column_value = 0;
+			}
 			
 			# prints this line if the value of interest is in the column to filter by
 			if($option == 0 and $column_value == $query     # 0 to match cells equal to query,
