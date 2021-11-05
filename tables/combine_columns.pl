@@ -151,11 +151,6 @@ while(<COLUMN_TITLES_TABLE>) # for each row in the file
 close COLUMN_TITLES_TABLE;
 
 
-# consensus_allele				minor_allele
-# consensus_allele_lineage		minor_allele_lineage
-# consensus_allele_readcount	minor_allele_readcount
-# consensus_allele_frequency	minor_allele_frequency
-
 # assigned relationships between columns
 my %column_title_to_titles_of_columns_to_combine = ();
 my %column_title_is_column_to_combine = (); # key: column title -> value: 1 if column will be combined with another column
