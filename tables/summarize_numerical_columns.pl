@@ -37,10 +37,10 @@ if(!$table or !-e $table or -z $table)
 	die;
 }
 
-# verifies that titles of column to concatenate are provided and make sense
+# verifies that titles of column to summarize are provided and make sense
 if(!scalar @titles_of_columns_to_summarize)
 {
-	print STDERR "Error: title of columns to concatenate not provided. Exiting.\n";
+	print STDERR "Error: title of columns to summarize not provided. Exiting.\n";
 	die;
 }
 
