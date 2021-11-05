@@ -109,6 +109,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_numerical_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
+- [`summarize_numerical_column_holding_other_columns_constant.pl`](/tables/summarize_numerical_column_holding_other_columns_constant.pl): Summarizes values in selected numerical column while holding other columns constant. Outputs table with constant columns and new columns with statistics summarizing selected numerical column: mean, standard deviation, median, range, min, max, and all values sorted in a comma-separated list.
+
+   _Usage: `perl summarize_numerical_column_holding_other_columns_constant.pl [tab-separated table] "[title of numerical column to summarize]" "[title of column to hold constant]" "[title of another column to hold constant]" [etc.] > [output table path]`_
+
 - [`combine_columns.pl`](/tables/combine_columns.pl): Combines each selected pair of columns into one column with all values. Does not merge values. See script for example inputs and outputs.
 
    _Usage: `perl combine_columns.pl [input table] [list of tab-separated groups of titles of columns to combine, one group per line] > [output table path]`_
