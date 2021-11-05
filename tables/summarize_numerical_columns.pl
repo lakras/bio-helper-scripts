@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 # Summarizes selected numerical columns. Adds new columns with: mean, standard deviation,
-# median, range, min, max, and all values sorted in a comma-separated list.
+# median, min, max, range, and all values sorted in a comma-separated list.
 
 # Usage:
 # perl summarize_numerical_columns.pl [tab-separated table] "[column title]"

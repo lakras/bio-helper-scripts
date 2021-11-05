@@ -2,8 +2,8 @@
 
 # Summarizes values in selected numerical column while holding other columns constant.
 # Outputs table with constant columns and new columns with statistics summarizing selected
-# numerical column: mean, standard deviation, median, range, min, max, and all values
-# sorted in a comma-separated list.
+# numerical column: mean, standard deviation, median, number values, min, max, range, and
+# all values sorted in a comma-separated list.
 
 # Usage:
 # perl summarize_numerical_column_holding_other_columns_constant.pl [tab-separated table]
@@ -131,6 +131,7 @@ while(<TABLE>) # for each row in the file
 			print "mean".$column_title_piece.$DELIMITER; # mean
 			print "std_dev".$column_title_piece.$DELIMITER; # standard deviation,
 			print "median".$column_title_piece.$DELIMITER; # median
+			print "number_values".$column_title_piece.$DELIMITER; # number values
 			print "min".$column_title_piece.$DELIMITER; # min
 			print "max".$column_title_piece.$DELIMITER; # max
 			print "range".$column_title_piece.$DELIMITER; # range
@@ -167,6 +168,7 @@ foreach my $constant_columns_to_print(keys %constant_column_values_to_values_to_
 	my $mean = mean(@column_values);
 	my $std_dev = std_dev(@column_values);
 	my $median = median(@column_values);
+	my $number_values = scalar @column_values;
 	my $min = min(@column_values);
 	my $max = max(@column_values);
 	my $range = $min."-".$max;
@@ -177,8 +179,9 @@ foreach my $constant_columns_to_print(keys %constant_column_values_to_values_to_
 
 	# prints new column values
 	print $mean.$DELIMITER; # mean
-	print $std_dev.$DELIMITER; # standard deviation,
+	print $std_dev.$DELIMITER; # standard deviation
 	print $median.$DELIMITER; # median
+	print $number_values.$DELIMITER; # number values
 	print $min.$DELIMITER; # min
 	print $max.$DELIMITER; # max
 	print $range.$DELIMITER; # range

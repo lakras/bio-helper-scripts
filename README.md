@@ -105,11 +105,11 @@ Includes the following scripts—
 
    _Usage: `perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
-- [`summarize_numerical_columns.pl`](/tables/summarize_numerical_columns.pl): Summarizes selected numerical columns. Adds new columns with: mean, standard deviation, median, range, min, max, and all values sorted in a comma-separated list.
+- [`summarize_numerical_columns.pl`](/tables/summarize_numerical_columns.pl): Summarizes selected numerical columns. Adds new columns with: mean, standard deviation, median, min, max, range, and all values sorted in a comma-separated list.
 
    _Usage: `perl summarize_numerical_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
-- [`summarize_numerical_column_holding_other_columns_constant.pl`](/tables/summarize_numerical_column_holding_other_columns_constant.pl): Summarizes values in selected numerical column while holding other columns constant. Outputs table with constant columns and new columns with statistics summarizing selected numerical column: mean, standard deviation, median, range, min, max, and all values sorted in a comma-separated list.
+- [`summarize_numerical_column_holding_other_columns_constant.pl`](/tables/summarize_numerical_column_holding_other_columns_constant.pl): Summarizes values in selected numerical column while holding other columns constant. Outputs table with constant columns and new columns with statistics summarizing selected numerical column: mean, standard deviation, median, number values, min, max, range, and all values sorted in a comma-separated list.
 
    _Usage: `perl summarize_numerical_column_holding_other_columns_constant.pl [tab-separated table] "[title of numerical column to summarize]" "[title of column to hold constant]" "[title of another column to hold constant]" [etc.] > [output table path]`_
 
