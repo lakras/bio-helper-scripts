@@ -257,8 +257,8 @@ sub std_dev
 {
 	my @values = @_;
 	
-	# returns if we don't have any input values
-	if(scalar @values < 1)
+	# returns if we don't have enough input values
+	if(scalar @values < 2)
 	{
 		return $NO_DATA;
 	}
