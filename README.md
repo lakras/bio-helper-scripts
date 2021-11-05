@@ -109,6 +109,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_numerical_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
+- [`combine_columns.pl`](/tables/combine_columns.pl): Combines each selected pair of columns into one column with all values. Does not merge values. See script for example inputs and outputs.
+
+   _Usage: `perl combine_columns.pl [input table] [list of tab-separated groups of titles of columns to combine, one group per line] > [output table path]`_
+
 - [`merge_columns.pl`](/tables/merge_columns.pl): Merges selected columns. Reports any conflicts.
 
    _Usage: `perl merge_columns.pl [table to merge] "[title of column to merge]" "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]`_
