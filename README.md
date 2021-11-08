@@ -89,6 +89,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl summarize_read_depths_across_files.pl [read depth table] [another read depth table] [another read depth table] [etc.] > [output table path]`_
 
+- [`retrieve_position_ranges_with_threshold_read_depth.pl`](/read-depths/retrieve_position_ranges_with_threshold_read_depth.pl): Prints ranges of positions with read depths at or above minimum read depth.
+
+   _Usage: `perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth] [read depth table] > [output path]`_
+
 ## Tables ([`tables`](/tables))
 
 ### Column title manipulation
