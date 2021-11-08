@@ -6,6 +6,7 @@ Helper scripts for processing genomic sequence data.
 - [FASTA file processing](#fasta-file-processing-fasta)
 - [FASTA alignment file processing](#fasta-alignment-file-processing-aligned-fasta)
 - [VCF file processing](#vcf-file-processing-vcf-files)
+- [Read depth file processing](#read-depth-file-processing-read-depths)
 - [Tables](#tables-tables)
    - [Column title manipulation](#column-title-manipulation)
    - [Column manipulation](#column-manipulation)
@@ -75,9 +76,18 @@ Includes the following scripts—
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
+Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
+
 - [`vcf_file_to_heterozygosity_table.pl`](/vcf-files/vcf_file_to_heterozygosity_table.pl): Reads in vcf file output produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call) and prints human-readable heterozygosity table. Optionally filters output by read depth, minor allele readcount, and minor allele frequency. See code for output table format and hardcoded filtering thresholds.
 
    _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 to not filter] > [output file path]`_
+
+## Read depth file processing ([`read-depths`](/read-depths))
+Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
+
+- [`summarize_read_depths_across_files.pl`](/read-depths/summarize_read_depths_across_files.pl): Summarizes read depths across read depth tables. Outputs table with reference name; position; and mean, standard deviation, median, min, max, and range of read depths at each position, and number of read depth values at each position that are 0.
+
+   _Usage: `perl summarize_read_depths_across_files.pl [read depth table] [another read depth table] [another read depth table] [etc.] > [output table path]`_
 
 ## Tables ([`tables`](/tables))
 
