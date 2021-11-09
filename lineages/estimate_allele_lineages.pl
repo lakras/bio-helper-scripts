@@ -90,6 +90,10 @@ my $READ_DEPTH_COLUMN = 2;
 # if 0, prints all lineage-defining positions even if there is no consensus allele
 my $ONLY_PRINT_POSITIONS_WITH_CONSENSUS_ALLELE = 1;
 
+# if 1, uses read depth as estimate of consensus-level readcount at positions with no heterozygosity
+# if 0, leaves readcount blank for positions without heterozygosity
+my $ESTIMATE_NO_VARIATION_CONSENSUS_READCOUNT_AS_READ_DEPTH = 1;
+
 
 # verifies that input files exist and are non-empty
 if(!$lineages_aligned_fasta or !-e $lineages_aligned_fasta or -z $lineages_aligned_fasta)
@@ -567,6 +571,13 @@ foreach my $sample(sort keys %all_samples)
  			{
  				$consensus_allele_lineage = $position_to_base_to_matching_lineage{$position}{$consensus_allele};
  			}
+		}
+		
+		# substitutes in read depth for consensus allele readcount
+		if($ESTIMATE_NO_VARIATION_CONSENSUS_READCOUNT_AS_READ_DEPTH
+			and $consensus_allele_readcount eq $NO_DATA)
+		{
+			$consensus_allele_readcount = $read_depth;
 		}
 		
 		# retrieves minor allele information for this line
