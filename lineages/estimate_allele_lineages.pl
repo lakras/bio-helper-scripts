@@ -8,8 +8,8 @@
 
 # Reference sequence must be first sequence in both alignment fastas. Both alignment
 # fastas must use the same reference. Output positions are 1-indexed relative to reference
-# sequence. If heterozygosity tables are provided, positions must be relative to same
-# reference as the two alignment fastas.
+# sequence. If heterozygosity tables or read depth tables are provided, positions must be
+# relative to same reference as the two alignment fastas.
 
 # Optional input heterozygosity table is in same format as that used in polyphonia
 # (see https://github.com/broadinstitute/polyphonia#--het)
@@ -24,11 +24,19 @@
 # - minor allele readcount (e.g., 72)
 # - minor allele frequency (e.g., 0.065574)
 
+# Optional input read depth table is in format produced by samtools depth:
+# - name of reference genome (e.g., NC_045512.2)
+# - position of locus relative to reference genome, 1-indexed (e.g., 28928)
+# - read depth at that position (e.g., 1098)
+
 # Output table contains columns:
 # - sample
 # - lineage_defining_position_([reference])
 # - consensus_allele
 # - consensus_allele_lineage
+
+# and, if read depth tables are included:
+# - read_depth
 
 # and, if heteroyzgosity tables are included:
 # - consensus_allele_readcount
@@ -41,11 +49,12 @@
 # Usage:
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
 # [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# [optional list of read depth files]
 
 # Prints to console. To print to file, use
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
 # [consensus genomes aligned to reference] [optional list of heterozygosity tables]
-# > [output table path]
+# [optional list of read depth files] > [output table path]
 
 
 use strict;
@@ -55,11 +64,13 @@ use warnings;
 my $lineages_aligned_fasta = $ARGV[0]; # lineages aligned to reference; reference must be first sequence in file; must start with same reference as other alignment file
 my $sample_consensuses_aligned_fasta = $ARGV[1]; # sample consensus sequences aligned to reference; reference must be first sequence in file; must start with same reference as other alignment file
 my $heterozygosity_tables = $ARGV[2]; # optional file containing a list of heterozygosity table files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
+my $read_depth_files = $ARGV[3]; # optional file containing a list of read depth files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
 
 
 my $DELIMITER = "\t";
 my $NEWLINE = "\n";
 my $NO_DATA = "";
+
 
 # heterozygosity table columns:
 my $HETEROZYGOSITY_TABLE_POSITION_COLUMN = 1; # (0-indexed)
@@ -69,6 +80,12 @@ my $HETEROZYGOSITY_TABLE_MAJOR_ALLELE_FREQUENCY_COLUMN = 4;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_COLUMN = 5;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_READCOUNT_COLUMN = 6;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_FREQUENCY_COLUMN = 7;
+
+# columns in read-depth tables produced by samtools:
+my $READ_DEPTH_REFERENCE_COLUMN = 0; # reference must be same across all input files
+my $READ_DEPTH_POSITION_COLUMN = 1; # 1-indexed
+my $READ_DEPTH_COLUMN = 2;
+
 
 # if 0, prints all lineage-defining positions even if there is no consensus allele
 my $ONLY_PRINT_POSITIONS_WITH_CONSENSUS_ALLELE = 1;
@@ -91,6 +108,11 @@ if($heterozygosity_tables and (!-e $heterozygosity_tables or -z $heterozygosity_
 {
 	print STDERR "Warning: list of heterozygosity table files does not exist or is empty:\n\t"
 		.$heterozygosity_tables."\n";
+}
+if($read_depth_files and (!-e $read_depth_files or -z $read_depth_files))
+{
+	print STDERR "Warning: list of read depth table files does not exist or is empty:\n\t"
+		.$read_depth_files."\n";
 }
 
 
@@ -302,9 +324,10 @@ my %sample_to_position_to_consensus_allele_frequency = ();
 my %sample_to_position_to_minor_allele = ();
 my %sample_to_position_to_minor_allele_readcount = ();
 my %sample_to_position_to_minor_allele_frequency = ();
+my %sample_to_position_to_read_depth = ();
 
-# read in heterozygosity tables
-# save values at lineage-defining positions
+
+# read in heterozygosity tables and save values at lineage-defining positions
 if($heterozygosity_tables)
 {
 	open HETEROZYGOSITY_TABLES_LIST, "<$heterozygosity_tables" || die "Could not open $heterozygosity_tables to read; terminating =(\n";
@@ -376,16 +399,86 @@ if($heterozygosity_tables)
 				}
 				else # sample name could not be retrieved
 				{
-					print STDERR "Error: could not retrieve from filepath of heterozygosity "
+					print STDERR "Warning: could not retrieve from filepath of heterozygosity "
 						."table a sample name that matches a sequence name from consensus "
 						."genome alignment. Excluding heterozygosity table:\n\t"
 						.$heterozygosity_table."\n";
-					die;
 				}
 			}
 		}
 	}
 	close HETEROZYGOSITY_TABLES_LIST;
+}
+
+
+# read in read depth tables and save values at lineage-defining positions
+if($read_depth_files)
+{
+	open READ_DEPTH_TABLES_LIST, "<$read_depth_files" || die "Could not open $read_depth_files to read; terminating =(\n";
+	while(<READ_DEPTH_TABLES_LIST>) # for each line in the file
+	{
+		chomp;
+		my $read_depth_table = $_;
+		if($read_depth_table and $read_depth_table =~ /\S/) # non-empty string
+		{
+			if(!-e $read_depth_table) # file does not exist
+			{
+				print STDERR "Error: read depth table does not exist:\n\t"
+					.$read_depth_table."\nExiting.\n";
+				die;
+			}
+			elsif(-z $read_depth_table) # file is empty
+			{
+				print STDERR "Warning: skipping empty read depth table:\n\t"
+					.$read_depth_table."\n";
+			}
+			else # file exists and is non-empty
+			{
+				# retrieve sample name from file name
+				my $sample_name = "";
+				foreach my $potential_sample_name(sort {length $a <=> length $b} keys %all_samples)
+				{
+					if($read_depth_table =~ /$potential_sample_name/)
+					{
+						$sample_name = $potential_sample_name;
+					}
+				}
+				
+				if($sample_name)
+				{
+					# read in heterozygosity table
+					open READ_DEPTH_TABLE, "<$read_depth_table" || die "Could not open $read_depth_table to read; terminating =(\n";
+					while(<READ_DEPTH_TABLE>) # for each line in the file
+					{
+						chomp;
+						my $line = $_;
+						if($line =~ /\S/) # non-empty line
+						{
+							# parses this line
+							my @items = split($DELIMITER, $line);
+							my $position = $items[$READ_DEPTH_POSITION_COLUMN];
+							my $read_depth = $items[$READ_DEPTH_COLUMN];
+
+							if($is_lineage_defining_position{$position})
+							{
+								# saves read depth
+								$sample_to_position_to_read_depth{$sample_name}{$position} = $read_depth;
+							}
+						}
+					}
+					close READ_DEPTH_TABLE;
+				}
+				else # sample name could not be retrieved
+				{
+					print STDERR "Warning: could not retrieve from filepath of read depth "
+						."table a sample name that matches a sequence name from consensus "
+						."genome alignment. Excluding heterozygosity table:\n\t"
+						.$read_depth_table."\n";
+				}
+			}
+		}
+	}
+	close READ_DEPTH_TABLES_LIST;
 }
 
 
@@ -424,6 +517,10 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 # print output table header line
 print "sample".$DELIMITER;
 print "lineage_defining_position_(".$reference_sequence_name.")".$DELIMITER;
+if($read_depth_files)
+{
+	print "read_depth".$DELIMITER;
+}
 print "consensus_allele".$DELIMITER;
 print "consensus_allele_lineage";
 
@@ -436,12 +533,9 @@ if($heterozygosity_tables)
 	print "minor_allele".$DELIMITER;
 	print "minor_allele_lineage".$DELIMITER;
 	print "minor_allele_readcount".$DELIMITER;
-	print "minor_allele_frequency".$NEWLINE;
+	print "minor_allele_frequency";
 }
-else
-{
-	print $NEWLINE;
-}
+print $NEWLINE;
 
 
 # print output table
@@ -449,6 +543,13 @@ foreach my $sample(sort keys %all_samples)
 {
 	foreach my $position(sort {$a <=> $b} keys %is_lineage_defining_position)
 	{
+		# retrieves read depth for this position
+		my $read_depth = $NO_DATA;
+		if($sample_to_position_to_read_depth{$sample}{$position})
+		{
+			$read_depth = $sample_to_position_to_read_depth{$sample}{$position};
+		}
+	
 		# retrieves consensus-level allele information for this line
 		my $consensus_allele = $NO_DATA;
 		my $consensus_allele_readcount = $NO_DATA;
@@ -489,6 +590,11 @@ foreach my $sample(sort keys %all_samples)
 		{
 			print $sample.$DELIMITER;
 			print $position.$DELIMITER;
+			
+			if($read_depth_files)
+			{
+				print $read_depth.$DELIMITER;
+			}
 
 			print $consensus_allele.$DELIMITER;
 			print $consensus_allele_lineage;
@@ -502,12 +608,9 @@ foreach my $sample(sort keys %all_samples)
 				print $minor_allele.$DELIMITER;
 				print $minor_allele_lineage.$DELIMITER;
 				print $minor_allele_readcount.$DELIMITER;
-				print $minor_allele_frequency.$NEWLINE;
+				print $minor_allele_frequency;
 			}
-			else
-			{
-				print $NEWLINE;
-			}
+			print $NEWLINE;
 		}
 	}
 }
