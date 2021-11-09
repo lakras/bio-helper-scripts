@@ -46,14 +46,26 @@
 # - minor_allele_readcount
 # - minor_allele_frequency
 
+# If print_columns_for_each_lineage == 1, output table instead contains columns:
+# - sample
+# - lineage_defining_position_([reference])
+# and, for each lineage provided in lineages_aligned_fasta:
+# - [lineage]_readcount
+# - [lineage]_frequency
+
+# and, if read depth tables are included:
+# - read_depth
+
 # Usage:
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
 # [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles]
 # [optional list of read depth files]
 
 # Prints to console. To print to file, use
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
 # [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles]
 # [optional list of read depth files] > [output table path]
 
 
@@ -65,6 +77,7 @@ my $lineages_aligned_fasta = $ARGV[0]; # lineages aligned to reference; referenc
 my $sample_consensuses_aligned_fasta = $ARGV[1]; # sample consensus sequences aligned to reference; reference must be first sequence in file; must start with same reference as other alignment file
 my $heterozygosity_tables = $ARGV[2]; # optional file containing a list of heterozygosity table files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
 my $read_depth_files = $ARGV[3]; # optional file containing a list of read depth files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
+my $print_columns_for_each_lineage = $ARGV[4]; # if 0, prints columns for consensus-level and potentially minor alleles; if 1, prints columns for each lineage
 
 
 my $DELIMITER = "\t";
@@ -94,6 +107,8 @@ my $ONLY_PRINT_POSITIONS_WITH_CONSENSUS_ALLELE = 1;
 # if 0, leaves readcount blank for positions without heterozygosity
 my $ESTIMATE_NO_VARIATION_CONSENSUS_READCOUNT_AS_READ_DEPTH = 1;
 
+# if 1 and $print_columns_for_each_lineage==1, prints special columns listing lineage
+my $PRINT_LINEAGES_COLUMN = 1;
 
 # verifies that input files exist and are non-empty
 if(!$lineages_aligned_fasta or !-e $lineages_aligned_fasta or -z $lineages_aligned_fasta)
@@ -122,6 +137,7 @@ if($read_depth_files and (!-e $read_depth_files or -z $read_depth_files))
 
 # read in aligned lineages fasta file
 my %lineage_name_to_genome = (); # key: sequence name -> value: lineage genome, including gaps froms alignment
+my %all_lineages = (); # key: name of lineage -> value: 1
 my $reference_sequence = ""; # first sequence in alignment
 my $reference_sequence_name = ""; # name of first sequence in alignment
 
@@ -152,6 +168,11 @@ while(<ALIGNED_LINEAGES_GENOMES>) # for each line in the file
 		# prepare for next sequence
 		$sequence = "";
 		$sequence_name = $1;
+		if($reference_sequence_name) # if reference sequence has already been read in
+		{
+			# this sequence name is a lineage name
+			$all_lineages{$sequence_name} = 1;
+		}
 	}
 	else
 	{
@@ -520,24 +541,43 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 
 # print output table header line
 print "sample".$DELIMITER;
-print "lineage_defining_position_(".$reference_sequence_name.")".$DELIMITER;
+print "lineage_defining_position_(".$reference_sequence_name.")";
 if($read_depth_files)
 {
-	print "read_depth".$DELIMITER;
+	print $DELIMITER;
+	print "read_depth";
 }
-print "consensus_allele".$DELIMITER;
-print "consensus_allele_lineage";
 
-if($heterozygosity_tables)
+if($print_columns_for_each_lineage)
+{
+	foreach my $lineage(sort keys %all_lineages)
+	{
+		print $DELIMITER;
+		if($PRINT_LINEAGES_COLUMN)
+		{
+			print $lineage."_lineage".$DELIMITER;
+		}
+		print $lineage."_readcount".$DELIMITER;
+		print $lineage."_frequency";
+	}
+}
+else # print columns for consensus and potentially minor allele
 {
 	print $DELIMITER;
-	print "consensus_allele_readcount".$DELIMITER;
-	print "consensus_allele_frequency".$DELIMITER;
+	print "consensus_allele".$DELIMITER;
+	print "consensus_allele_lineage";
 
-	print "minor_allele".$DELIMITER;
-	print "minor_allele_lineage".$DELIMITER;
-	print "minor_allele_readcount".$DELIMITER;
-	print "minor_allele_frequency";
+	if($heterozygosity_tables)
+	{
+		print $DELIMITER;
+		print "consensus_allele_readcount".$DELIMITER;
+		print "consensus_allele_frequency".$DELIMITER;
+
+		print "minor_allele".$DELIMITER;
+		print "minor_allele_lineage".$DELIMITER;
+		print "minor_allele_readcount".$DELIMITER;
+		print "minor_allele_frequency";
+	}
 }
 print $NEWLINE;
 
@@ -601,26 +641,60 @@ foreach my $sample(sort keys %all_samples)
 		if($consensus_allele ne $NO_DATA or !$ONLY_PRINT_POSITIONS_WITH_CONSENSUS_ALLELE)
 		{
 			print $sample.$DELIMITER;
-			print $position.$DELIMITER;
+			print $position;
 			
 			if($read_depth_files)
 			{
-				print $read_depth.$DELIMITER;
+				print $DELIMITER;
+				print $read_depth;
 			}
-
-			print $consensus_allele.$DELIMITER;
-			print $consensus_allele_lineage;
 			
-			if($heterozygosity_tables)
+			if($print_columns_for_each_lineage)
+			{
+				foreach my $lineage(sort keys %all_lineages)
+				{
+					# retrieves readcount and frequency for lineage (default 0)
+					my $lineage_readcount = 0;
+					my $lineage_frequency = 0;
+					
+					if($consensus_allele_lineage eq $lineage)
+					{
+						$lineage_readcount = $consensus_allele_readcount;
+						$lineage_frequency = $consensus_allele_frequency;
+					}
+					elsif($minor_allele_lineage eq $lineage)
+					{
+						$lineage_readcount = $minor_allele_readcount;
+						$lineage_frequency = $minor_allele_frequency;
+					}
+				
+					# prints readcount and frequency for lineage
+					print $DELIMITER;
+					if($PRINT_LINEAGES_COLUMN)
+					{
+						print $lineage.$DELIMITER;
+					}
+					print $lineage_readcount.$DELIMITER;
+					print $lineage_frequency;
+				}
+			}
+			else # print columns for consensus and potentially minor allele
 			{
 				print $DELIMITER;
-				print $consensus_allele_readcount.$DELIMITER;
-				print $consensus_allele_frequency.$DELIMITER;
+				print $consensus_allele.$DELIMITER;
+				print $consensus_allele_lineage;
+			
+				if($heterozygosity_tables)
+				{
+					print $DELIMITER;
+					print $consensus_allele_readcount.$DELIMITER;
+					print $consensus_allele_frequency.$DELIMITER;
 
-				print $minor_allele.$DELIMITER;
-				print $minor_allele_lineage.$DELIMITER;
-				print $minor_allele_readcount.$DELIMITER;
-				print $minor_allele_frequency;
+					print $minor_allele.$DELIMITER;
+					print $minor_allele_lineage.$DELIMITER;
+					print $minor_allele_readcount.$DELIMITER;
+					print $minor_allele_frequency;
+				}
 			}
 			print $NEWLINE;
 		}
