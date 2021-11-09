@@ -269,6 +269,7 @@ while(<TABLE>) # for each row in the file
 			
 			# prints column titles
 			my %combined_column_already_printed = (); # key: column title -> value: 1 if combined column including this column has already been printed
+			my $first_column_printed = 0;
 			foreach my $column_title(@items_in_line)
 			{
 				if($column_title_is_column_to_combine{$column_title})
@@ -289,12 +290,22 @@ while(<TABLE>) # for each row in the file
 					
 						# generates and prints combined column title
 						my $combined_column_title = join("_", @titles_of_columns_to_combine);
-						print $combined_column_title.$DELIMITER;
+						if($first_column_printed)
+						{
+							print $DELIMITER;
+						}
+						$first_column_printed = 1;
+						print $combined_column_title;
 					}
 				}
 				else # not a column to combine with other columns
 				{
-					print $column_title.$DELIMITER;
+					if($first_column_printed)
+					{
+						print $DELIMITER;
+					}
+					$first_column_printed = 1;
+					print $column_title;
 				}
 			}
 			print $NEWLINE;
