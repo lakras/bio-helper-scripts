@@ -575,6 +575,7 @@ foreach my $sample(sort keys %all_samples)
 		
 		# substitutes in read depth for consensus allele readcount
 		if($ESTIMATE_NO_VARIATION_CONSENSUS_READCOUNT_AS_READ_DEPTH
+			and $read_depth_files
 			and $consensus_allele_readcount eq $NO_DATA)
 		{
 			$consensus_allele_readcount = $read_depth;
