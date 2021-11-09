@@ -27,7 +27,7 @@ Includes the following scripts—
    
 - [`estimate_allele_lineages.pl`](/lineages/estimate_allele_lineages.pl): Generates table listing lineage(s) consistent with each sample's consensus and minor alleles. See script for descriptions of input files and output table.
 
-   _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] [optional list of read depth files] > [output table path]`_
+   _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] [optional list of read depth files] [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles] > [output table path]`_
 
 ## FASTA file processing ([`fasta`](/fasta))
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
@@ -114,6 +114,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 - [`duplicate_columns.pl`](/tables/duplicate_columns.pl): Duplicates selected columns.
 
    _Usage: `perl duplicate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
+
+- [`add_one_value_column.pl`](/tables/add_one_value_column.pl): Adds column with specified title and specified value for all values.
+
+   _Usage: `perl add_one_value_column.pl [table to add column to] "[title of column to add]" "[value of column to add]" > [output table path]`_
 
 - [`concatenate_columns.pl`](/tables/concatenate_columns.pl): Concatenates values in selected columns. Adds concatenated values in new column.
 
