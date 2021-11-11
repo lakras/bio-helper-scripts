@@ -471,7 +471,7 @@ if($read_depth_files)
 				
 				if($sample_name)
 				{
-					# read in heterozygosity table
+					# read in read depth table
 					open READ_DEPTH_TABLE, "<$read_depth_table" || die "Could not open $read_depth_table to read; terminating =(\n";
 					while(<READ_DEPTH_TABLE>) # for each line in the file
 					{
