@@ -4,10 +4,12 @@
 
 # Usage:
 # perl determine_distances_to_lineages_from_alignment.pl [alignment fasta file path]
+# [1 to ignore first sequence in alignment, 0 to include it]
 # "[name of lineage sequence]" "[name of another lineage sequence]" [etc.]
 
 # Prints to console. To print to file, use
 # perl determine_distances_to_lineages_from_alignment.pl [alignment fasta file path]
+# [1 to ignore first sequence in alignment, 0 to include it]
 # "[name of lineage sequence]" "[name of another lineage sequence]" [etc.]
 # > [output fasta file path]
 
@@ -17,7 +19,8 @@ use warnings;
 
 
 my $alignment_file = $ARGV[0]; # fasta alignment; reference sequence must appear first
-my @lineage_sequence_names = @ARGV[1..$#ARGV]; # all lineage sequence names must appear in alignment file
+my $ignore_reference = $ARGV[1]; # if 0, includes first sequence in alignment; if 1, ignores it
+my @lineage_sequence_names = @ARGV[2..$#ARGV]; # all lineage sequence names must appear in alignment file
 
 
 my $NEWLINE = "\n";
