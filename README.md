@@ -29,6 +29,10 @@ Includes the following scripts—
 
    _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] [optional list of read depth files] [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles] > [output table path]`_
 
+- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates input heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions: positions at which the aligned lineage sequences have non-identical unambiguous (A, T, C, or G) bases. Adds columns for each pair of lineages. Adds a header line. Outputs to one file per heterozygosity table or all together.
+
+   _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
+
 ## FASTA file processing ([`fasta`](/fasta))
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
 
@@ -81,6 +85,10 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 - [`vcf_file_to_heterozygosity_table.pl`](/vcf-files/vcf_file_to_heterozygosity_table.pl): Reads in vcf file output produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call) and prints human-readable heterozygosity table. Optionally filters output by read depth, minor allele readcount, and minor allele frequency. See code for output table format and hardcoded filtering thresholds.
 
    _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 to not filter] > [output file path]`_
+
+- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates input heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions: positions at which the aligned lineage sequences have non-identical unambiguous (A, T, C, or G) bases. Adds columns for each pair of lineages. Adds a header line. Outputs to one file per heterozygosity table or all together.
+
+   _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
 
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
