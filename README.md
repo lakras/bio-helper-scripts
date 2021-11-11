@@ -110,7 +110,7 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth] [read depth table] > [output path]`_
 
-- [`mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
+- [`aligned-fasta/mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
 
    _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [read depth table] [minimum read depth] > [output fasta file path]`_
 
