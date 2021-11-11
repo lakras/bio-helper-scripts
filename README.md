@@ -91,7 +91,7 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
    _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 to not filter] > [output file path]`_
 
-- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
+- [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
 
