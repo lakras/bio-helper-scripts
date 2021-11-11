@@ -29,7 +29,7 @@ Includes the following scripts—
 
    _Usage: `perl estimate_allele_lineages.pl [lineage genomes aligned to reference] [consensus genomes aligned to reference] [optional list of heterozygosity tables] [optional list of read depth files] [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles] > [output table path]`_
 
-- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates input heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions: positions at which the aligned lineage sequences have non-identical unambiguous (A, T, C, or G) bases. Adds columns for each pair of lineages. Adds a header line. Outputs to one file per heterozygosity table or all together.
+- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
 
@@ -86,7 +86,7 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
    _Usage: `perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq] [1 to filter output, 0 to not filter] > [output file path]`_
 
-- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates input heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions: positions at which the aligned lineage sequences have non-identical unambiguous (A, T, C, or G) bases. Adds columns for each pair of lineages. Adds a header line. Outputs to one file per heterozygosity table or all together.
+- [`annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
 

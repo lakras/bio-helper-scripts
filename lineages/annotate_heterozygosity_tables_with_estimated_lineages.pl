@@ -3,8 +3,8 @@
 # Annotates input heterozygosity tables with lineage consistent with minor and
 # consensus-level alleles at lineage-defining positions: positions at which the aligned
 # lineage sequences have non-identical unambiguous (A, T, C, or G) bases. Adds columns
-# for each pair of lineages. Adds a header line. Outputs to one file per heterozygosity
-# table or all together.
+# for each pair of lineages. Adds a header line. Output is printed to one file per
+# heterozygosity table or as one table.
 
 # Reference sequence must be first sequence in alignment fasta. Positions in
 # heterozygosity tables must be relative to same reference as the alignment fasta.
