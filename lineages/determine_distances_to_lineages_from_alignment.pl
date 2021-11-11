@@ -3,11 +3,11 @@
 # Generates 2d table of distances between all sequences in alignment to lineage sequences.
 
 # Usage:
-# perl determine_distances_from_lineages_from_alignment.pl [alignment fasta file path]
+# perl determine_distances_to_lineages_from_alignment.pl [alignment fasta file path]
 # "[name of lineage sequence]" "[name of another lineage sequence]" [etc.]
 
 # Prints to console. To print to file, use
-# perl determine_distances_from_lineages_from_alignment.pl [alignment fasta file path]
+# perl determine_distances_to_lineages_from_alignment.pl [alignment fasta file path]
 # "[name of lineage sequence]" "[name of another lineage sequence]" [etc.]
 # > [output fasta file path]
 
