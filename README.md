@@ -33,6 +33,10 @@ Includes the following scripts—
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
 
+- [`determine_distances_from_lineages_from_alignment.pl`](/lineages/determine_distances_from_lineages_from_alignment.pl): Generates 2d table of distances between all sequences in alignment to lineage sequences.
+
+   _Usage: `perl determine_distances_from_lineages_from_alignment.pl [alignment fasta file path] "[name of lineage sequence]" "[name of another lineage sequence]" [etc.] > [output fasta file path]`_
+
 ## FASTA file processing ([`fasta`](/fasta))
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
 
