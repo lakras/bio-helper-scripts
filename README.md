@@ -80,6 +80,10 @@ Includes the following scripts—
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
+- [`mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
+
+   _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [read depth table] [minimum read depth] > [output fasta file path]`_
+
 - [`remove_reference_gaps_in_alignment.pl`](/aligned-fasta/remove_reference_gaps_in_alignment.pl): Removes gaps in reference (first sequence) in alignment and bases or gaps at the corresponding positions in all other sequences in the alignment.
 
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
@@ -105,6 +109,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 - [`retrieve_position_ranges_with_threshold_read_depth.pl`](/read-depths/retrieve_position_ranges_with_threshold_read_depth.pl): Prints ranges of positions with read depths at or above minimum read depth.
 
    _Usage: `perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth] [read depth table] > [output path]`_
+
+- [`mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
+
+   _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [read depth table] [minimum read depth] > [output fasta file path]`_
 
 ## Tables ([`tables`](/tables))
 
