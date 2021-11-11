@@ -4,11 +4,11 @@
 
 # Usage:
 # perl generate_distance_table_from_alignment.pl [alignment fasta file path]
-# [1 to ignore first sequence in alignment]
+# [1 to ignore first sequence in alignment, 0 to include it]
 
 # Prints to console. To print to file, use
 # perl generate_distance_table_from_alignment.pl [alignment fasta file path]
-# [1 to ignore first sequence in alignment] > [output fasta file path]
+# [1 to ignore first sequence in alignment, 0 to include it] > [output fasta file path]
 
 
 use strict;

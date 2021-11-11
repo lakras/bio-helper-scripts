@@ -74,7 +74,7 @@ Includes the following scripts—
 
 - [`generate_distance_table_from_alignment.pl`](/aligned-fasta/generate_distance_table_from_alignment.pl): Generates 2d table of distances between all sequences in alignment.
 
-   _Usage: `perl generate_distance_table_from_alignment.pl [alignment fasta file path] [1 to ignore first sequence in alignment] > [output fasta file path]`_
+   _Usage: `perl generate_distance_table_from_alignment.pl [alignment fasta file path] [1 to ignore first sequence in alignment, 0 to include it] > [output fasta file path]`_
 
 - [`modify_alignment_fasta.pl`](/aligned-fasta/modify_alignment_fasta.pl): Modifies aligned fasta file according to allele changes specified in changes table. See script for description of changes table.
 
