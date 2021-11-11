@@ -437,75 +437,72 @@ if($heterozygosity_tables)
 
 
 # read in read depth tables and save values at lineage-defining positions
-if($read_depth_files)
+open READ_DEPTH_TABLES_LIST, "<$read_depth_files" || die "Could not open $read_depth_files to read; terminating =(\n";
+while(<READ_DEPTH_TABLES_LIST>) # for each line in the file
 {
-	open READ_DEPTH_TABLES_LIST, "<$read_depth_files" || die "Could not open $read_depth_files to read; terminating =(\n";
-	while(<READ_DEPTH_TABLES_LIST>) # for each line in the file
+	chomp;
+	my $read_depth_table = $_;
+	if($read_depth_table and $read_depth_table =~ /\S/) # non-empty string
 	{
-		chomp;
-		my $read_depth_table = $_;
-		if($read_depth_table and $read_depth_table =~ /\S/) # non-empty string
+		if(!-e $read_depth_table) # file does not exist
 		{
-			if(!-e $read_depth_table) # file does not exist
+			print STDERR "Error: read depth table does not exist:\n\t"
+				.$read_depth_table."\nExiting.\n";
+			die;
+		}
+		elsif(-z $read_depth_table) # file is empty
+		{
+			print STDERR "Warning: skipping empty read depth table:\n\t"
+				.$read_depth_table."\n";
+		}
+		else # file exists and is non-empty
+		{
+			# retrieve sample name from file name
+			my $sample_name = "";
+			foreach my $potential_sample_name(sort {length $a <=> length $b} keys %all_samples)
 			{
-				print STDERR "Error: read depth table does not exist:\n\t"
-					.$read_depth_table."\nExiting.\n";
-				die;
-			}
-			elsif(-z $read_depth_table) # file is empty
-			{
-				print STDERR "Warning: skipping empty read depth table:\n\t"
-					.$read_depth_table."\n";
-			}
-			else # file exists and is non-empty
-			{
-				# retrieve sample name from file name
-				my $sample_name = "";
-				foreach my $potential_sample_name(sort {length $a <=> length $b} keys %all_samples)
+				if($read_depth_table =~ /$potential_sample_name/)
 				{
-					if($read_depth_table =~ /$potential_sample_name/)
-					{
-						$sample_name = $potential_sample_name;
-					}
+					$sample_name = $potential_sample_name;
 				}
-				
-				if($sample_name)
+			}
+			
+			if($sample_name)
+			{
+				# read in read depth table
+				open READ_DEPTH_TABLE, "<$read_depth_table"
+					|| die "Could not open $read_depth_table to read; terminating =(\n";
+				while(<READ_DEPTH_TABLE>) # for each line in the file
 				{
-					# read in read depth table
-					open READ_DEPTH_TABLE, "<$read_depth_table"
-						|| die "Could not open $read_depth_table to read; terminating =(\n";
-					while(<READ_DEPTH_TABLE>) # for each line in the file
+					chomp;
+					my $line = $_;
+					if($line =~ /\S/) # non-empty line
 					{
-						chomp;
-						my $line = $_;
-						if($line =~ /\S/) # non-empty line
-						{
-							# parses this line
-							my @items = split($DELIMITER, $line);
-							my $position = $items[$READ_DEPTH_POSITION_COLUMN];
-							my $read_depth = $items[$READ_DEPTH_COLUMN];
+						# parses this line
+						my @items = split($DELIMITER, $line);
+						my $position = $items[$READ_DEPTH_POSITION_COLUMN];
+						my $read_depth = $items[$READ_DEPTH_COLUMN];
 
-							if($is_lineage_defining_position{$position})
-							{
-								# saves read depth
-								$sample_to_position_to_read_depth{$sample_name}{$position} = $read_depth;
-							}
+						if($is_lineage_defining_position{$position})
+						{
+							# saves read depth
+							$sample_to_position_to_read_depth{$sample_name}{$position} = $read_depth;
 						}
 					}
-					close READ_DEPTH_TABLE;
 				}
-				else # sample name could not be retrieved
-				{
-					print STDERR "Warning: could not retrieve from filepath of read depth "
-						."table a sample name that matches a sequence name from consensus "
-						."genome alignment. Excluding heterozygosity table:\n\t"
-						.$read_depth_table."\n";
-				}
+				close READ_DEPTH_TABLE;
+			}
+			else # sample name could not be retrieved
+			{
+				print STDERR "Warning: could not retrieve from filepath of read depth "
+					."table a sample name that matches a sequence name from consensus "
+					."genome alignment. Excluding read depth table:\n\t"
+					.$read_depth_table."\n";
 			}
 		}
 	}
-	close READ_DEPTH_TABLES_LIST;
 }
+close READ_DEPTH_TABLES_LIST;
 
 
 # processes aligned consensus genomes
