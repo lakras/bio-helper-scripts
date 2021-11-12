@@ -262,22 +262,30 @@ sub process_sequence
 		{
 			# retrieves string index corresponding to this position
 			# (if no gaps in reference, string index will be position-1)
-			my $string_index = $position_to_string_index{$position};
-			
-			# verifies that position (1-indexed) is within range
-			if($string_index < length($current_sequence))
+			if(defined $position_to_string_index{$position})
 			{
-				my $observed_current_allele = substr($current_sequence, $string_index, 1);
-				if(is_base($observed_current_allele))
+				my $string_index = $position_to_string_index{$position};
+			
+				# verifies that position (1-indexed) is within range
+				if($string_index < length($current_sequence))
 				{
-					# updates allele at position
-					substr($current_sequence, $string_index, 1, $MASKED_ALLELE);
+					my $observed_current_allele = substr($current_sequence, $string_index, 1);
+					if(is_base($observed_current_allele))
+					{
+						# updates allele at position
+						substr($current_sequence, $string_index, 1, $MASKED_ALLELE);
+					}
+				}
+				else
+				{
+					print STDERR "Warning: position ".$position." (string index ".$string_index
+						.") is out of range of sequence ".$current_sequence_name.".\n";
 				}
 			}
 			else
 			{
-				print STDERR "Warning: position ".$position." (string index ".$string_index
-					.") to change is out of range of sequence ".$current_sequence_name.".\n";
+				print STDERR "Warning: position ".$position." is out of range of sequence "
+					.$current_sequence_name.".\n";
 			}
 		}
 	}
