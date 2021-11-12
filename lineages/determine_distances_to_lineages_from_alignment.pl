@@ -122,6 +122,12 @@ foreach my $lineage_sequence_name(@lineage_sequence_names)
 	print $DELIMITER;
 	print $lineage_sequence_name;
 }
+print $DELIMITER;
+print "nearest_lineage";
+print $DELIMITER;
+print "nearest_lineage_distance";
+print $DELIMITER;
+print "number_alleles_not_matching_any_lineage";
 print $NEWLINE;
 
 
@@ -135,7 +141,11 @@ foreach my $sequence_name(@sequence_names)
 		# prints sequence name
 		print $sequence_name;
 		
-		# prints comparisons
+		# prints distance to each lineage
+		my $closest_lineage = "";
+		my $closest_lineage_distance = -1;
+		my %number_lineages_matching_base_index = (); # key: base index -> value: 1 if unambiguous base distinct from all lineages
+		my %base_index_has_unambiguous_base_in_sequence_and_a_lineage = (); # key: base index -> value: 1 
 		foreach my $lineage_sequence_name(@lineage_sequence_names)
 		{
 			my $lineage_sequence = $sequence_name_to_sequence{$lineage_sequence_name};
@@ -147,17 +157,60 @@ foreach my $sequence_name(@sequence_names)
 				my $sequence_base = substr($sequence, $base_index, 1);
 				my $lineage_sequence_base = substr($lineage_sequence, $base_index, 1);
 	
-				if(is_unambiguous_base($sequence_base) and is_unambiguous_base($lineage_sequence_base)
-					and $sequence_base ne $lineage_sequence_base)
+				if(is_unambiguous_base($sequence_base) and is_unambiguous_base($lineage_sequence_base))
 				{
-					$distance++;
+					$base_index_has_unambiguous_base_in_sequence_and_a_lineage{$base_index} = 1;
+					if($sequence_base ne $lineage_sequence_base) # sequence bases does not match lineage base
+					{
+						$distance++;
+					}
+					else # sequence base matches lineage base
+					{
+						$number_lineages_matching_base_index{$base_index}++;
+					}
 				}
 			}
 		
-			# prints distance
+			# prints distance to lineage
 			print $DELIMITER;
 			print prepare_integer_for_printing($distance);
+			
+			# updates closest lineage
+			if($closest_lineage_distance == -1 # first lineage we are comparing to
+				or $distance < $closest_lineage_distance) # closer lineage
+			{
+				$closest_lineage_distance = $distance;
+				$closest_lineage = $lineage_sequence_name;
+			}
+			elsif($distance == $closest_lineage_distance) # lineage just as close as previously closest
+			{
+				if($closest_lineage)
+				{
+					$closest_lineage .= ", ";
+				}
+				$closest_lineage .= $lineage_sequence_name;
+			}
 		}
+		
+		# prints closest lineage
+		print $DELIMITER;
+		print $closest_lineage;
+		print $DELIMITER;
+		print prepare_integer_for_printing($closest_lineage_distance);
+		
+		# prints number alleles distinct from all lineages
+		my $number_alleles_not_matching_any_lineage = 0;
+		foreach my $base_index(keys %base_index_has_unambiguous_base_in_sequence_and_a_lineage)
+		{
+			if($base_index_has_unambiguous_base_in_sequence_and_a_lineage{$base_index}
+				and !$number_lineages_matching_base_index{$base_index})
+			{
+				$number_alleles_not_matching_any_lineage++;
+			}
+		}
+		print $DELIMITER;
+		print $number_alleles_not_matching_any_lineage;
+		
 		print $NEWLINE;
 	}
 }
