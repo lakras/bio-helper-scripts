@@ -92,6 +92,10 @@ Includes the following scripts—
 
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
 
+- [`collapse_aligned_sequences_by_name.pl`](/aligned-fasta/collapse_aligned_sequences_by_name.pl): Merges aligned sequences with same name up to a ": ", such as those output by LASTZ.
+
+   _Usage: `perl collapse_aligned_sequences_by_name.pl [alignment fasta file path] > [output fasta file path]`_
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
