@@ -148,6 +148,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl add_one_value_column.pl [table to add column to] "[title of column to add]" "[value of column to add]" > [output table path]`_
 
+- [`add_column_for_selected_rows.pl`](/tables/add_column_for_selected_rows.pl): Creates new column with values in selected rows.
+
+   _Usage: `perl add_column_for_selected_rows.pl [table to add new column to] "[title of column in table to identify rows by]" [file with list of rows to select, one per line] "[optional title of new column to add]" "[optional value to add to selected rows in new column]" "[optional value to add to all other rows in new column]" > [output table path]`_
+
 - [`concatenate_columns.pl`](/tables/concatenate_columns.pl): Concatenates values in selected columns. Adds concatenated values in new column.
 
    _Usage: `perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
