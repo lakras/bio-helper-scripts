@@ -56,15 +56,15 @@ if(!defined $table_title_of_column_to_merge_by)
 
 
 # sets optional values if not selected
-if(!$title_of_new_column)
+if(!defined $title_of_new_column)
 {
 	$title_of_new_column = $list_of_rows_to_add_to;
 }
-if(!$new_column_value_for_selected_rows)
+if(!defined $new_column_value_for_selected_rows)
 {
 	$new_column_value_for_selected_rows = "TRUE";
 }
-if(!$new_column_value_for_other_rows)
+if(!defined $new_column_value_for_other_rows)
 {
 	$new_column_value_for_other_rows = "FALSE";
 }
@@ -86,7 +86,7 @@ close LIST_OF_ROWS_TO_ADD_TO;
 
 
 # reads in and adds column to table to add columns to
-$first_line = 1;
+my $first_line = 1;
 my $table_column_to_merge_by = -1;
 my %row_found = (); # key: value in column to merge by of row to add to -> value: 1 if row found in table
 open TABLE, "<$table" || die "Could not open $table to read; terminating =(\n";
