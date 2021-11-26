@@ -121,7 +121,7 @@ foreach my $sequence_name(keys %sequence_name_included)
 {
 	if(!$sequence_name_found{$sequence_name})
 	{
-		print STDERR "Error: sequence name ".$sequence_name." not found\n";
+		print STDERR "Error: sequence name ".$sequence_name." not found.\n";
 	}
 }
 
