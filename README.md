@@ -330,5 +330,9 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
-     
+   
+- [`erase_empty_files.pl`](/misc/erase_empty_files.pl): Erases empty files.
+
+   _Usage: `perl erase_empty_files.pl [file to check and potentially erase] [another file to check and potentially erase] [a third file to check and potentially erase] etc.`_
+
 More coming soon :)
