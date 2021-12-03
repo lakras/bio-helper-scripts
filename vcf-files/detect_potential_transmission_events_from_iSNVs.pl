@@ -22,11 +22,13 @@
 # Usage:
 # perl detect_potential_transmission_events_from_iSNVs.pl
 # [consensus sequences alignment fasta file path] [list of heterozygosity tables]
+# [optional file containing list of read depth tables]
 # [0 to print one line per sample pair, 1 to print one line per iSNV]
 
 # Prints to console. To print to file, use
 # perl detect_potential_transmission_events_from_iSNVs.pl
 # [consensus sequences alignment fasta file path] [list of heterozygosity tables]
+# [optional file containing list of read depth tables]
 # [0 to print one line per sample pair, 1 to print one line per iSNV]
 # > [output fasta file path]
 
@@ -37,7 +39,8 @@ use warnings;
 
 my $consensus_sequences_aligned = $ARGV[0]; # fasta alignment of consensus sequences; reference sequence must appear first
 my $heterozygosity_tables = $ARGV[1]; # file containing a list of heterozygosity table files, one for each sample; positions must be relative to same reference used in fasta alignment file; filenames must contain sample names used in consensus genome alignment
-my $print_one_line_per_iSNV = $ARGV[2]; # if 0, prints one line per sample pair; if 1, prints line for each iSNV matched in each sample pair
+my $read_depth_files = $ARGV[2]; # optional file containing a list of read depth files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
+my $print_one_line_per_iSNV = $ARGV[3]; # if 0, prints one line per sample pair; if 1, prints line for each iSNV matched in each sample pair
 
 
 # thresholds for calling a transmission event
@@ -60,10 +63,49 @@ my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_COLUMN = 5;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_READCOUNT_COLUMN = 6;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_FREQUENCY_COLUMN = 7;
 
+# columns in read-depth tables produced by samtools:
+my $READ_DEPTH_REFERENCE_COLUMN = 0; # reference must be same across all input files
+my $READ_DEPTH_POSITION_COLUMN = 1; # 1-indexed
+my $READ_DEPTH_COLUMN = 2;
+
 my $DELIMITER = "\t";
 my $NEWLINE = "\n";
 my $NO_DATA = "NA";
 
+
+# verifies that fasta alignment file exists and is non-empty
+if(!$consensus_sequences_aligned)
+{
+	print STDERR "Error: no input fasta alignment file provided. Exiting.\n";
+	die;
+}
+if(!-e $consensus_sequences_aligned)
+{
+	print STDERR "Error: input fasta alignment file does not exist:\n\t".$consensus_sequences_aligned."\nExiting.\n";
+	die;
+}
+if(-z $consensus_sequences_aligned)
+{
+	print STDERR "Error: input fasta alignment file is empty:\n\t".$consensus_sequences_aligned."\nExiting.\n";
+	die;
+}
+
+# verifies that heterozygosity tables file exists and is non-empty
+if(!$heterozygosity_tables)
+{
+	print STDERR "Error: no heterozygosity tables file provided. Exiting.\n";
+	die;
+}
+if(!-e $heterozygosity_tables)
+{
+	print STDERR "Error: heterozygosity tables file does not exist:\n\t".$heterozygosity_tables."\nExiting.\n";
+	die;
+}
+if(-z $heterozygosity_tables)
+{
+	print STDERR "Error: heterozygosity tables file is empty:\n\t".$heterozygosity_tables."\nExiting.\n";
+	die;
+}
 
 
 # reads in aligned consensus sequences
@@ -118,7 +160,90 @@ if($sequence and $sequence_name)
 close ALIGNED_CONSENSUS_SEQUENCES;
 
 
+# reads in read depth tables if provided
+my %sample_to_position_to_read_depth = (); # key: sample name -> key: position (1-indexed, relative to reference) -> value: read depth at this position
+my %read_depth_read_in_for_sample = (); # key: sample name -> value: 1 if read depth table read in
+if($read_depth_files)
+{
+	open READ_DEPTH_TABLES_LIST, "<$read_depth_files" || die "Could not open $read_depth_files to read; terminating =(\n";
+	while(<READ_DEPTH_TABLES_LIST>) # for each line in the file
+	{
+		chomp;
+		my $read_depth_table = $_;
+		if($read_depth_table and $read_depth_table =~ /\S/) # non-empty string
+		{
+			if(!-e $read_depth_table) # file does not exist
+			{
+				print STDERR "Error: read depth table does not exist:\n\t"
+					.$read_depth_table."\nExiting.\n";
+				die;
+			}
+			elsif(-z $read_depth_table) # file is empty
+			{
+				print STDERR "Warning: skipping empty read depth table:\n\t"
+					.$read_depth_table."\n";
+			}
+			else # file exists and is non-empty
+			{
+				# trims file path to file name
+				my $sample_name = retrieve_file_name($read_depth_table);
+
+				# retrieves largest possible sample name that collides with a sample name
+				# from consensus sequences alignment
+				# (file name sample1.ext1.ext2 has possible sample names sample1.ext1.ext2, sample1.ext1, sample1)
+				my $sample_name_found = 0;
+				while($sample_name and !$sample_name_found)
+				{
+					if($sample_names{$sample_name})
+					{
+						# potential sample name collides with a sample name from consensus genome
+						# this is our sample name
+						$sample_name_found = 1;
+					}
+					else
+					{
+						$sample_name = trim_off_file_extension($sample_name);
+					}
+				}
+			
+				if(!$sample_name_found)
+				{
+					print STDERR "Warning: skipping read depth table that could not be "
+						."mapped by name to a consensus sequence:\n\t"
+						.$read_depth_table.".\n";
+				}
+				else
+				{
+					# read in read depth table
+					open READ_DEPTH_TABLE, "<$read_depth_table"
+						|| die "Could not open $read_depth_table to read; terminating =(\n";
+					while(<READ_DEPTH_TABLE>) # for each line in the file
+					{
+						chomp;
+						my $line = $_;
+						if($line =~ /\S/) # non-empty line
+						{
+							# parses this line
+							my @items = split($DELIMITER, $line);
+							my $position = $items[$READ_DEPTH_POSITION_COLUMN];
+							my $read_depth = $items[$READ_DEPTH_COLUMN];
+
+							# saves read depth
+							$sample_to_position_to_read_depth{$sample_name}{$position} = $read_depth;
+						}
+					}
+					close READ_DEPTH_TABLE;
+					$read_depth_read_in_for_sample{$sample_name} = 1;
+				}
+			}
+		}
+	}
+	close READ_DEPTH_TABLES_LIST;
+}
+
+
 # reads in base at each position in each consensus sequence
+# only includes positions passing read depth filter
 my %sample_to_position_to_consensus_allele = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: base in consensus sequence
 my @reference_bases = split(//, $reference_sequence);
 foreach my $sample_name(keys %sample_name_to_consensus_sequence)
@@ -137,7 +262,9 @@ foreach my $sample_name(keys %sample_name_to_consensus_sequence)
 	
 			# retrieves and saves sample's base at this position
 			my $base = $consensus_genome_bases[$base_index];
-			if(is_unambiguous_base($base))
+			if(is_unambiguous_base($base)
+				and (!$read_depth_read_in_for_sample{$sample_name}
+					or $sample_to_position_to_read_depth{$sample_name}{$position} >= $MINIMUM_READ_DEPTH))
 			{
 				$sample_to_position_to_consensus_allele{$sample_name}{$position} = $base;
 			}
