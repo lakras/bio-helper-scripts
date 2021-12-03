@@ -404,23 +404,22 @@ if($print_one_line_per_iSNV)
 	print "to_sample".$DELIMITER;
 	print "position".$DELIMITER;
 	print "base".$DELIMITER;
-	print "frequency_in_from_sample".$DELIMITER;
-	print "readcount_in_from_sample".$DELIMITER;
+	print "frequency_in_index_case".$DELIMITER;
+	print "readcount_in_index_case".$DELIMITER;
 # 	print "sample_2_frequency".$DELIMITER;
 # 	print "sample_2_readcount".$DELIMITER;
 	print "other_consensus_level_differences".$NEWLINE;
 }
 else
 {
-	# index case	secondary case	number matched iSNVs in index case	median matched iSNV frequency	min matched iSNV frequency	max matched iSNV frequency	matched iSNV frequencies
-	print "from_sample".$DELIMITER;
-	print "to_sample".$DELIMITER;
-	print "number_iSNVs".$DELIMITER;
-	print "median_iSNV_frequency".$DELIMITER;
-	print "min_iSNV_frequency".$DELIMITER;
-	print "max_iSNV_frequency".$DELIMITER;
-	print "iSNV_frequencies".$DELIMITER;
-	print "iSNVs".$DELIMITER;
+	print "index_case".$DELIMITER;
+	print "proposed_secondary_case".$DELIMITER;
+	print "number_matched_iSNVs".$DELIMITER;
+	print "median_matched_iSNV_frequency".$DELIMITER;
+	print "min_matched_iSNV_frequency".$DELIMITER;
+	print "max_matched_iSNV_frequency".$DELIMITER;
+	print "matched_iSNV_frequencies".$DELIMITER;
+	print "matched_iSNVs".$DELIMITER;
 	print "other_consensus_level_differences".$NEWLINE;
 }
 
