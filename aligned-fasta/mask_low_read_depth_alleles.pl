@@ -7,12 +7,12 @@
 # Sequence names in alignment fasta file must match read depth file names.
 
 # Usage:
-# perl mask_low_read_depth_alleles.pl [alignment fasta file path] [read depth table]
-# [minimum read depth]
+# perl mask_low_read_depth_alleles.pl [alignment fasta file path]
+# [file containing list of read depth tables] [minimum read depth]
 
 # Prints to console. To print to file, use
-# perl mask_low_read_depth_alleles.pl [alignment fasta file path] [read depth table]
-# [minimum read depth] > [output fasta file path]
+# perl mask_low_read_depth_alleles.pl [alignment fasta file path]
+# [file containing list of read depth tables] [minimum read depth] > [output fasta file path]
 
 
 use strict;
