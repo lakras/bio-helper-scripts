@@ -54,6 +54,10 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_containing_queries.pl [fasta file path] "[query 1]" "[query 2]" "[query 3]" [etc.] > [output fasta file path]`_
 
+- [`filter_sequences_by_length.pl`](/fasta/filter_sequences_by_length.pl): Filters fasta file by sequence length.
+
+   _Usage: `perl filter_sequences_by_length.pl [fasta file path] [minimum length] [1 to filter by number of unambiguous bases, 0 to filter on number of bases (including Ns)] > [output fasta file path]`_
+
 - [`add_prefix_to_fasta_headers.pl`](/fasta/add_prefix_to_fasta_headers.pl): Adds prefix to each header line in fasta file(s).
 
    _Usage: `perl add_prefix_to_fasta_headers.pl [fasta file path] > [output fasta file path]`_
