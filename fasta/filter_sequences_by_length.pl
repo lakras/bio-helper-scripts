@@ -65,7 +65,7 @@ while(<FASTA_FILE>) # for each line in the file
 	}
 	else
 	{
-		$sequence .= "";
+		$sequence .= $_;
 	}
 }
 close FASTA_FILE;
@@ -91,11 +91,11 @@ sub sequence_length
 	my $sequence_length = 0;
 	foreach my $base(split //, $sequence)
 	{
-		if($filter_by_unambiguous_sequence_length and is_unambiguous_base$base())
+		if($filter_by_unambiguous_sequence_length and is_unambiguous_base($base))
 		{
 			$sequence_length++;
 		}
-		elsif(!$filter_by_unambiguous_sequence_length and is_base$base())
+		elsif(!$filter_by_unambiguous_sequence_length and is_base($base))
 		{
 			$sequence_length++;
 		}
