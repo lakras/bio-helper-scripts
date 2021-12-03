@@ -499,7 +499,7 @@ foreach my $sample_name_1(keys %sample_names)
 					my @sample_pair_iSNVs = ();
 					my @iSNV_frequencies = ();
 					
-					foreach my $position(sort keys %iSNV_position_to_base)
+					foreach my $position(sort {$a <=> $b} keys %iSNV_position_to_base)
 					{
 						# retrieves information for this allele
 						my $base = $iSNV_position_to_base{$position};
