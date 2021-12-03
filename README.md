@@ -86,7 +86,7 @@ Includes the following scripts—
 
 - [`mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
 
-   _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [file containing list of read depth tables] [minimum read depth] > [output fasta file path]`_
+   _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [list of read depth tables] [minimum read depth] > [output fasta file path]`_
 
 - [`remove_reference_gaps_in_alignment.pl`](/aligned-fasta/remove_reference_gaps_in_alignment.pl): Removes gaps in reference (first sequence) in alignment and bases or gaps at the corresponding positions in all other sequences in the alignment.
 
@@ -105,7 +105,7 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
 - [`detect_potential_transmission_events_from_iSNVs.pl`](/vcf-files/detect_potential_transmission_events_from_iSNVs.pl): Detects potential transmission events from iSNVs, assuming an average transmission bottleneck of one virus per transmission.
 
-   _Usage: `perl detect_potential_transmission_events_from_iSNVs.pl [consensus sequences alignment fasta file path] [list of heterozygosity tables] [0 to print one line per sample pair, 1 to print one line per iSNV] > [output fasta file path]`_
+   _Usage: `perl detect_potential_transmission_events_from_iSNVs.pl [consensus sequences alignment fasta file path] [list of heterozygosity tables] [optional list of read depth tables] [0 to print one line per sample pair, 1 to print one line per iSNV] > [output fasta file path]`_
 
 - [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
@@ -124,7 +124,7 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
 - [`aligned-fasta/mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
 
-   _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [file containing list of read depth tables] [minimum read depth] > [output fasta file path]`_
+   _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [list of read depth tables] [minimum read depth] > [output fasta file path]`_
 
 ## Tables ([`tables`](/tables))
 

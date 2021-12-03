@@ -8,11 +8,11 @@
 
 # Usage:
 # perl mask_low_read_depth_alleles.pl [alignment fasta file path]
-# [file containing list of read depth tables] [minimum read depth]
+# [list of read depth tables] [minimum read depth]
 
 # Prints to console. To print to file, use
 # perl mask_low_read_depth_alleles.pl [alignment fasta file path]
-# [file containing list of read depth tables] [minimum read depth] > [output fasta file path]
+# [list of read depth tables] [minimum read depth] > [output fasta file path]
 
 
 use strict;
