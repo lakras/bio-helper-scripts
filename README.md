@@ -305,6 +305,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 - [`summarize_table_columns.pl`](/tables/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
    _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
+   
+- [`count_occurrences_of_column_values.pl`](/tables/count_occurrences_of_column_values.pl): Counts number occurrences of each value in selected column of table.
+
+   _Usage: `perl count_occurrences_of_column_values.pl [tab-separated table] "[column title]" > [output table path]`_
 
 - [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
