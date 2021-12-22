@@ -314,6 +314,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl make_r_friendly_table.pl [table file path] [first data column index] > [output table path]`_
 
+- [`verify_column_values_are_consistent_across_tables.pl`](/tables/verify_column_values_are_consistent_across_tables.pl): Verifies that the same column values always appear with row identifier values. Column titles must be consistent across tables, including title of row identifier column.
+
+   _Usage: `perl verify_column_values_are_consistent_across_tables.pl [row identifier column title] [table1] [table2] [table 3] [etc.]`_
+
 ## Miscellaneous ([`misc`](/misc))
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
