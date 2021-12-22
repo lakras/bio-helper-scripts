@@ -354,7 +354,7 @@ sub get_earliest_date
 	foreach my $date(@dates)
 	{
 		my $distance_from_base_date = date_difference($date, $base_date);
-		if($distance_from_base_date < $earliest_date_distance_from_base_date)
+		if($distance_from_base_date > $earliest_date_distance_from_base_date)
 		{
 			$earliest_date = $date;
 			$earliest_date_distance_from_base_date = $distance_from_base_date;
@@ -383,7 +383,7 @@ sub get_latest_date
 	foreach my $date(@dates)
 	{
 		my $distance_from_base_date = date_difference($date, $base_date);
-		if($distance_from_base_date > $latest_date_distance_from_base_date)
+		if($distance_from_base_date < $latest_date_distance_from_base_date)
 		{
 			$latest_date = $date;
 			$latest_date_distance_from_base_date = $distance_from_base_date;
