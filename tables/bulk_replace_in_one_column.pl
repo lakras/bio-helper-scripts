@@ -82,6 +82,7 @@ close REPLACEMENT_MAP;
 # reads in input table and replaces values
 my $first_line = 1;
 my $column_to_search = -1;
+my %values_not_mapped = (); # key: value not mapped to a replacement value -> value: 1
 open TABLE, "<$table" || die "Could not open $table to read; terminating =(\n";
 while(<TABLE>) # for each row in the file
 {
@@ -143,8 +144,7 @@ while(<TABLE>) # for each row in the file
 					}
 					elsif($value)
 					{
-						print STDERR "Warning: value ".$value." not mapped to any "
-							."replacement value.\n";
+						$values_not_mapped{$value} = 1;
 					}
 				}
 		
@@ -157,6 +157,17 @@ while(<TABLE>) # for each row in the file
 	}
 }
 close TABLE;
+
+
+# prints list of values not mapped
+if(scalar keys %values_not_mapped)
+{
+	print STDERR "Warning: the following values were not mapped to replacement values:\n";
+	foreach my $value(keys %values_not_mapped)
+	{
+		print STDERR "\t".$value."\n";
+	}
+}
 
 
 # July 22, 2021
