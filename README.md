@@ -200,6 +200,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl replace_values_with_coded_values.pl [table] "[title of column to search]" "[optional code prefix]" > [output table path]`_
 
+- [`bulk_replace_in_one_column.pl`](/tables/bulk_replace_in_one_column.pl): Replaces all occurrences of values in selected column to mapped replacement values.
+
+   _Usage: `perl bulk_replace_in_one_column.pl [tab-separated file mapping current values (first column) to new values (second column)] [path of table in which to replace values] [title of column to replace values in] > [output table path]`_
+
 - [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text.
 
    _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] "[text to add to start of each column value]" "[text to add to end of each column value]" "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
