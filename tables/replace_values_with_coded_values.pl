@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
 # Replaces non-empty values with coded values, e.g., Value 1 (for the most common value),
-# Value 2 (for the second-most common value), Value 3, etc.
+# Value 2 (for the second-most common value), Value 3, etc. Ties are broken alphabetically.
 
 # Usage:
 # perl replace_values_with_coded_values.pl [table] "[title of column to search]"
@@ -97,7 +97,8 @@ close TABLE;
 # codes values
 my $value_count = 1;
 my %value_to_coded_value = (); # key: value -> value: coded value
-foreach my $value(sort {$value_to_count{$b} <=> $value_to_count{$a}} keys %value_to_count)
+foreach my $value(sort {$value_to_count{$b} <=> $value_to_count{$a} || $a cmp $b}
+	keys %value_to_count)
 {
 	my $coded_value = $code_prefix." ".$value_count;
 	$value_to_coded_value{$value} = $coded_value;
