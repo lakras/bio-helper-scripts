@@ -196,6 +196,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl replace_nonempty_values_in_columns.pl [table] "[replacement text]" "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
 
+- [`replace_values_with_coded_values.pl`](/tables/replace_values_with_coded_values.pl): Replaces non-empty values with coded values, e.g., Value 1 (for the most common value), Value 2 (for the second-most common value), Value 3, etc.
+
+   _Usage: `perl replace_values_with_coded_values.pl [table] "[title of column to search]" "[optional code prefix]" > [output table path]`_
+
 - [`add_to_start_and_end_of_values_in_columns.pl`](/tables/add_to_start_and_end_of_values_in_columns.pl): Pads non-empty values in specified columns with parameter start and end text.
 
    _Usage: `perl add_to_start_and_end_of_values_in_columns.pl [table] "[text to add to start of each column value]" "[text to add to end of each column value]" "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
