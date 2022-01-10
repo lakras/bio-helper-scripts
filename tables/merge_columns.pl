@@ -162,7 +162,7 @@ while(<TABLE>) # for each row in the file
 			
 			# prints a warning if values disagree
 			if(scalar keys %value_to_merge_to_source > 1
-				or $all_numeric and !$values_all_close_enough)
+				and $all_numeric and !$values_all_close_enough)
 			{
 				print STDERR "Warning: merge conflict:";
 				foreach my $value(keys %value_to_merge_to_source)
