@@ -158,6 +158,15 @@ while(<TABLE_2>) # for each row in the file
 close TABLE_2;
 
 
+# generates empty string to add where no columns added
+my @empty_values = ();
+foreach my $title_of_columns_to_add(@table_2_titles_of_columns_to_add)
+{
+	push(@empty_values, "");
+}
+my $no_columns_added_string = join($DELIMITER, @empty_values);
+
+
 # reads in and adds columns to table to add columns to
 $first_line = 1;
 my $table_1_column_to_merge_by = -1;
@@ -222,8 +231,10 @@ while(<TABLE_1>) # for each row in the file
 			}
 			else
 			{
-				print STDERR "Warning: value to merge by ".$value_to_merge_by." not found "
-					."in table with columns to add:\n\t".$table_2."\n";
+# 				print STDERR "Warning: value to merge by ".$value_to_merge_by." not found "
+# 					."in table with columns to add:\n\t".$table_2."\n";
+				print $DELIMITER;
+				print $no_columns_added_string;
 			}
 			print $NEWLINE;
 		}
