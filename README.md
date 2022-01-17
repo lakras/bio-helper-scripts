@@ -60,7 +60,11 @@ Includes the following scripts—
 
 - [`add_prefix_to_fasta_headers.pl`](/fasta/add_prefix_to_fasta_headers.pl): Adds prefix to each header line in fasta file(s).
 
-   _Usage: `perl add_prefix_to_fasta_headers.pl [fasta file path] > [output fasta file path]`_
+   _Usage: `perl add_prefix_to_fasta_headers.pl [prefix to add to fasta file headers] [fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
+
+- [`add_filename_as_prefix_to_fasta_headers.pl`](/fasta/add_filename_as_prefix_to_fasta_headers.pl): Adds file name as prefix to each header line in fasta file(s).
+
+   _Usage: `perl add_filename_as_prefix_to_fasta_headers.pl [fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
 
 - [`split_fasta_into_n_files.pl`](/fasta/split_fasta_into_n_files.pl): Splits up fasta file into a set number of smaller files, each with about the same number of sequences.
 
