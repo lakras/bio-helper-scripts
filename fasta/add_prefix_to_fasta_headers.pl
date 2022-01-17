@@ -3,10 +3,12 @@
 # Adds prefix to each header line in fasta file(s).
 
 # Usage:
-# perl add_prefix_to_fasta_headers.pl [fasta file path]
+# perl add_prefix_to_fasta_headers.pl [prefix to add to fasta file headers]
+# [fasta file path] [another fasta file path] [etc.]
 
 # Prints to console. To print to file, use
-# perl add_prefix_to_fasta_headers.pl [fasta file path] > [output fasta file path]
+# perl add_prefix_to_fasta_headers.pl [prefix to add to fasta file headers]
+# [fasta file path] [another fasta file path] [etc.] > [output fasta file path]
 
 
 use strict;
