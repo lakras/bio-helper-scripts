@@ -106,6 +106,7 @@ Includes the following scripts—
    _Usage: `perl collapse_aligned_sequences_by_name.pl [alignment fasta file path] > [output fasta file path]`_
 
 ## BLAST ([`blast`](/blast))
+All blast runs must use format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
 
 - [`count_sequences_in_blast_output.pl`](/blast/count_sequences_in_blast_output.pl): Counts the number of sequences with hits in the blast output.
 
