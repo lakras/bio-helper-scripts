@@ -300,9 +300,9 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
 ### Row manipulation
 
-- [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows matching (containing, beginning with, ending with, or equal to) column value of interest in column to filter by. Case-sensitive.
+- [`filter_table_rows_by_column_value.pl`](/tables/filter_table_rows_by_column_value.pl): Filters table by column values. Only includes rows matching (containing, beginning with, ending with, equal to, not equal to, or not containing) column value of interest in column to filter by. Case-sensitive.
 
-   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]" "[column value to select]" > [output table path]`_
+   _Usage: `perl filter_table_rows_by_column_value.pl [tab-separated table] [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to, 4: not equal to, 5: not containing] "[title of column to filter by]" "[column value to select]" > [output table path]`_
 
 - [`filter_table_rows_by_numerical_column_value.pl`](/tables/filter_table_rows_by_numerical_column_value.pl): Filters table by column values. Only includes rows equal to, greater than, or less than column value of interest in column to filter by.
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env perl
 
 # Filters table by column values. Only includes rows matching (containing, beginning with,
-# ending with, or equal to) column value of interest in column to filter by.
-# Case-sensitive.
+# ending with, equal to, not equal to, or not containing) column value of interest in
+# column to filter by. Case-sensitive.
 
 # Usage:
 # perl filter_table_rows_by_column_value.pl [tab-separated table]
-# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to, 4: not equal to]
+# [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to, 4: not equal to, 5: not containing]
 # "[title of column to filter by]" "[column value to select]"
 
 # Prints to console. To print to file, use
@@ -86,9 +86,16 @@ while(<TABLE>) # for each row in the file
 			my $column_value = $items_in_line[$column_to_filter_by];
 			
 			# prints this line if the value of interest is in the column to filter by
-			if($option == 4) # 4 to match cells not equal to query)
+			if($option == 4) # 4 to match cells not equal to query
 			{
 				if(defined $column_value and $column_value ne $column_value_to_select)
+				{
+					print $line.$NEWLINE;
+				}
+			}
+			elsif($option == 5) # 4 to match cells not containing query
+			{
+				if($column_value !~ /$column_value_to_select/)
 				{
 					print $line.$NEWLINE;
 				}
