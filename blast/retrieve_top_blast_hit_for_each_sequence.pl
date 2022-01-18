@@ -25,11 +25,20 @@ my $TAXONID_SEPARATOR = ";"; # in blast file
 
 # blast file
 my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
-my $MATCHED_TAXONID_COLUMN = 3;# staxids (Subject Taxonomy ID(s), separated by a ';')
+my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
 my $SUPERKINGDOM_COLUMN = 5;	# sskingdoms (Subject Super Kingdom(s), separated by a ';' (in alphabetical order))
-my $PERCENT_ID_COLUMN = 9; 	# pident
-my $QUERY_COVERAGE_COLUMN = 10;# qcovs
-my $EVALUE_COLUMN = 11;		# evalue
+my $PERCENT_ID_COLUMN = 9; 		# pident
+my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
+my $EVALUE_COLUMN = 11;			# evalue
+
+
+# verifies that input file exists and is not empty
+if(!$blast_output or !-e $blast_output or -z $blast_output)
+{
+	print STDERR "Error: blast output not provided, does not exist, or empty:\n\t"
+		.$blast_output."\nExiting.\n";
+	die;
+}
 
 
 # reads in blast output and extracts top blast hit for each sequence

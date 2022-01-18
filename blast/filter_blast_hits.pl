@@ -78,107 +78,31 @@ if(!$min_match_length)
 }
 
 
-if(!$max_pident and !$max_qcovs)
+# reads in blast output and extracts sequences passing thresholds
+open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
+while(<BLAST_OUTPUT>)
 {
-	# reads in blast output and extracts sequences of interest
-	open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
-	while(<BLAST_OUTPUT>)
+	chomp;
+	if($_ =~ /\S/)
 	{
-		chomp;
-		if($_ =~ /\S/)
-		{
-			my @items = split($DELIMITER, $_);
-			my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
-			my $percent_id = $items[$PERCENT_ID_COLUMN];
-			my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
-			my $evalue = $items[$EVALUE_COLUMN];
-			my $match_length = $items[$MATCH_LENGTH_COLUMN];
-		
-			if(!$OR and ($percent_id >= $min_pident
-					and $query_coverage >= $min_qcovs
-					and $match_length >= $min_match_length)
-				or $OR and ($percent_id >= $min_pident
-						or $query_coverage >= $min_qcovs)
-	 				and $match_length >= $min_match_length)
-			{
-				print $_;
-				print $NEWLINE;
-			}
-		}
-	}
-	close BLAST_OUTPUT;
-}
-else
-{
-	# reads in blast output and flags sequences of interest
-	my %print_sequence = (); # key: sequence name -> value: 1 if we're printing it
-	open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
-	while(<BLAST_OUTPUT>)
-	{
-		chomp;
-		if($_ =~ /\S/)
-		{
-			my @items = split($DELIMITER, $_);
-			my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
-			my $percent_id = $items[$PERCENT_ID_COLUMN];
-			my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
-			my $evalue = $items[$EVALUE_COLUMN];
-			my $match_length = $items[$MATCH_LENGTH_COLUMN];
-		
-			if(!$OR and ($percent_id >= $min_pident
-					and $query_coverage >= $min_qcovs
-					and $match_length >= $min_match_length)
-				or $OR and ($percent_id >= $min_pident
-						or $query_coverage >= $min_qcovs)
-	 				and $match_length >= $min_match_length)
-			{
-				$print_sequence{$sequence_name} = 1;
-			}
-		}
-	}
-	close BLAST_OUTPUT;
+		my @items = split($DELIMITER, $_);
+		my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
+		my $percent_id = $items[$PERCENT_ID_COLUMN];
+		my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
+		my $evalue = $items[$EVALUE_COLUMN];
+		my $match_length = $items[$MATCH_LENGTH_COLUMN];
 	
-	# reads in blast output and un-flags sequences with too-good blast hits
-	open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
-	while(<BLAST_OUTPUT>)
-	{
-		chomp;
-		if($_ =~ /\S/)
+		if(!$OR and ($percent_id >= $min_pident and $query_coverage >= $min_qcovs
+				and $match_length >= $min_match_length)
+			or $OR and ($percent_id >= $min_pident or $query_coverage >= $min_qcovs)
+				and $match_length >= $min_match_length)
 		{
-			my @items = split($DELIMITER, $_);
-			my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
-			my $percent_id = $items[$PERCENT_ID_COLUMN];
-			my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
-			my $evalue = $items[$EVALUE_COLUMN];
-			my $match_length = $items[$MATCH_LENGTH_COLUMN];
-		
-			if($max_pident and $percent_id > $max_pident
-				or $max_qcovs and $query_coverage > $max_qcovs)
-			{
-				$print_sequence{$sequence_name} = 0;
-			}
+			print $_;
+			print $NEWLINE;
 		}
 	}
-	close BLAST_OUTPUT;
-	
-	# reads in blast output and prints lines belonging to sequences of interest
-	open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
-	while(<BLAST_OUTPUT>)
-	{
-		chomp;
-		if($_ =~ /\S/)
-		{
-			my @items = split($DELIMITER, $_);
-			my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
-			if($print_sequence{$sequence_name})
-			{
-				print $_;
-				print $NEWLINE;
-			}
-		}
-	}
-	close BLAST_OUTPUT;
 }
+close BLAST_OUTPUT;
 
 
 # August 30, 2020
