@@ -86,7 +86,11 @@ Includes the following scripts—
 - [`modify_unaligned_fasta.pl`](/fasta/modify_unaligned_fasta.pl): Modifies unaligned fasta file according to allele changes specified in changes table. Not designed to handle gaps. See script for description of changes table.
 
    _Usage: `perl modify_unaligned_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
-   
+
+- [`retrieve_sequence_position_in_fasta_file.pl`](/fasta/retrieve_sequence_position_in_fasta_file.pl): Prints position of sequence in fasta file.
+
+   _Usage: `perl retrieve_sequence_position_in_fasta_file.pl [fasta sequence file] "[sequence name]"`_
+
 ## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 
 - [`generate_distance_table_from_alignment.pl`](/aligned-fasta/generate_distance_table_from_alignment.pl): Generates 2d table of distances between all sequences in alignment.
