@@ -236,6 +236,10 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
    _Usage: `perl replace_column_values_where_other_column_present_and_nonzero.pl [table] "[title of column to check]" "[title of column to fill in]" "[replacement value]" > [output table path]`_
 
+- [`remove_nonunique_values_in_list_in_column.pl`](/tables/remove_nonunique_values_in_list_in_column.pl): Removes non-unique values in comma-separated lists in specified columns.
+
+   _Usage: `perl remove_nonunique_values_in_list_in_column.pl [table] "[column title]" "[another column title]" "[another column title]" [etc.] > [output table path]`_
+
 - [`retrieve_subset_of_columns.pl`](/tables/retrieve_subset_of_columns.pl): Subsets table to only columns of interest.
 
    _Usage: `perl retrieve_subset_of_columns.pl [table] "[title of first column to include in output]" "[title of second column to include]" "[title of third column to include]" [etc.] > [output table path]`_
