@@ -124,6 +124,10 @@ All blast runs must use format `-outfmt "6 qseqid sacc stitle staxids sscinames 
 
    _Usage: `perl retrieve_top_blast_hit_for_each_sequence.pl [blast output] > [output subset of blast output table]`_
 
+- [`retrieve_top_blast_hits_for_each_sequence.pl`](/blast/retrieve_top_blast_hits_for_each_sequence.pl): Retrieves top hit for each sequence (assumes they are in order in blast output). Prints all top hits with same e-values.
+
+   _Usage: `perl retrieve_top_blast_hits_for_each_sequence.pl [blast output] > [output subset of blast output table]`_
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
