@@ -5,6 +5,7 @@ Helper scripts for processing genomic sequence data.
 - [SARS-CoV-2 or other genome lineages](#sars-cov-2-or-other-genome-lineages-lineages)
 - [FASTA file processing](#fasta-file-processing-fasta)
 - [FASTA alignment file processing](#fasta-alignment-file-processing-aligned-fasta)
+- [BLAST](#blast)
 - [VCF file processing](#vcf-file-processing-vcf-files)
 - [Read depth file processing](#read-depth-file-processing-read-depths)
 - [Tables](#tables-tables)
@@ -103,6 +104,12 @@ Includes the following scripts—
 - [`collapse_aligned_sequences_by_name.pl`](/aligned-fasta/collapse_aligned_sequences_by_name.pl): Merges aligned sequences with same name up to a ": ", such as those output by LASTZ.
 
    _Usage: `perl collapse_aligned_sequences_by_name.pl [alignment fasta file path] > [output fasta file path]`_
+
+## BLAST ([`blast`](/blast))
+
+- [`count_sequences_in_blast_output.pl`](/blast/count_sequences_in_blast_output.pl): Counts the number of sequences with hits in the blast output.
+
+   _Usage: `perl count_sequences_in_blast_output.pl [blast output table] [optional minimum percent id] [optional minimum query coverage] [1 to print sequence names, 0 to print number sequences only]`_
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
