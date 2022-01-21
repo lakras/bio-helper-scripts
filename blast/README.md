@@ -47,7 +47,7 @@ docker run hello-world
 cd ; mkdir -p blastdb queries fasta results blastdb_custom
 ```
 
-Any other time, run:
+Any other time, get it warmed up and updated by running:
 ```
 docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
 ```
