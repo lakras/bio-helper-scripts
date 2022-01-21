@@ -1,14 +1,18 @@
 #!/usr/bin/env perl
 
-# Retrieves sequences that do not have blast results.
+# Retrieves sequences that have blast results.
 
 # Usage:
-# perl extract_sequences_with_no_blast_hits.pl [blast output file]
-# [fasta file that was input to blast]
+# perl extract_sequences_with_blast_hits.pl [blast output file]
+# [fasta file that was input to blast] 
+# [minimum percent identity for a blast hit to be counted]
+# [minimum query coverage for a blast hit to be counted]
 
 # Prints to console. To print to file, use
-# perl extract_sequences_with_no_blast_hits.pl [blast output file]
-# [fasta file that was input to blast] > [output fasta file path]
+# perl extract_sequences_with_blast_hits.pl [blast output file]
+# [fasta file that was input to blast]
+# [minimum percent identity for a blast hit to be counted]
+# [minimum query coverage for a blast hit to be counted] > [output fasta file path]
 
 
 use strict;
@@ -17,6 +21,8 @@ use warnings;
 
 my $blast_output = $ARGV[0]; # blast output format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $fasta_file = $ARGV[1]; # contains all sequences included in broad-database blast output--should be the fasta file used as input to broad-database blast
+my $minimum_pident = $ARGV[2]; # minimum percent identity to count a blast hit
+my $minimum_qcovs = $ARGV[3]; # minimum query coverage to count a blast hit
 
 
 my $NEWLINE = "\n";
@@ -24,26 +30,11 @@ my $DELIMITER = "\t";
 
 # blast file
 my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
-my $MATCHED_TAXONID_COLUMN = 3;# staxids (Subject Taxonomy ID(s), separated by a ';')
+my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
 my $SUPERKINGDOM_COLUMN = 5;	# sskingdoms (Subject Super Kingdom(s), separated by a ';' (in alphabetical order))
-my $PERCENT_ID_COLUMN = 9; 	# pident
-my $QUERY_COVERAGE_COLUMN = 10;# qcovs
-my $EVALUE_COLUMN = 11;		# evalue
-
-
-# retrieves list of all sequences that were input to blast (all sequences to examine here)
-my %sequence_has_no_or_poor_blast_hits = (); # key: sequence name -> value: 1 if sequence has no blast hit or only "bad" blast hits
-open FASTA, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
-while(<FASTA>) # for each row in the file
-{
-	chomp;
-	if($_ =~ /^>(.*)$/) # sequence name
-	{
-		my $sequence_name = $1;
-		$sequence_has_no_or_poor_blast_hits{$sequence_name} = 1;
-	}
-}
-close FASTA;
+my $PERCENT_ID_COLUMN = 9; 		# pident
+my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
+my $EVALUE_COLUMN = 11;			# evalue
 
 
 # reads in blast output: removes sequences with any matches
@@ -60,8 +51,11 @@ while(<BLAST_OUTPUT>)
 		my $evalue = $items[$EVALUE_COLUMN];
 		my $matched_taxon_id = $items[$MATCHED_TAXONID_COLUMN];
 		
-		# marks sequence to not be output
-		$sequence_has_no_or_poor_blast_hits{$sequence_name} = 0;
+		# marks sequence to be output
+		if($percent_id >= $minimum_pident and $query_coverage >= $minimum_qcovs)
+		{
+			$sequence_has_blast_hit{$sequence_name} = 1;
+		}
 	}
 }
 close BLAST_OUTPUT;
@@ -77,7 +71,7 @@ while(<FASTA>) # for each row in the file
 	if($_ =~ /^>(.*)$/) # sequence name
 	{
 		my $sequence_name = $1;
-		if($sequence_has_no_or_poor_blast_hits{$sequence_name})
+		if($sequence_has_blast_hit{$sequence_name})
 		{
 			$current_sequence_included = 1;
 			$sequence_printed{$sequence_name} = 1;
@@ -98,9 +92,9 @@ close FASTA;
 
 
 # verifies that all expected sequences from blast output have been found in the fasta file
-foreach my $sequence_name(keys %sequence_has_no_or_poor_blast_hits)
+foreach my $sequence_name(keys %sequence_has_blast_hit)
 {
-	if($sequence_has_no_or_poor_blast_hits{$sequence_name}
+	if($sequence_has_blast_hit{$sequence_name}
 		and !$sequence_printed{$sequence_name})
 	{
 		print STDERR "Error: sequence ".$sequence_name." seen in blast output but "
