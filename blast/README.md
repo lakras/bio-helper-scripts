@@ -38,6 +38,9 @@ exit
 
 docker run hello-world
 # should see "Hello from Docker!"
+
+# make and populate directories
+cd ; mkdir -p blastdb queries fasta results blastdb_custom
 ```
 
 Any other time, run:
@@ -51,3 +54,57 @@ docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
 - `docker rm <CONTAINER_ID>`: Removes a container
 - `docker images`: Displays a list of images
 - `docker rmi <REPOSITORY (IMAGE_NAME)>`: Removes an image
+
+## Preparing Query
+
+```
+# move query to its directory
+mv *fasta $HOME/queries/.
+
+# make sure queries are all there
+ls -al $HOME/queries
+```
+
+## Making Custom Databases
+Replace any occurrence of `[something]` with your own content.
+```
+# make blastx database
+docker run --rm \
+    -v $HOME/blastdb_custom:/blast/blastdb_custom:rw \
+    -v $HOME/fasta:/blast/fasta:ro \
+    -w /blast/blastdb_custom \
+    ncbi/blast \
+    makeblastdb -in /blast/fasta/[PROTEIN_SEQUENCES].fasta -dbtype prot \
+    -parse_seqids -out [my-database-proteins] -title "[my database proteins]" \
+    -taxid [NNNNNN] -blastdb_version 5
+
+# make blastn database
+docker run --rm \
+    -v $HOME/blastdb_custom:/blast/blastdb_custom:rw \
+    -v $HOME/fasta:/blast/fasta:ro \
+    -w /blast/blastdb_custom \
+    ncbi/blast \
+    makeblastdb -in /blast/fasta/[NUCLEOTIDE_SEQUENCES].fasta -dbtype nucl \
+    -parse_seqids -out [my-database-nucleotides] -title "[my database nucleotides]" \
+    -taxid [NNNNNN] -blastdb_version 5
+
+# display the accessions, sequence length, and common name of the sequences in the databases
+docker run --rm \
+    -v $HOME/blastdb:/blast/blastdb:ro \
+    -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
+    ncbi/blast \
+    blastdbcmd -entry all -db [my-database-proteins] -outfmt "%a %l %T"
+
+docker run --rm \
+    -v $HOME/blastdb:/blast/blastdb:ro \
+    -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
+    ncbi/blast \
+    blastdbcmd -entry all -db [my-database-nucleotides] -outfmt "%a %l %T"
+
+# adding names of sequences
+# download https://ftp.ncbi.nlm.nih.gov/blast/db/taxdb.tar.gz
+# upload to cloud
+tar -xf taxdb.tar.gz
+mv taxdb.btd blastdb_custom
+mv taxdb.bti blastdb_custom
+```
