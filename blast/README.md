@@ -76,7 +76,7 @@ docker run --rm \
     -w /blast/blastdb_custom \
     ncbi/blast \
     makeblastdb -in /blast/fasta/[PROTEIN_SEQUENCES].fasta -dbtype prot \
-    -parse_seqids -out [my-database-proteins] -title "[my database proteins]" \
+    -parse_seqids -out [my-protein-database] -title "[my protein database]" \
     -taxid [NNNNNN] -blastdb_version 5
 ```
 ```
@@ -87,7 +87,7 @@ docker run --rm \
     -w /blast/blastdb_custom \
     ncbi/blast \
     makeblastdb -in /blast/fasta/[NUCLEOTIDE_SEQUENCES].fasta -dbtype nucl \
-    -parse_seqids -out [my-database-nucleotides] -title "[my database nucleotides]" \
+    -parse_seqids -out [my-nucleotide-database] -title "[my nucleotide database]" \
     -taxid [NNNNNN] -blastdb_version 5
 ```
 ```
@@ -149,4 +149,66 @@ docker run --rm \
     -v $HOME/blastdb:/blast/blastdb:ro \
     ncbi/blast \
     blastdbcmd -list /blast/blastdb -remove_redundant_dbs
+```
+
+## Running BLAST
+```
+# megablast example
+docker run --rm \
+  -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
+  -v $HOME/queries:/blast/queries:ro \
+  -v $HOME/results:/blast/results:rw \
+  ncbi/blast \
+  blastn -task megablast -query /blast/queries/[my_query_file].fasta -db "nt [my-nucleotide-database]" -num_threads 16 \
+  -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
+  -out /blast/results/megablast.[my_file_name].out
+```
+```
+# blastn example
+docker run --rm \
+  -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
+  -v $HOME/queries:/blast/queries:ro \
+  -v $HOME/results:/blast/results:rw \
+  ncbi/blast \
+  blastn -task blastn -query /blast/queries/[my_query_file].fasta -db "nt [my-nucleotide-database]" -num_threads 16 \
+  -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
+  -out /blast/results/blastn.[my_file_name].out
+```
+```
+# blastx example
+docker run --rm \
+  -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
+  -v $HOME/queries:/blast/queries:ro \
+  -v $HOME/results:/blast/results:rw \
+  ncbi/blast \
+  blastx -task blastx -query /blast/queries/[my_query_file].fasta -db "nr [my-protein-database]" -num_threads 16 \
+  -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
+  -out /blast/results/blastx.[my_file_name].out
+```
+```
+# blastx-fast example
+docker run --rm \
+  -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
+  -v $HOME/queries:/blast/queries:ro \
+  -v $HOME/results:/blast/results:rw \
+  ncbi/blast \
+  blastx -task blastx-fast -query /blast/queries/[my_query_file].fa -db "nr [my-protein-database]" -num_threads 32 \
+  -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
+  -out /blast/results/blastx-fast.[my_file_name].out
+```
+
+`stdout` and `stderr` will be in `script.out`.
+BLAST output will be in `$HOME/results`.
+
+It can be helpful to save your versions of the above commands into a script named with the extension `.sh` (for exampled, [my_script].sh). You can then upload the script to your VM's home directory and run the script:
+```
+nohup bash [my_script].sh > [my_script_stdout_and_stderr].out &
+```
+
+## Downloading Large Output Files
+```
+sudo apt install zip
+cd [MY_DIRECTORY]
+zip -r [MY_FILENAME].zip [MY_FILENAME]
+# download new zip file
 ```
