@@ -37,6 +37,21 @@ my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
 my $EVALUE_COLUMN = 11;			# evalue
 
 
+# verifies that input files exist and are not empty
+if(!$fasta_file or !-e $fasta_file or -z $fasta_file)
+{
+	print STDERR "Error: fasta file not provided, does not exist, or empty:\n\t"
+		.$fasta_file."\nExiting.\n";
+	die;
+}
+
+if(!$blast_output or !-e $blast_output or -z $blast_output)
+{
+	print STDERR "Error: blast output file not provided, does not exist, or empty:\n\t"
+		.$blast_output."\nExiting.\n";
+	die;
+}
+
 # sets thresholds to default values if not provided
 if(!$minimum_pident)
 {

@@ -24,6 +24,14 @@ my $NEWLINE = "\n";
 my $SEQUENCE_NAME_SEPARATOR = "__";
 
 
+# verifies that fasta files were provided
+if(!scalar @fastas_to_merge)
+{
+	print STDERR "Error: no fasta files provided.\nExiting.\n";
+	die;
+}
+
+
 my %sequence_to_name = (); # key: sequence -> value: name of sequence (concatenated with "_" if multiple)
 foreach my $fasta(@fastas_to_merge)
 {

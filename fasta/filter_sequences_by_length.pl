@@ -24,20 +24,11 @@ my $filter_by_unambiguous_sequence_length = $ARGV[2]; # 1 to filter by number of
 my $NEWLINE = "\n";
 
 
-# verifies that fasta file exists and is non-empty
-if(!$fasta_file)
+# verifies that input file exists and is not empty
+if(!$fasta_file or !-e $fasta_file or -z $fasta_file)
 {
-	print STDERR "Error: no input fasta file provided. Exiting.\n";
-	die;
-}
-if(!-e $fasta_file)
-{
-	print STDERR "Error: input fasta file does not exist:\n\t".$fasta_file."\nExiting.\n";
-	die;
-}
-if(-z $fasta_file)
-{
-	print STDERR "Error: input fasta file is empty:\n\t".$fasta_file."\nExiting.\n";
+	print STDERR "Error: fasta file not provided, does not exist, or empty:\n\t"
+		.$fasta_file."\nExiting.\n";
 	die;
 }
 

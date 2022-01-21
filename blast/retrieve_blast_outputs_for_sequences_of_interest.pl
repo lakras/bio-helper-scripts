@@ -32,6 +32,22 @@ my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
 my $INCLUDE_ANY_SEQUENCE_CONTAINING_NAME_OF_INTEREST = 0;
 
 
+# verifies that blast output file exists and is non-empty
+if(!$blast_output or !-e $blast_output or -z $blast_output)
+{
+	print STDERR "Error: blast output file not provided, does not exist, or empty:\n\t"
+		.$blast_output."\nExiting.\n";
+	die;
+}
+
+# verifies that sequences of interest were provided
+if(!scalar @sequences_of_interest)
+{
+	print STDERR "Error: no sequences of interest provided.\nExiting.\n";
+	die;
+}
+
+
 # reads in blast output and extracts sequences of interest
 open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
 while(<BLAST_OUTPUT>)
