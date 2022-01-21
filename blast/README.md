@@ -4,7 +4,7 @@ The contents of this file are based on [this excellent tutorial](https://github.
 
 ## Contents
 - [Helpful Links](#helpful-links)
-- [Starting up a VM](#helpful-links)
+- [Starting up a VM](#starting-up-a-vm)
 - [Helpful Docker Commands](#helpful-docker-commands)
 - [Preparing Query](#preparing-query)
 - [Making Custom Databases](#making-custom-databases)
