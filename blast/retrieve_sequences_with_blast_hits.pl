@@ -37,7 +37,19 @@ my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
 my $EVALUE_COLUMN = 11;			# evalue
 
 
+# sets thresholds to default values if not provided
+if(!$minimum_pident)
+{
+	$minimum_pident = 0;
+}
+if(!$minimum_qcovs)
+{
+	$minimum_qcovs = 0;
+}
+
+
 # reads in blast output: removes sequences with any matches
+my %sequence_has_blast_hit = (); # key: sequence name -> value: 1 if sequence has blast hits passing thresholds
 open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
 while(<BLAST_OUTPUT>)
 {

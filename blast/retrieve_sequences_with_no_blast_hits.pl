@@ -37,8 +37,19 @@ my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
 my $EVALUE_COLUMN = 11;			# evalue
 
 
+# sets thresholds to default values if not provided
+if(!$minimum_pident)
+{
+	$minimum_pident = 0;
+}
+if(!$minimum_qcovs)
+{
+	$minimum_qcovs = 0;
+}
+
+
 # retrieves list of all sequences that were input to blast (all sequences to examine here)
-my %sequence_has_no_or_poor_blast_hits = (); # key: sequence name -> value: 1 if sequence has no blast hit or only "bad" blast hits
+my %sequence_has_no_or_poor_blast_hits = (); # key: sequence name -> value: 1 if sequence has no blast hits or only blast hits that do not pass thresholds
 open FASTA, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
 while(<FASTA>) # for each row in the file
 {
