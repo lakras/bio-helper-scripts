@@ -23,6 +23,7 @@ The contents of this file are based on [this excellent tutorial](https://github.
 
 ## Starting up a VM
 Create a Google Cloud Virtual Machine:
+- location closest to you
 - n2-highmem-16
 - change boot disk to a 500GB Ubuntu 20.04 LTS
 
