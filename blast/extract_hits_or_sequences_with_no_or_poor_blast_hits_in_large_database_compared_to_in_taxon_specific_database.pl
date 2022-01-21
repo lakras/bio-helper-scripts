@@ -228,14 +228,19 @@ while(<TAXON_ONLY_BLAST_OUTPUT>)
 		my $evalue = $items[$EVALUE_COLUMN];
 		my $matched_taxon_id = $items[$MATCHED_TAXONID_COLUMN];
 		
-		if($has_hits_in_large_db_search{$sequence_name} and !$has_taxon_of_interest_hit_in_large_db{$sequence_name} # haven't previously categorized this sequence
-			and !$has_good_taxon_database_hit{$sequence_name}) # haven't already identified this sequence as having good picobirnavirus hit
+		if($has_hits_in_large_db_search{$sequence_name}
+			and !$has_taxon_of_interest_hit_in_large_db{$sequence_name} # haven't previously categorized this sequence
+			and !$has_good_taxon_database_hit{$sequence_name}) # haven't already identified this sequence as having good taxon of interest hit
 		{
 			if($percent_id >= $PERCENT_ID_MULTIPLER * $large_db_top_hit_percent_id{$sequence_name}
 				and $query_coverage >= $QUERY_COVERAGE_MULTIPLER * $large_db_top_hit_percent_qcovs{$sequence_name})
 			{
 				$has_good_taxon_database_hit{$sequence_name} = 1;
 			}
+		}
+		elsif(!$has_hits_in_large_db_search{$sequence_name})
+		{
+			$has_good_taxon_database_hit{$sequence_name} = 1;
 		}
 	}
 }
@@ -255,9 +260,8 @@ if($print_fasta_sequences)
 			my $sequence_name = $1;
 			$current_sequence_included = 0;
 		
-			if((!$has_hits_in_large_db_search{$sequence_name}
-					or !$has_taxon_of_interest_hit_in_large_db{$sequence_name})
-				and $has_good_taxon_database_hit{$sequence_name})
+			if($has_good_taxon_database_hit{$sequence_name}
+				or $has_taxon_of_interest_hit_in_large_db{$sequence_name})
 			{
 				$current_sequence_included = 1;
 			}
@@ -285,10 +289,8 @@ if(!$print_fasta_sequences)
 			my @items = split($DELIMITER, $_);
 			my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
 		
-			if($all_large_db_search_sequence_names{$sequence_name}
-				and (!$has_hits_in_large_db_search{$sequence_name}
-					or !$has_taxon_of_interest_hit_in_large_db{$sequence_name})
-				and $has_good_taxon_database_hit{$sequence_name})
+			if($has_good_taxon_database_hit{$sequence_name}
+				or $has_taxon_of_interest_hit_in_large_db{$sequence_name})
 			{
 				if($MAX_NUMBER_HITS_TO_PRINT_PER_SEQUENCE == 0
 					or $number_hits_printed{$sequence_name} < $MAX_NUMBER_HITS_TO_PRINT_PER_SEQUENCE)
@@ -312,9 +314,8 @@ if(!$print_fasta_sequences)
 			my @items = split($DELIMITER, $_);
 			my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
 		
-			if((!$has_hits_in_large_db_search{$sequence_name}
-					or !$has_taxon_of_interest_hit_in_large_db{$sequence_name})
-				and $has_good_taxon_database_hit{$sequence_name})
+			if($has_good_taxon_database_hit{$sequence_name}
+				or $has_taxon_of_interest_hit_in_large_db{$sequence_name})
 			{
 				if($MAX_NUMBER_HITS_TO_PRINT_PER_SEQUENCE == 0
 					or $number_hits_printed{$sequence_name} < $MAX_NUMBER_HITS_TO_PRINT_PER_SEQUENCE)
