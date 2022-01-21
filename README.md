@@ -136,6 +136,10 @@ All blast runs must use format `-outfmt "6 qseqid sacc stitle staxids sscinames 
 
    _Usage: `perl filter_blast_hits.pl [blast output] [minimum percent identity] [minimum percent query coverage] [optional maximum percent identity] [optional maximum percent query coverage] [optional minimum length of matched sequence] > [output subset of blast output table]`_
 
+- [`retrieve_blast_outputs_for_sequences_of_interest.pl`](/blast/retrieve_blast_outputs_for_sequences_of_interest.pl): Retrieves blast hits for sequences of interest from blast output file.
+
+   _Usage: `perl retrieve_blast_outputs_for_sequences_of_interest.pl [blast output file] [sequence name to retrieve blast hits for] [another sequence name to retrieve blast hits for] [etc.] > [subset blast output path]`_
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
