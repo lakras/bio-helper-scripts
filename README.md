@@ -5,7 +5,7 @@ Helper scripts for processing genomic sequence data.
 - [SARS-CoV-2 or other genome lineages](#sars-cov-2-or-other-genome-lineages-lineages)
 - [FASTA file processing](#fasta-file-processing-fasta)
 - [FASTA alignment file processing](#fasta-alignment-file-processing-aligned-fasta)
-- [BLAST](#blast)
+- [BLAST](#blast-blast)
 - [VCF file processing](#vcf-file-processing-vcf-files)
 - [Read depth file processing](#read-depth-file-processing-read-depths)
 - [Tables](#tables-tables)
