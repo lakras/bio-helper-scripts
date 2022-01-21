@@ -2,6 +2,17 @@
 
 The contents of this file are based on [this excellent tutorial](https://github.com/ncbi/blast_plus_docs#section-2---a-step-by-step-guide-using-the-blast-docker-image), the help and advice of labmates, and my own experience.
 
+## Contents
+- [Helpful Links](#helpful-links)
+- [Starting up a VM](#helpful-links)
+- [Helpful Docker Commands](#helpful-docker-commands)
+- [Preparing Query](#preparing-query)
+- [Making Custom Databases](#making-custom-databases)
+- [Downloading Databases](#downloading-databases)
+- [Running BLAST](#running-blast)
+- [Downloading Large Output Files](#downloading-large-output-files)
+
+
 ## Helpful Links
 ### Misc:
 - excellent tutorial: https://github.com/ncbi/blast_plus_docs#section-2---a-step-by-step-guide-using-the-blast-docker-image
