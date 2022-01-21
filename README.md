@@ -83,6 +83,10 @@ Includes the following scripts—
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
    
+- [`merge_fastas_and_remove_redundant_sequences.pl`](/fasta/merge_fastas_and_remove_redundant_sequences.pl): Merges fasta files, removing redundant sequences (so there is only one of each sequence, regardless of name). Can also be used to remove redundant sequences from a single fasta file.
+
+   _Usage: `perl merge_fastas_and_remove_redundant_sequences.pl [fasta file path] [another fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
+
 - [`modify_unaligned_fasta.pl`](/fasta/modify_unaligned_fasta.pl): Modifies unaligned fasta file according to allele changes specified in changes table. Not designed to handle gaps. See script for description of changes table.
 
    _Usage: `perl modify_unaligned_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
