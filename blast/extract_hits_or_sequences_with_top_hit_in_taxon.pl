@@ -55,6 +55,27 @@ my $NAMES_COLUMN = 1;		# names.dmp
 my $NAME_TYPE_COLUMN = 3;	# names.dmp
 
 
+# verifies that all input files exist and are non-empty
+if(!$nodes_file or !-e $nodes_file or -z $nodes_file)
+{
+	print STDERR "Error: nodes.dmp file not provided, does not exist, or empty:\n\t"
+		.$nodes_file."\nExiting.\n";
+	die;
+}
+if(!$blast_output or !-e $blast_output or -z $blast_output)
+{
+	print STDERR "Error: blast output file not provided, does not exist, or empty:\n\t"
+		.$blast_output."\nExiting.\n";
+	die;
+}
+if($print_fasta_sequences and (!$fasta_file or !-e $fasta_file or -z $fasta_file))
+{
+	print STDERR "Error: fasta file not provided, does not exist, or empty:\n\t"
+		.$fasta_file."\nExiting.\n";
+	die;
+}
+
+
 # reads in nodes file
 my %taxonid_to_parent = (); # key: taxon id -> value: taxon id of parent taxon
 my %taxonid_to_rank = (); # key: taxon id -> value: rank of taxon
