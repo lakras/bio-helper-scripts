@@ -1,3 +1,5 @@
+# A Short Guide to Running BLAST
+
 The contents of this file are based on [this excellent tutorial](https://github.com/ncbi/blast_plus_docs#section-2---a-step-by-step-guide-using-the-blast-docker-image), the help and advice of labmates, and my own experience.
 
 ## Helpful Links
@@ -50,7 +52,7 @@ Any other time, run:
 docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
 ```
 
-## Docker Commands
+## Helpful Docker Commands
 - `docker ps -a`: Displays a list of containers
 - `docker rm $(docker ps -q -f status=exited)`: Removes all exited containers, if you have at least 1 exited container
 - `docker rm <CONTAINER_ID>`: Removes a container
