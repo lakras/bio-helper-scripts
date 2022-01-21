@@ -172,6 +172,10 @@ All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids ssc
 
    _Usage: `perl extract_hits_or_sequences_with_top_hit_in_taxon.pl [blast output table] [fasta file that was input to blast] [nodes.dmp file from NCBI] [taxon id of taxon of interest] [1 to print fasta sequences, 0 to print subset of blast output] > [output file path]`_
 
+- [`extract_hits_or_sequences_with_no_or_poor_blast_hits_in_large_database_compared_to_in_taxon_specific_database.pl`](/blast/extract_hits_or_sequences_with_no_or_poor_blast_hits_in_large_database_compared_to_in_taxon_specific_database.pl): Retrieves blast hits or fasta sequences of sequences that produced a blast hit from the taxon of interest in a blast search within a database consisting only of sequences from the taxon of interest and produced either no hits at all in blast search within large database blast search or only hits that were comparable to or worse than hits from the blast search in the taxon-specific database.
+
+   _Usage: `perl extract_hits_or_sequences_with_no_or_poor_blast_hits_in_large_database_compared_to_in_taxon_specific_database.pl [blast output table from taxon-specific database blast search] [blast output table from large database blast search] [fasta file that was input to blast for large database blast search] [nodes.dmp file from NCBI] [taxon id of taxon of interest] [1 to print fasta sequences, 0 to print subset of blast output] > [output file path]`_
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
