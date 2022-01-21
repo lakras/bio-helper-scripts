@@ -68,8 +68,9 @@ ls -al $HOME/queries
 
 ## Making Custom Databases
 Replace any occurrence of `[something]` with your own content.
+
+Make blastx database:
 ```
-# make blastx database
 docker run --rm \
     -v $HOME/blastdb_custom:/blast/blastdb_custom:rw \
     -v $HOME/fasta:/blast/fasta:ro \
@@ -79,8 +80,9 @@ docker run --rm \
     -parse_seqids -out [my-protein-database] -title "[my protein database]" \
     -taxid [NNNNNN] -blastdb_version 5
 ```
+
+Make blastn database:
 ```
-# make blastn database
 docker run --rm \
     -v $HOME/blastdb_custom:/blast/blastdb_custom:rw \
     -v $HOME/fasta:/blast/fasta:ro \
@@ -90,8 +92,9 @@ docker run --rm \
     -parse_seqids -out [my-nucleotide-database] -title "[my nucleotide database]" \
     -taxid [NNNNNN] -blastdb_version 5
 ```
+
+Display the accessions, sequence length, and common name of the sequences in the databases:
 ```
-# display the accessions, sequence length, and common name of the sequences in the databases
 docker run --rm \
     -v $HOME/blastdb:/blast/blastdb:ro \
     -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
@@ -104,8 +107,9 @@ docker run --rm \
     ncbi/blast \
     blastdbcmd -entry all -db [my-database-nucleotides] -outfmt "%a %l %T"
 ```
+
+Add names of sequences:
 ```
-# adding names of sequences
 # download https://ftp.ncbi.nlm.nih.gov/blast/db/taxdb.tar.gz
 # upload to cloud
 tar -xf taxdb.tar.gz
@@ -114,37 +118,37 @@ mv taxdb.bti blastdb_custom
 ```
 
 ## Downloading Databases
+Display BLAST databases available on the GCP:
 ```
-# display BLAST databases on the GCP
 docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
 ```
+
+Download nt database (takes about 18 minutes):
 ```
-# download nt database
-# (takes 18 minutes)
 docker run --rm \
   -v $HOME/blastdb:/blast/blastdb:rw \
   -w /blast/blastdb \
   ncbi/blast \
   update_blastdb.pl --source gcp nt &
 ```
+
+Download nr database (takes about 1 hour).
 ```
-# download nr database
-# (takes 1 hour)
 docker run --rm \
   -v $HOME/blastdb:/blast/blastdb:rw \
   -w /blast/blastdb \
   ncbi/blast \
   update_blastdb.pl --source gcp nr &
 ```
+
+Check database directory size (nt is about 95 GB, nr is about 237 GB):
 ```
-# check database directory size
-# (nt is 95 GB--listed as 97 on the GCP list)
-# (nr is 237 GB--listed as 242 GB)
 du -sk $HOME/blastdb
 du -sh $HOME/blastdb
 ```
+
+Display database(s) that are now in `$HOME/blastdb`:
 ```
-# display database(s) in $HOME/blastdb
 docker run --rm \
     -v $HOME/blastdb:/blast/blastdb:ro \
     ncbi/blast \
@@ -152,8 +156,8 @@ docker run --rm \
 ```
 
 ## Running BLAST
+megablast example:
 ```
-# megablast example
 docker run --rm \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
@@ -163,8 +167,9 @@ docker run --rm \
   -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
   -out /blast/results/megablast.[my_file_name].out
 ```
+
+blastn example:
 ```
-# blastn example
 docker run --rm \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
@@ -174,8 +179,9 @@ docker run --rm \
   -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
   -out /blast/results/blastn.[my_file_name].out
 ```
+
+blastx example:
 ```
-# blastx example
 docker run --rm \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
@@ -185,8 +191,9 @@ docker run --rm \
   -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
   -out /blast/results/blastx.[my_file_name].out
 ```
+
+blastx-fast example:
 ```
-# blastx-fast example
 docker run --rm \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
@@ -206,9 +213,13 @@ nohup bash [my_script].sh > [my_script_stdout_and_stderr].out &
 ```
 
 ## Downloading Large Output Files
+Install `zip`:
 ```
 sudo apt install zip
+```
+Run zip:
+```
 cd [MY_DIRECTORY]
 zip -r [MY_FILENAME].zip [MY_FILENAME]
-# download new zip file
 ```
+Download new zip file.
