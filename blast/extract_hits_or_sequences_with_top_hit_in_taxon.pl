@@ -159,7 +159,7 @@ while(<BLAST_OUTPUT>)
 		my $evalue = $items[$EVALUE_COLUMN];
 		my @matched_taxon_ids = split($TAXONID_SEPARATOR, $items[$MATCHED_TAXONID_COLUMN]);
 		
-		# traverses full taxon path to check for matched taxon id a
+		# traverses full taxon path to check for matched taxon id
 		my $matched_taxon_id_is_in_expected_taxon = 0;
 		foreach my $matched_taxon_id(@matched_taxon_ids)
 		{
