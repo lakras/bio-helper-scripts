@@ -95,6 +95,10 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequence_position_in_fasta_file.pl [fasta sequence file] "[sequence name]"`_
 
+- [`slice_blast_output_file_before_or_after_sequence_name_query.pl`](/fasta/slice_blast_output_file_before_or_after_sequence_name_query.pl): Prints either all sequences before or all sequence after sequence name appears in fasta sequence file.
+
+   _Usage: `perl slice_blast_output_file_before_or_after_sequence_name_query.pl [fasta file] [sequence name to slice before or after] [1 to print all sequences BEFORE sequence name, 0 to print all sequences AFTER sequence name] [1 to print sequences including sequence name, 0 not to] > [output fasta file]`_
+
 - [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
 
    _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
