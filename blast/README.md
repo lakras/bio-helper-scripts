@@ -108,3 +108,37 @@ tar -xf taxdb.tar.gz
 mv taxdb.btd blastdb_custom
 mv taxdb.bti blastdb_custom
 ```
+
+## Downloading Databases
+```
+# display BLAST databases on the GCP
+docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
+
+# download nt database
+# (takes 18 minutes)
+docker run --rm \
+  -v $HOME/blastdb:/blast/blastdb:rw \
+  -w /blast/blastdb \
+  ncbi/blast \
+  update_blastdb.pl --source gcp nt &
+
+# download nr database
+# (takes 1 hour)
+docker run --rm \
+  -v $HOME/blastdb:/blast/blastdb:rw \
+  -w /blast/blastdb \
+  ncbi/blast \
+  update_blastdb.pl --source gcp nr &
+
+# check database directory size
+# (nt is 95 GB--listed as 97 on the GCP list)
+# (nr is 237 GB--listed as 242 GB)
+du -sk $HOME/blastdb
+du -sh $HOME/blastdb
+
+# display database(s) in $HOME/blastdb
+docker run --rm \
+    -v $HOME/blastdb:/blast/blastdb:ro \
+    ncbi/blast \
+    blastdbcmd -list /blast/blastdb -remove_redundant_dbs
+```
