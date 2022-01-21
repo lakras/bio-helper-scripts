@@ -26,6 +26,25 @@ Create a Google Cloud Virtual Machine:
 - n2-highmem-16
 - change boot disk to a 500GB Ubuntu 20.04 LTS
 
+The first time after making the VM, run these commands:
+```
+# Run these commands to install Docker and add non-root users to run Docker
+sudo snap install docker
+sudo apt update
+sudo apt install -y docker.io
+sudo usermod -aG docker $USER
+exit
+# exit and SSH back in for changes to take effect
+
+docker run hello-world
+# should see "Hello from Docker!"
+```
+
+Any other time, run:
+```
+docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
+```
+
 ## Docker Commands
 - `docker ps -a`: Displays a list of containers
 - `docker rm $(docker ps -q -f status=exited)`: Removes all exited containers, if you have at least 1 exited container
