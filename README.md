@@ -103,7 +103,6 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_with_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
 
-
 ## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 
 - [`generate_distance_table_from_alignment.pl`](/aligned-fasta/generate_distance_table_from_alignment.pl): Generates 2d table of distances between all sequences in alignment.
@@ -156,6 +155,10 @@ All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids ssc
 - [`retrieve_sequences_with_blast_hits.pl`](/blast/retrieve_sequences_with_blast_hits.pl): Retrieves sequences that have blast results.
 
    _Usage: `perl retrieve_sequences_with_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
+
+- [`slice_blast_output_file_before_or_after_sequence_name_query.pl`](/blast/slice_blast_output_file_before_or_after_sequence_name_query.pl): Prints either all lines before or all lines after sequence name appears in blast output file.
+
+   _Usage: `perl slice_blast_output_file_before_or_after_sequence_name_query.pl [blast output] [sequence name to slice before or after] [1 to print all lines BEFORE sequence name, 0 to print all lines AFTER sequence name] [1 to print lines including sequence name, 0 not to] > [output subset of blast output table]`_
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
