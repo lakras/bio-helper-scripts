@@ -38,6 +38,15 @@ my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
 my $MATCH_ANY_SEQUENCE_CONTAINING_NAME_OF_INTEREST = 0;
 
 
+# verifies that blast output file exists and is non-empty
+if(!$blast_output or !-e $blast_output or -z $blast_output)
+{
+	print STDERR "Error: blast output file not provided, does not exist, or empty:\n\t"
+		.$blast_output."\nExiting.\n";
+	die;
+}
+
+
 open BLAST_FILE, "<$blast_output" || die "Could not open $blast_output to read\n";
 my $print_output = 0; # 0: don't print this line, 1: print this line, 2: this line contains sequence name of interest
 if($print_before)

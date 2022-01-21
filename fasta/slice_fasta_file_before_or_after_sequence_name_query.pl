@@ -28,11 +28,19 @@ my $print_sequence_of_interest_lines = $ARGV[3]; # 1 to print lines containing s
 
 
 my $NEWLINE = "\n";
-my $DELIMITER = "\t";
 
 # if 0, matches only identical sequence names
 # if 1, matches sequence names that include name of sequence of interest
 my $MATCH_ANY_SEQUENCE_CONTAINING_NAME_OF_INTEREST = 0;
+
+
+# verifies that fasta file exists and is not empty
+if(!$fasta_file or !-e $fasta_file or -z $fasta_file)
+{
+	print STDERR "Error: fasta file not provided, does not exist, or empty:\n\t"
+		.$fasta_file."\nExiting.\n";
+	die;
+}
 
 
 open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read\n";
