@@ -35,7 +35,8 @@ sudo apt install -y docker.io
 sudo usermod -aG docker $USER
 exit
 # exit and SSH back in for changes to take effect
-
+```
+```
 docker run hello-world
 # should see "Hello from Docker!"
 
@@ -77,7 +78,8 @@ docker run --rm \
     makeblastdb -in /blast/fasta/[PROTEIN_SEQUENCES].fasta -dbtype prot \
     -parse_seqids -out [my-database-proteins] -title "[my database proteins]" \
     -taxid [NNNNNN] -blastdb_version 5
-
+```
+```
 # make blastn database
 docker run --rm \
     -v $HOME/blastdb_custom:/blast/blastdb_custom:rw \
@@ -87,7 +89,8 @@ docker run --rm \
     makeblastdb -in /blast/fasta/[NUCLEOTIDE_SEQUENCES].fasta -dbtype nucl \
     -parse_seqids -out [my-database-nucleotides] -title "[my database nucleotides]" \
     -taxid [NNNNNN] -blastdb_version 5
-
+```
+```
 # display the accessions, sequence length, and common name of the sequences in the databases
 docker run --rm \
     -v $HOME/blastdb:/blast/blastdb:ro \
@@ -100,7 +103,8 @@ docker run --rm \
     -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
     ncbi/blast \
     blastdbcmd -entry all -db [my-database-nucleotides] -outfmt "%a %l %T"
-
+```
+```
 # adding names of sequences
 # download https://ftp.ncbi.nlm.nih.gov/blast/db/taxdb.tar.gz
 # upload to cloud
@@ -113,7 +117,8 @@ mv taxdb.bti blastdb_custom
 ```
 # display BLAST databases on the GCP
 docker run --rm ncbi/blast update_blastdb.pl --showall pretty --source gcp
-
+```
+```
 # download nt database
 # (takes 18 minutes)
 docker run --rm \
@@ -121,7 +126,8 @@ docker run --rm \
   -w /blast/blastdb \
   ncbi/blast \
   update_blastdb.pl --source gcp nt &
-
+```
+```
 # download nr database
 # (takes 1 hour)
 docker run --rm \
@@ -129,13 +135,15 @@ docker run --rm \
   -w /blast/blastdb \
   ncbi/blast \
   update_blastdb.pl --source gcp nr &
-
+```
+```
 # check database directory size
 # (nt is 95 GB--listed as 97 on the GCP list)
 # (nr is 237 GB--listed as 242 GB)
 du -sk $HOME/blastdb
 du -sh $HOME/blastdb
-
+```
+```
 # display database(s) in $HOME/blastdb
 docker run --rm \
     -v $HOME/blastdb:/blast/blastdb:ro \
