@@ -95,6 +95,15 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequence_position_in_fasta_file.pl [fasta sequence file] "[sequence name]"`_
 
+- [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
+
+   _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
+   
+- [`blast/retrieve_sequences_with_blast_hits.pl`](/blast/retrieve_sequences_with_blast_hits.pl): Retrieves sequences that have blast results.
+
+   _Usage: `perl retrieve_sequences_with_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
+
+
 ## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 
 - [`generate_distance_table_from_alignment.pl`](/aligned-fasta/generate_distance_table_from_alignment.pl): Generates 2d table of distances between all sequences in alignment.
