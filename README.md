@@ -136,6 +136,8 @@ Includes the following scripts—
 ## BLAST ([`blast`](/blast))
 All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
 
+Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast/README.md`](/blast/README.md).
+
 - [`count_sequences_in_blast_output.pl`](/blast/count_sequences_in_blast_output.pl): Counts the number of sequences with hits in the blast output.
 
    _Usage: `perl count_sequences_in_blast_output.pl [blast output table] [optional minimum percent id] [optional minimum query coverage] [1 to print sequence names, 0 to print number sequences only]`_
