@@ -140,6 +140,10 @@ All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids ssc
 
    _Usage: `perl retrieve_blast_outputs_for_sequences_of_interest.pl [blast output file] [sequence name to retrieve blast hits for] [another sequence name to retrieve blast hits for] [etc.] > [subset blast output path]`_
 
+- [`extract_sequences_with_no_blast_hits.pl`](/blast/extract_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
+
+   _Usage: `perl extract_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] > [output fasta file path]`_
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
