@@ -210,6 +210,8 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
 ## Tables ([`tables`](/tables))
 
+Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use with comma-separated `.csv` files, change the value of the `$DELIMITER` variable from `"\t"` to `","`.
+
 ### Column title manipulation
 
 - [`replace_all_spaces_parens_in_column_titles.pl`](/tables/replace_all_spaces_parens_in_column_titles.pl): Replaces all spaces and parentheses in header line with provided replacement value, or underscore by default.
