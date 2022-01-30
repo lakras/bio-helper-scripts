@@ -162,51 +162,139 @@ sub date_to_YYYY_MM_DD
 		return $date;
 	}
 	
-	# translates date to output format
-	if($date =~ /^(\d+)\/(\d+)\/(\d+)$/)
+	# retrieves day, month, and year from input
+	my $year = -1;
+	my $month = -1;
+	my $day = -1;
+	
+	if($date =~ /^(\d\d\d\d)[\/-]([a-zA-Z]+)[\/-](\d+)$/) # YYYY/MMM/DD or YYYY-MMM-DD format, with Month written out (e.g., Dec)
 	{
 		# retrieves date
-		my $year = $3;
-		my $month = $1;
-		my $day = $2;
-		
-		# pads month and/or day with 0s if necessary
-		if(length($month) < 2)
-		{
-			$month = "0".$month;
-		}
-		if(length($day) < 2)
-		{
-			$day = "0".$day;
-		}
-		
-		# pads year with 20 if necessary
-		if(length($year) == 2)
-		{
-			$year = "20".$year;
-		}
-		elsif(length($year) != 4)
-		{
-			print STDERR "Error: year ".$year." in date ".$date." not 4 or 2 digits. Exiting.\n";
-		}
-		
-		# puts date back together
-		my $output = $year."-".$month."-".$day;
-		
-		# verifies that output is in correct format
-		if($output =~ /^\d{4}-\d{2}-\d{2}$/)
-		{
-			return $output;
-		}
-		print STDERR "Error: result ".$output." of reformatting date ".$date." not in "
-			."YYYY-MM-DD format. Please fix code. Exiting.\n";
-		die;
+		$year = $1;
+		$month = month_text_to_month_number($2);
+		$day = $3;
 	}
-	print STDERR "Error: date ".$date." not in recognized format while converting format "
-		."in column(s) ".join(", ", @titles_of_columns_with_dates)." in table:\n\t".$table
-		."\nPlease fix input or code. Exiting.\n";
+	elsif($date =~ /^(\d+)[\/-]([a-zA-Z]+)[\/-](\d\d\d\d)$/) # DD/MMM/YYYY or DD-MMM-YYYY format, with Month written out (e.g., Dec)
+	{
+		# retrieves date
+		$year = $3;
+		$month = month_text_to_month_number($2);
+		$day = $1;
+	}
+	elsif($date =~ /^(\d+)[\/-]([a-zA-Z]+)[\/-](\d+)$/) # DD/MMM/YY or DD-MMM-YY format, with Month written out (e.g., Dec)
+	{
+		# retrieves date
+		$year = $3;
+		$month = month_text_to_month_number($2);
+		$day = $1;
+	}
+	elsif($date =~ /^(\d+)[\/-](\d+)[\/-](\d+)$/) #  M/D/YY or M-D-YY format
+	{
+		# retrieves date
+		$year = $3;
+		$month = $1;
+		$day = $2;
+	}
+	else # format not recognized
+	{
+		print STDERR "Error: date ".$date." not in recognized format while converting format "
+			."in column(s) ".join(", ", @titles_of_columns_with_dates)." in table:\n\t"
+			.$table."\n";
+		return $date;
+	}
+	
+	# prepares output
+	# pads month and/or day with 0s if necessary
+	if(length($month) < 2)
+	{
+		$month = "0".$month;
+	}
+	if(length($day) < 2)
+	{
+		$day = "0".$day;
+	}
+	
+	# pads year with 20 if necessary
+	if(length($year) == 2)
+	{
+		$year = "20".$year;
+	}
+	elsif(length($year) != 4)
+	{
+		print STDERR "Error: year ".$year." in date ".$date." not 4 or 2 digits. Exiting.\n";
+	}
+	
+	# puts date back together
+	my $output = $year."-".$month."-".$day;
+	
+	# verifies that output is in correct format
+	if($output =~ /^\d{4}-\d{2}-\d{2}$/)
+	{
+		return $output;
+	}
+	print STDERR "Error: result ".$output." of reformatting date ".$date." not in "
+		."YYYY-MM-DD format. Please fix code.\n";
 	die;
+}
+
+# example input: Dec
+# example input: December
+# example output: 12
+sub month_text_to_month_number
+{
+	my $month_text = $_[0];
+	if($month_text =~ /Jan/)
+	{
+		return 1;
+	}
+	if($month_text =~ /Feb/)
+	{
+		return 2;
+	}
+	if($month_text =~ /Mar/)
+	{
+		return 3;
+	}
+	if($month_text =~ /Apr/)
+	{
+		return 4;
+	}
+	if($month_text =~ /May/)
+	{
+		return 5;
+	}
+	if($month_text =~ /Jun/)
+	{
+		return 6;
+	}
+	if($month_text =~ /Jul/)
+	{
+		return 7;
+	}
+	if($month_text =~ /Aug/)
+	{
+		return 8;
+	}
+	if($month_text =~ /Sep/)
+	{
+		return 9;
+	}
+	if($month_text =~ /Oct/)
+	{
+		return 10;
+	}
+	if($month_text =~ /Nov/)
+	{
+		return 11;
+	}
+	if($month_text =~ /Dec/)
+	{
+		return 12;
+	}
+	print STDERR "Error: month ".$month_text." not recognized.\n";
+	return $month_text;
 }
 
 
 # August 24, 2021
+# January 30, 2022
