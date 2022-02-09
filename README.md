@@ -324,6 +324,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl compile_values_and_titles_in_selected_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
+- [`condense_list_values_into_one_item.pl`](/tables/condense_list_values_into_one_item.pl): For any values in specified columns that are comma-separated lists (e.g., 1, 2, 3), replaces comma-separated list with the first value in the list (e.g., 1).
+
+   _Usage: `perl condense_list_values_into_one_item.pl [table] "[title of column to replace lists in]" "[title of another column to replace lists in]" "[title of another column to replace lists in]" [etc.] > [output table path]`_
+
 ### Column manipulation with dates
 
 - [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
