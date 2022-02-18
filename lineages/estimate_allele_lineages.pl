@@ -59,14 +59,15 @@
 # Usage:
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
 # [consensus genomes aligned to reference] [optional list of heterozygosity tables]
-# [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles]
 # [optional list of read depth files]
+# [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles]
 
 # Prints to console. To print to file, use
 # perl estimate_allele_lineages.pl [lineage genomes aligned to reference]
 # [consensus genomes aligned to reference] [optional list of heterozygosity tables]
+# [optional list of read depth files]
 # [1 to print columns for each lineage, 0 to print columns for consensus and minor alleles]
-# [optional list of read depth files] > [output table path]
+# > [output table path]
 
 
 use strict;
