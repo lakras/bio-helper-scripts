@@ -386,6 +386,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl merge_tables_by_column_value.pl [file describing input] > [merged output table path]`_
 
+- [`add_newline_between_lines_with_nonconsecutive_values.pl`](/tables/add_newline_between_lines_with_nonconsecutive_values.pl): Adds newline between lines containing non-consecutive values in first column.
+
+   _Usage: `perl add_newline_between_lines_with_nonconsecutive_values.pl [table] [column with integer values] > [output table path]`_
+
 ### Replicates
 
 - [`annotate_replicates.pl`](/tables/annotate_replicates.pl): Assigns a source number to all replicates from the same source. Adds source number as a column to table to annotate.
