@@ -126,13 +126,13 @@ while(<TABLE>) # for each row in the file
 					}
 					elsif($option == 1) # smallest value
 					{
-						@values = sort @values;
+						@values = sort {$a <=> $b} @values;
 						$value = $values[0];
 					}
 					elsif($option == 2) # greatest value
 					{
-						@values = sort @values;
-						$value = $values[$#values];
+						@values = sort {$b <=> $a} @values;
+						$value = $values[0];
 					}
 					else
 					{
