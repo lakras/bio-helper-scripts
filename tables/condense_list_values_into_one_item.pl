@@ -1,15 +1,17 @@
 #!/usr/bin/env perl
 
-# For any values in specified columns that are comma-separated lists (e.g., 1, 2, 3),
-# replaces comma-separated list with the first value in the list (e.g., 1).
+# For any values in specified columns that are comma-separated lists, replaces
+# comma-separated list with the first, smallest, or largest value in the list.
 
 # Usage:
 # perl condense_list_values_into_one_item.pl [table]
+# [0 to use the first value, 1 to use the smallest value, 2 to use the greatest value]
 # "[title of column to replace lists in]" "[title of another column to replace lists in]"
 # "[title of another column to replace lists in]" [etc.]
 
 # Prints to console. To print to file, use
 # perl condense_list_values_into_one_item.pl [table]
+# [0 to use the first value, 1 to use the smallest value, 2 to use the greatest value]
 # "[title of column to replace lists in]" "[title of another column to replace lists in]"
 # "[title of another column to replace lists in]" [etc.] > [output table path]
 
@@ -19,7 +21,8 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my @titles_of_columns_to_search = @ARGV[1..$#ARGV];
+my $option = $ARGV[1]; # 0 to use the first value, 1 to use the smallest value, 2 to use the greatest value
+my @titles_of_columns_to_search = @ARGV[2..$#ARGV];
 
 
 my $NEWLINE = "\n";
@@ -39,6 +42,13 @@ if(!scalar @titles_of_columns_to_search)
 {
 	print STDERR "Error: no column titles provided. Exiting.\n";
 	die;
+}
+
+# verifies that option makes sense
+if($option < 0 or $option > 2)
+{
+	print STDERR "Error: option ".$option." not recognized. Selecting first value by default.\n";
+	$option = 1;
 }
 
 
@@ -109,9 +119,26 @@ while(<TABLE>) # for each row in the file
 				if($column_is_column_to_search{$column})
 				{
 					# if value is a comma-separated list, retrieves the first value in the list
-					if($value =~ /^(.*), ?.*/)
+					my @values = split(", ", $value, -1);
+					if($option == 0) # first value
 					{
-						$value = $1;
+						$value = $values[0];
+					}
+					elsif($option == 1) # smallest value
+					{
+						@values = sort @values;
+						$value = $values[0];
+					}
+					elsif($option == 2) # greatest value
+					{
+						@values = sort @values;
+						$value = $values[$#values];
+					}
+					else
+					{
+						print STDERR "Error: option ".$option." not recognized. "
+							."Selecting first value by default.\n";
+						$value = $values[0];
 					}
 				}
 		

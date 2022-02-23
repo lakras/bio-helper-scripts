@@ -324,9 +324,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl compile_values_and_titles_in_selected_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
-- [`condense_list_values_into_one_item.pl`](/tables/condense_list_values_into_one_item.pl): For any values in specified columns that are comma-separated lists (e.g., 1, 2, 3), replaces comma-separated list with the first value in the list (e.g., 1).
+- [`condense_list_values_into_one_item.pl`](/tables/condense_list_values_into_one_item.pl): For any values in specified columns that are comma-separated lists, replaces comma-separated list with the first, smallest, or largest value in the list.
 
-   _Usage: `perl condense_list_values_into_one_item.pl [table] "[title of column to replace lists in]" "[title of another column to replace lists in]" "[title of another column to replace lists in]" [etc.] > [output table path]`_
+   _Usage: `perl condense_list_values_into_one_item.pl [table] [0 to use the first value, 1 to use the smallest value, 2 to use the greatest value] "[title of column to replace lists in]" "[title of another column to replace lists in]" "[title of another column to replace lists in]" [etc.] > [output table path]`_
 
 ### Column manipulation with dates
 
