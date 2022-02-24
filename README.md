@@ -211,7 +211,7 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
 ## Tables ([`tables`](/tables))
 
-Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use with comma-separated `.csv` files, change the value of the `$DELIMITER` variable from `"\t"` to `","`.
+Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use with comma-separated `.csv` files, change the value of the `$DELIMITER` variable from `"\t"` to `","` or convert to comma-separated csv tables to tab-separated tsv tables using [`csv_to_tsv.pl`](/tables/csv_to_tsv.pl).
 
 ### Table Format
 
