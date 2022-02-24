@@ -64,28 +64,19 @@ while(<TABLE>) # for each row in the file
 		die;
 	}
 	
-	# replaces all commas within quotes with reserved character, in large groups of 8 first
-	while($line =~ /$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/)
+	# replaces all commas within quotes with reserved character
+	if($line =~ /^(.*$ESCAPE_QUOTATIONS_CHARACTER)([^$ESCAPE_QUOTATIONS_CHARACTER]+)($ESCAPE_QUOTATIONS_CHARACTER.*)$/)
 	{
-		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/$ESCAPE_QUOTATIONS_CHARACTER$1$reserved_character$2$reserved_character$3$reserved_character$4$reserved_character$5$reserved_character$6$reserved_character$7$reserved_character$8$reserved_character$9$ESCAPE_QUOTATIONS_CHARACTER/g;
-	}
-	
-	# replaces all commas within quotes with reserved character, in groups of 5
-	while($line =~ /$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/)
-	{
-		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/$ESCAPE_QUOTATIONS_CHARACTER$1$reserved_character$2$reserved_character$3$reserved_character$4$reserved_character$5$reserved_character$6$ESCAPE_QUOTATIONS_CHARACTER/g;
-	}
-	
-	# replaces all commas within quotes with reserved character in groups of 2
-	while($line =~ /$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/)
-	{
-		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/$ESCAPE_QUOTATIONS_CHARACTER$1$reserved_character$2$reserved_character$3$ESCAPE_QUOTATIONS_CHARACTER/g;
-	}
-	
-	# replaces all remaining commas within quotes with reserved character
-	while($line =~ /$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/)
-	{
-		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)"/"$1$reserved_character$2$ESCAPE_QUOTATIONS_CHARACTER/g;
+		# pulls out anything in quotes
+		my $line_start = $1;
+		my $within_quotes = $2;
+		my $line_end = $3;
+		
+		# replaces all commas within quotes with reserved character
+		$within_quotes =~ s/$PREVIOUS_DELIMITER/$reserved_character/g;
+		
+		# reconstructs line
+		$line = $line_start.$within_quotes.$line_end;
 	}
 	
 	# replaces all commas with tabs
