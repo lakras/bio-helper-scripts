@@ -9,6 +9,7 @@ Helper scripts for processing genomic sequence data.
 - [VCF file processing](#vcf-file-processing-vcf-files)
 - [Read depth file processing](#read-depth-file-processing-read-depths)
 - [Tables](#tables-tables)
+   - [Table Format](#table-format)
    - [Column title manipulation](#column-title-manipulation)
    - [Column manipulation](#column-manipulation)
    - [Column manipulation with dates](#column-manipulation-with-dates)
@@ -212,6 +213,20 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
 Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use with comma-separated `.csv` files, change the value of the `$DELIMITER` variable from `"\t"` to `","`.
 
+### Table Format
+
+- [`csv_to_tsv.pl`](/tables/csv_to_tsv.pl): Converts comma-separated csv table to tab-separated tsv table.
+
+   _Usage: `perl csv_to_tsv.pl [table] > [output table path]`_
+   
+- [`tsv_to_csv.pl`](/tables/tsv_to_csv.pl): Converts tab-separated tsv table to comma-separated csv table.
+
+   _Usage: `perl tsv_to_csv.pl [table] > [output table path]`_
+
+- [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
+
+   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column index] > [output table path]`_
+
 ### Column title manipulation
 
 - [`replace_all_spaces_parens_in_column_titles.pl`](/tables/replace_all_spaces_parens_in_column_titles.pl): Replaces all spaces and parentheses in header line with provided replacement value, or underscore by default.
@@ -370,14 +385,6 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
 ### Table manipulation
 
-- [`csv_to_tsv.pl`](/tables/csv_to_tsv.pl): Converts comma-separated csv table to tab-separated tsv table.
-
-   _Usage: `perl csv_to_tsv.pl [table] > [output table path]`_
-   
-- [`tsv_to_csv.pl`](/tables/tsv_to_csv.pl): Converts tab-separated tsv table to comma-separated csv table.
-
-   _Usage: `perl tsv_to_csv.pl [table] > [output table path]`_
-
 - [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
 
    _Usage: `perl concatenate_tables.pl [table1] [table2] [table3] etc. > [concatenated output table path]`_
@@ -421,10 +428,6 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`count_occurrences_of_column_values.pl`](/tables/count_occurrences_of_column_values.pl): Counts number occurrences of each value in selected column of table.
 
    _Usage: `perl count_occurrences_of_column_values.pl [tab-separated table] "[column title]" > [output table path]`_
-
-- [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
-
-   _Usage: `perl make_r_friendly_table.pl [table file path] [first data column index] > [output table path]`_
 
 - [`verify_column_values_are_consistent_across_tables.pl`](/tables/verify_column_values_are_consistent_across_tables.pl): Verifies that the same column values always appear with row identifier values. Column titles must be consistent across tables, including title of row identifier column.
 
