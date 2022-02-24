@@ -370,6 +370,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
 ### Table manipulation
 
+- [`csv_to_tsv.pl`](/tables/csv_to_tsv.pl): Converts comma-separated csv table to tab-separated tsv table.
+
+   _Usage: `perl csv_to_tsv.pl [table] > [output table path]`_
+
 - [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
 
    _Usage: `perl concatenate_tables.pl [table1] [table2] [table3] etc. > [concatenated output table path]`_
