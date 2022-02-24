@@ -82,7 +82,7 @@ while(<TABLE>) # for each row in the file
 		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/$ESCAPE_QUOTATIONS_CHARACTER$1$reserved_character$2$reserved_character$3$ESCAPE_QUOTATIONS_CHARACTER/g;
 	}
 	
-	# replaces all remaining commas within quotes with reserved character
+	# replaces all remaining tabs within quotes with reserved character
 	while($line =~ /$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/)
 	{
 		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)"/"$1$reserved_character$2$ESCAPE_QUOTATIONS_CHARACTER/g;
