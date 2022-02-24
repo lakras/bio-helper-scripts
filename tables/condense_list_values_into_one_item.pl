@@ -27,6 +27,7 @@ my @titles_of_columns_to_search = @ARGV[2..$#ARGV];
 
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
+my $NO_DATA = "NA";
 
 
 # verifies that input file exists and is not empty
@@ -118,27 +119,47 @@ while(<TABLE>) # for each row in the file
 				# replaces values that are lists if this is a column to search
 				if($column_is_column_to_search{$column})
 				{
-					# if value is a comma-separated list, retrieves the first value in the list
+					# removes NA values
 					my @values = split(", ", $value, -1);
-					if($option == 0) # first value
+					my @non_NA_values = ();
+					foreach my $subvalue(@values)
 					{
-						$value = $values[0];
+						if($subvalue ne $NO_DATA)
+						{
+							push(@non_NA_values, $subvalue);
+						}
 					}
-					elsif($option == 1) # smallest value
+					
+					# if all values NA
+					if(scalar @values and !scalar @non_NA_values)
 					{
-						@values = sort {$a <=> $b} @values;
-						$value = $values[0];
+						$value = $NO_DATA;
 					}
-					elsif($option == 2) # greatest value
+					
+					# if not all values NA
+					elsif(scalar @non_NA_values)
 					{
-						@values = sort {$b <=> $a} @values;
-						$value = $values[0];
-					}
-					else
-					{
-						print STDERR "Error: option ".$option." not recognized. "
-							."Selecting first value by default.\n";
-						$value = $values[0];
+						# if value is a comma-separated list, retrieves the first non-NA value in the list
+						if($option == 0) # first value
+						{
+							$value = $non_NA_values[0];
+						}
+						elsif($option == 1) # smallest value
+						{
+							@non_NA_values = sort {$a <=> $b} @non_NA_values;
+							$value = $non_NA_values[0];
+						}
+						elsif($option == 2) # greatest value
+						{
+							@non_NA_values = sort {$b <=> $a} @non_NA_values;
+							$value = $values[0];
+						}
+						else
+						{
+							print STDERR "Error: option ".$option." not recognized. "
+								."Selecting first value by default.\n";
+							$value = $non_NA_values[0];
+						}
 					}
 				}
 		
