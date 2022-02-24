@@ -50,7 +50,6 @@ while(<TABLE>) # for each row in the file
 	# replaces all commas within quotes with reserved character
 	while($line =~ /$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)$ESCAPE_QUOTATIONS_CHARACTER/)
 	{
-		print "test";
 		$line =~ s/$ESCAPE_QUOTATIONS_CHARACTER(.*)$PREVIOUS_DELIMITER(.*)"/"$1$reserved_character$2$ESCAPE_QUOTATIONS_CHARACTER/g;
 	}
 	
