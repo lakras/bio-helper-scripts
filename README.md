@@ -259,7 +259,7 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl concatenate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 
-- [`summarize_numerical_columns.pl`](/tables/summarize_numerical_columns.pl): Summarizes selected numerical columns. Adds new columns with: mean, standard deviation, median, min, max, range, and all values sorted in a comma-separated list.
+- [`summarize_numerical_columns.pl`](/tables/summarize_numerical_columns.pl): Summarizes selected numerical columns. Adds new columns with: mean, standard deviation, median, min, max, range, and all values sorted in a comma-separated list. If a column value contains a comma-separated list, includes all values from list.
 
    _Usage: `perl summarize_numerical_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
 

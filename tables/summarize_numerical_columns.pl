@@ -1,7 +1,8 @@
 #!/usr/bin/env perl
 
 # Summarizes selected numerical columns. Adds new columns with: mean, standard deviation,
-# median, min, max, range, and all values sorted in a comma-separated list.
+# median, min, max, range, and all values sorted in a comma-separated list. If a column
+# value contains a comma-separated list, includes all values from list.
 
 # Usage:
 # perl summarize_numerical_columns.pl [tab-separated table] "[column title]"
@@ -117,13 +118,29 @@ while(<TABLE>) # for each row in the file
 		else # column values (not titles)
 		{
 			# retrieves column values to summarize
+			# if a column value contains a comma-separated list, includes all values from list
 			my @column_values = ();
 			foreach my $column_title(@titles_of_columns_to_summarize)
 			{
 				my $column = $column_title_to_column{$column_title};
 				my $value = $items_in_line[$column];
-			
-				push(@column_values, $value);
+				my @values = ($value);
+				if($value =~ /, /)
+				{
+					@values = split(", ", $value);
+				}
+				elsif($value =~ /,/)
+				{
+					@values = split(",", $value);
+				}
+				
+				foreach my $value(@values)
+				{
+					if($value ne $NO_DATA)
+					{
+						push(@column_values, $value);
+					}
+				}
 			}
 			
 			# calculates summary values
