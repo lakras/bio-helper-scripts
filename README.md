@@ -424,6 +424,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`summarize_table_columns.pl`](/tables/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
    _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
+
+- [`add_column_indicating_presence_of_query.pl`](/tables/add_column_indicating_presence_of_query.pl): Adds column with values indicating presence of query in row.
+
+   _Usage: `perl add_column_indicating_presence_of_query.pl [table] [query] > [output table path]`_
    
 - [`count_occurrences_of_column_values.pl`](/tables/count_occurrences_of_column_values.pl): Counts number occurrences of each value in selected column of table.
 
