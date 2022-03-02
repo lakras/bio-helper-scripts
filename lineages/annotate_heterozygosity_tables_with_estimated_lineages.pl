@@ -71,7 +71,6 @@ my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_READCOUNT_COLUMN = 6;
 my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_FREQUENCY_COLUMN = 7;
 
 
-
 # verifies that input files exist and are non-empty
 if(!$lineages_aligned_fasta or !-e $lineages_aligned_fasta or -z $lineages_aligned_fasta)
 {
@@ -150,7 +149,8 @@ close ALIGNED_LINEAGES_GENOMES;
 # process aligned lineages fasta file
 # identify "defining positions" at which the lineages are different
 my %lineage_pairs = (); # key: [lineage] [lineage] -> value: 1
-my %lineage_pair_to_position_to_base_to_matching_lineage = (); # key: [lineage] [lineage] -> key: lineage-defining position -> key: base -> value: lineage(s) with this base at this position
+my %lineage_pair_to_lineage_defining_position_to_base_to_matching_lineage = (); # key: [lineage] [lineage] -> key: lineage-defining position -> key: base -> value: lineage(s) with this base at this position (lineage-defining positions only)
+my %position_to_base_to_matching_lineages = (); # key: position -> key: base -> value: all lineage(s) with this base at this position
 my $position = 0; # 1-indexed relative to reference
 for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++)
 {
@@ -163,7 +163,7 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 		# retrieves each lineage's base at this position
 		# verifies that we have unambiguous bases in all lineages
 		my %lineage_name_to_base = (); # key: lineage sequence name -> value: base at lineage
-		foreach my $lineage_name(keys %lineage_name_to_genome)
+		foreach my $lineage_name(sort keys %lineage_name_to_genome)
 		{
 			my $lineage_genome = $lineage_name_to_genome{$lineage_name};
 			if($base_index < length($lineage_genome)) # no sequence at this index; we've gone out of range
@@ -172,6 +172,11 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 				if(is_unambiguous_base($base))
 				{
 					$lineage_name_to_base{$lineage_name} = $base;
+					if($position_to_base_to_matching_lineages{$position}{$base})
+					{
+						$position_to_base_to_matching_lineages{$position}{$base} .= ", ";
+					}
+					$position_to_base_to_matching_lineages{$position}{$base} .= $lineage_name;
 				}
 			}
 		}
@@ -194,8 +199,8 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 					{
 						my $lineage_pair = $lineage_name_1." ".$lineage_name_2;
 						$lineage_pairs{$lineage_pair} = 1;
-						$lineage_pair_to_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$lineage_name_1_base} = $lineage_name_1;
-						$lineage_pair_to_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$lineage_name_2_base} = $lineage_name_2;
+						$lineage_pair_to_lineage_defining_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$lineage_name_1_base} = $lineage_name_1;
+						$lineage_pair_to_lineage_defining_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$lineage_name_2_base} = $lineage_name_2;
 					}
 				}
 			}
@@ -211,17 +216,20 @@ if(!$print_each_file_separately)
 	$header_line .= "heterozygosity_table".$DELIMITER;
 }
 $header_line .= "reference".$DELIMITER."position";
-$header_line .= $DELIMITER."minor_allele".$DELIMITER."minor_allele_readcount".$DELIMITER."minor_allele_frequency";
-foreach my $lineage_pair(sort keys %lineage_pairs)
-{
-	$header_line .= $DELIMITER.$lineage_pair."_minor_allele_match";
-}
+
 $header_line .= $DELIMITER."consensus_allele".$DELIMITER."consensus_allele_readcount".$DELIMITER."consensus_allele_frequency";
+$header_line .= $DELIMITER."lineages_consistent_with_consensus_allele";
 foreach my $lineage_pair(sort keys %lineage_pairs)
 {
-	$header_line .= $DELIMITER.$lineage_pair."_consensus_allele_match";
+	$header_line .= $DELIMITER."consensus_allele_lineage_defining_".$lineage_pair;
 }
 
+$header_line .= $DELIMITER."minor_allele".$DELIMITER."minor_allele_readcount".$DELIMITER."minor_allele_frequency";
+$header_line .= $DELIMITER."lineages_consistent_with_minor_allele";
+foreach my $lineage_pair(sort keys %lineage_pairs)
+{
+	$header_line .= $DELIMITER."minor_allele_lineage_defining_".$lineage_pair;
+}
 
 # prints header line to console
 if(!$print_each_file_separately)
@@ -271,6 +279,19 @@ while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 					my $consensus_allele_readcount = $items[$HETEROZYGOSITY_TABLE_MAJOR_ALLELE_READCOUNT_COLUMN];
 					my $consensus_allele_frequency = $items[$HETEROZYGOSITY_TABLE_MAJOR_ALLELE_FREQUENCY_COLUMN];
 					
+					# retrieves lineages matching alleles at this position
+					my $lineages_matching_consensus_allele = "";
+					if($position_to_base_to_matching_lineages{$position}{$consensus_allele})
+					{
+						$lineages_matching_consensus_allele = $position_to_base_to_matching_lineages{$position}{$consensus_allele};
+					}
+					
+					my $lineages_matching_minor_allele = "";
+					if($position_to_base_to_matching_lineages{$position}{$minor_allele})
+					{
+						$lineages_matching_minor_allele = $position_to_base_to_matching_lineages{$position}{$minor_allele};
+					}
+					
 					# prints info on position
 					if(!$print_each_file_separately)
 					{
@@ -278,11 +299,12 @@ while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 					}
 					$output_lines .= $reference.$DELIMITER.$position;
 					
-					# prints info on minor allele
-					$output_lines .= $DELIMITER.$minor_allele.$DELIMITER.$minor_allele_readcount.$DELIMITER.$minor_allele_frequency;
+					# prints info on consensus-level allele
+					$output_lines .= $DELIMITER.$consensus_allele.$DELIMITER.$consensus_allele_readcount.$DELIMITER.$consensus_allele_frequency;
+					$output_lines .= $DELIMITER.$lineages_matching_consensus_allele;
 					foreach my $lineage_pair(sort keys %lineage_pairs)
 					{
-						my $lineage_matched = $lineage_pair_to_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$minor_allele};
+						my $lineage_matched = $lineage_pair_to_lineage_defining_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$consensus_allele};
 						if($lineage_matched)
 						{
 							$output_lines .= $DELIMITER.$lineage_matched;
@@ -293,11 +315,12 @@ while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 						}
 					}
 					
-					# prints info on consensus-level allele
-					$output_lines .= $DELIMITER.$consensus_allele.$DELIMITER.$consensus_allele_readcount.$DELIMITER.$consensus_allele_frequency;
+					# prints info on minor allele
+					$output_lines .= $DELIMITER.$minor_allele.$DELIMITER.$minor_allele_readcount.$DELIMITER.$minor_allele_frequency;
+					$output_lines .= $DELIMITER.$lineages_matching_minor_allele;
 					foreach my $lineage_pair(sort keys %lineage_pairs)
 					{
-						my $lineage_matched = $lineage_pair_to_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$consensus_allele};
+						my $lineage_matched = $lineage_pair_to_lineage_defining_position_to_base_to_matching_lineage{$lineage_pair}{$position}{$minor_allele};
 						if($lineage_matched)
 						{
 							$output_lines .= $DELIMITER.$lineage_matched;
@@ -307,6 +330,7 @@ while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 							$output_lines .= $DELIMITER.$NO_DATA;
 						}
 					}
+					
 					$output_lines .= $NEWLINE;
 				}
 			}
@@ -387,3 +411,4 @@ sub add_comma_separators
 
 # July 14, 2021
 # November 10, 2021
+# March 2, 2022
