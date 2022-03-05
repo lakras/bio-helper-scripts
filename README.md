@@ -428,7 +428,11 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`add_column_indicating_presence_of_query.pl`](/tables/add_column_indicating_presence_of_query.pl): Adds column with values indicating presence of query in row.
 
    _Usage: `perl add_column_indicating_presence_of_query.pl [table] [query] > [output table path]`_
-   
+
+- [`add_row_indicating_presence_of_query.pl`](/tables/add_row_indicating_presence_of_query.pl): Adds row with values indicating presence of query in column.
+
+   _Usage: `perl add_row_indicating_presence_of_query.pl [table] [query] > [output table path]`_
+
 - [`count_occurrences_of_column_values.pl`](/tables/count_occurrences_of_column_values.pl): Counts number occurrences of each value in selected column of table.
 
    _Usage: `perl count_occurrences_of_column_values.pl [tab-separated table] "[column title]" > [output table path]`_
