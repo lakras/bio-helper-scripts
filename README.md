@@ -44,6 +44,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] > [output table file path]`_
 
+- [`align_each_fasta_file_with_reference_separately.pl`](/fasta/align_each_fasta_file_with_reference_separately.pl): Adds reference sequence to the top of each fasta file and aligns each file separately. New files are created at filepath of old file with "_aligned_to_ref.fasta" appended to the end. Temp files created with "_temp.fasta" appended to the end. Files already at those paths will be overwritten.
+
+   _Usage: `perl align_each_fasta_file_with_reference_separately.pl [reference sequence] [file path of MAFFT executable file (mafft.bat)] [fasta file path] [another fasta file path] [another fasta file path] [etc.]`_
+
 - [`retrieve_sequences_by_name.pl`](/fasta/retrieve_sequences_by_name.pl): Retrieves query sequences by name from fasta file.
 
    _Usage: `perl retrieve_sequences_by_name.pl [fasta file path] "[query sequence name 1]" "[query sequence name 2]" [etc.] > [output fasta file path]`_
