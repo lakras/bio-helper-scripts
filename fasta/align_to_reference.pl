@@ -302,7 +302,10 @@ foreach my $alignment_file(@alignment_files)
 	{
 		if($sequence_name ne $reference_sequence_name)
 		{
+			# prints sequence name
 			print ">".$sequence_name.$NEWLINE;
+			
+			# prints sequence
 			my $last_position = max(keys %{$sequence_name_to_position_to_base{$sequence_name}});
 			for(my $position = 1; $position <= $last_position; $position++)
 			{
@@ -314,6 +317,12 @@ foreach my $alignment_file(@alignment_files)
 				{
 					print "-";
 				}
+			}
+			
+			# prints dashes until we reach the length of the reference
+			for(my $position = $last_position+1; $position <= length($reference_sequence); $position++)
+			{
+				print "-";
 			}
 			print $NEWLINE;
 		}
