@@ -138,6 +138,10 @@ Includes the following scripts—
 
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
 
+- [`combine_alignments_to_same_reference.pl`](/aligned-fasta/combine_alignments_to_same_reference.pl): Combines multiple fasta files including the same reference sequence into one fasta alignment. Reference fasta is printed first, with no gaps. All other sequences are printed aligned to the reference as in the input. Bases aligned to a gap in the reference are removed. Sequences in input files must have unique names. First sequence in each alignment fasta file must be reference.
+
+   _Usage: `perl combine_alignments_to_same_reference.pl [alignment fasta file path] [another alignment fasta file path] [another alignment fasta file path] [etc.] > [output fasta file path]`_
+
 - [`collapse_aligned_sequences_by_name.pl`](/aligned-fasta/collapse_aligned_sequences_by_name.pl): Merges aligned sequences with same name up to a ": ", such as those output by LASTZ.
 
    _Usage: `perl collapse_aligned_sequences_by_name.pl [alignment fasta file path] > [output fasta file path]`_
