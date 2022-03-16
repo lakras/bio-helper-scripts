@@ -131,7 +131,8 @@ foreach my $alignment_file(@alignment_files)
 		if($sequence_name ne $reference_sequence_name)
 		{
 			print ">".$sequence_name.$NEWLINE;
-			for(my $position = 1; $position <= max(keys %{$sequence_name_to_position_to_base{$sequence_name}}); $position++)
+			my $last_position = max(keys %{$sequence_name_to_position_to_base{$sequence_name}});
+			for(my $position = 1; $position <= $last_position; $position++)
 			{
 				if($sequence_name_to_position_to_base{$sequence_name}{$position})
 				{
