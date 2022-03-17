@@ -111,6 +111,7 @@ my $ESTIMATE_NO_VARIATION_CONSENSUS_READCOUNT_AS_READ_DEPTH = 1;
 # if 1 and $print_columns_for_each_lineage==1, prints special columns listing lineage
 my $PRINT_LINEAGES_COLUMN = 1;
 
+
 # verifies that input files exist and are non-empty
 if(!$lineages_aligned_fasta or !-e $lineages_aligned_fasta or -z $lineages_aligned_fasta)
 {
@@ -188,6 +189,10 @@ if($sequence and $sequence_name)
 close ALIGNED_LINEAGES_GENOMES;
 
 
+# processes list of lineages
+my @all_lineages_list = sort keys %all_lineages;
+
+
 # print list of lineages
 # print "lineages:".$NEWLINE;
 # foreach my $lineage_name(keys %lineage_name_to_genome)
@@ -201,6 +206,7 @@ close ALIGNED_LINEAGES_GENOMES;
 # identify "defining positions" at which the lineages are different
 my %is_lineage_defining_position = (); # key: position (1-indexed, relative to reference) -> value: 1 if position is lineage-defining position
 my %position_to_base_to_matching_lineage = (); # key: lineage-defining position -> key: base -> value: lineage(s) with this base at this position
+my %position_to_lineage_to_base = (); # key: lineage-defining position -> key: lineage(s) with this base at this position -> value: base
 my $position = 0; # 1-indexed relative to reference
 for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++)
 {
@@ -269,6 +275,7 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 						$position_to_base_to_matching_lineage{$position}{$lineage_base} .= ", ";
 					}
 					$position_to_base_to_matching_lineage{$position}{$lineage_base} .= $lineage_name;
+					$position_to_lineage_to_base{$position}{$lineage_name} .= $lineage_base;
 				}
 			}
 		}
@@ -541,6 +548,18 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 # print output table header line
 print "sample".$DELIMITER;
 print "lineage_defining_position_(".$reference_sequence_name.")";
+
+foreach my $lineage_1_index(0..$#all_lineages_list)
+{
+	my $lineage_1 = $all_lineages_list[$lineage_1_index];
+	foreach my $lineage_2_index($lineage_1_index+1..$#all_lineages_list)
+	{
+		my $lineage_2 = $all_lineages_list[$lineage_2_index];
+		print $DELIMITER;
+		print $lineage_1."_".$lineage_2."_lineage_defining";
+	}
+}
+
 if($read_depth_files)
 {
 	print $DELIMITER;
@@ -556,6 +575,7 @@ if($print_columns_for_each_lineage)
 		{
 			print $lineage."_lineage".$DELIMITER;
 		}
+		print $lineage."_allele".$DELIMITER;
 		print $lineage."_readcount".$DELIMITER;
 		print $lineage."_frequency";
 	}
@@ -642,6 +662,24 @@ foreach my $sample(sort keys %all_samples)
 			print $sample.$DELIMITER;
 			print $position;
 			
+			foreach my $lineage_1_index(0..$#all_lineages_list)
+			{
+				my $lineage_1 = $all_lineages_list[$lineage_1_index];
+				foreach my $lineage_2_index($lineage_1_index+1..$#all_lineages_list)
+				{
+					my $lineage_2 = $all_lineages_list[$lineage_2_index];
+					
+					print $DELIMITER;
+					if($position_to_lineage_to_base{$position}{$lineage_1}
+						and $position_to_lineage_to_base{$position}{$lineage_2}
+						and $position_to_lineage_to_base{$position}{$lineage_1}
+							ne $position_to_lineage_to_base{$position}{$lineage_2})
+					{
+						print $lineage_1." ".$lineage_2." lineage-defining";
+					}
+				}
+			}
+			
 			if($read_depth_files)
 			{
 				print $DELIMITER;
@@ -653,15 +691,21 @@ foreach my $sample(sort keys %all_samples)
 				foreach my $lineage(sort keys %all_lineages)
 				{
 					# retrieves readcount and frequency for lineage (default 0)
-					my $lineage_readcount = 0;
-					my $lineage_frequency = 0;
+					my $lineage_readcount = "";
+					my $lineage_frequency = "";
 					
-					if($consensus_allele_lineage eq $lineage)
+					my $lineage_allele = "";
+					if($position_to_lineage_to_base{$position}{$lineage})
+					{
+						$lineage_allele = $position_to_lineage_to_base{$position}{$lineage};
+					}
+					
+					if(contains_between_commas($consensus_allele_lineage, $lineage))
 					{
 						$lineage_readcount = $consensus_allele_readcount;
 						$lineage_frequency = $consensus_allele_frequency;
 					}
-					elsif($minor_allele_lineage eq $lineage)
+					elsif(contains_between_commas($minor_allele_lineage, $lineage))
 					{
 						$lineage_readcount = $minor_allele_readcount;
 						$lineage_frequency = $minor_allele_frequency;
@@ -673,6 +717,7 @@ foreach my $sample(sort keys %all_samples)
 					{
 						print $lineage.$DELIMITER;
 					}
+					print $lineage_allele.$DELIMITER;
 					print $lineage_readcount.$DELIMITER;
 					print $lineage_frequency;
 				}
@@ -749,6 +794,22 @@ sub add_comma_separators
 	my $text = reverse $value;
     $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
     return scalar reverse $text;
+}
+
+sub contains_between_commas
+{
+	my $value = $_[0];
+	my $query = $_[1];
+	
+	my @values = split(", ", $value);
+	foreach my $value(@values)
+	{
+		if($value eq $query)
+		{
+			return 1;
+		}
+	}
+	return 0;
 }
 
 
