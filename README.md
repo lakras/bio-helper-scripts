@@ -134,6 +134,10 @@ Includes the following scripts—
 
    _Usage: `perl modify_alignment_fasta.pl [alignment fasta file path] [changes table] > [output fasta file path]`_
 
+- [`mask_positions.pl`](/aligned-fasta/mask_positions.pl): Masks (replaces with Ns) alleles at indicated positions. Positions must be relative to same reference appearing in alignment fasta file. Reference must be first sequence in alignment fasta file. Does not mask bases that align to gaps in reference.
+
+   _Usage: `perl mask_positions.pl [alignment fasta file path] [first position in region to mask] [last position in region to mask] [first position in another region to mask] [last position in another region to mask] [etc.] > [output fasta file path]`_
+
 - [`mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
 
    _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [list of read depth tables] [minimum read depth] > [output fasta file path]`_
