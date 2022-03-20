@@ -466,6 +466,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
    _Usage: `perl verify_column_values_are_consistent_across_tables.pl [row identifier column title] [table1] [table2] [table 3] [etc.]`_
 
 ## Miscellaneous ([`misc`](/misc))
+- [`run_script_on_multiple_files.pl`](/misc/run_script_on_multiple_files.pl): Runs script individually on multiple input files, otherwise using the same input parameters. Script must accept input file as first parameter.
+
+   _Usage: `perl run_script_on_multiple_files.pl [file path of script to run] [file with list of input files to run script on] [optional extension to add to input file path to create output file path] [optional second parameter to provide script] [optional third parameter to provide script] [etc.]`_
+
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
    _Usage: `perl download_files.pl [file with list of files to download] [optional output directory]`_
