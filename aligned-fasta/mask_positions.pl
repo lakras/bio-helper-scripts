@@ -40,12 +40,14 @@ if(!$alignment_file)
 }
 if(!-e $alignment_file)
 {
-	print STDERR "Error: input fasta alignment file does not exist:\n\t".$alignment_file."\nExiting.\n";
+	print STDERR "Error: input fasta alignment file does not exist:\n\t"
+		.$alignment_file."\nExiting.\n";
 	die;
 }
 if(-z $alignment_file)
 {
-	print STDERR "Error: input fasta alignment file is empty:\n\t".$alignment_file."\nExiting.\n";
+	print STDERR "Error: input fasta alignment file is empty:\n\t"
+		.$alignment_file."\nExiting.\n";
 	die;
 }
 
@@ -108,7 +110,6 @@ foreach my $region_index(0..$#starts_of_regions_to_mask)
 		$mask_position{$position} = 1;
 	}
 }
-
 
 
 # reads in fasta sequences
