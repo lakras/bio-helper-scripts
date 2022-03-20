@@ -210,6 +210,10 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
    _Usage: `perl detect_potential_transmission_events_from_iSNVs.pl [consensus sequences alignment fasta file path] [list of heterozygosity tables] [optional list of read depth tables] [0 to print one line per sample pair, 1 to print one line per iSNV] > [output fasta file path]`_
 
+- [`mask_positions_in_heterozygosity_table.pl`](/vcf-files/mask_positions_in_heterozygosity_table.pl): Masks (removes lines corresponding to) alleles at indicated positions. See script for input file format. Positions must be relative to reference used in heterozygosity table.
+
+   _Usage: `perl mask_positions_in_heterozygosity_table.pl [heterozygosity table] [first position in region to mask] [last position in region to mask] [first position in another region to mask] [last position in another region to mask] [etc.] > [output heterozygosity table file path]`_
+
 - [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
