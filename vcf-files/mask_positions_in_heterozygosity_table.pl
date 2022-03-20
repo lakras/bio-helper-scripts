@@ -30,7 +30,6 @@
 # [etc.] > [output heterozygosity table file path]
 
 
-
 use strict;
 use warnings;
 
@@ -91,6 +90,11 @@ if(scalar @starts_of_regions_to_mask ne scalar @ends_of_regions_to_mask)
 {
 	print STDERR "Error: different numbers of start and end positions of regions to "
 		."mask. Exiting.\n";
+	die;
+}
+if(!scalar @starts_of_regions_to_mask)
+{
+	print STDERR "Error: no regions to mask provided. Exiting.\n";
 	die;
 }
 foreach my $region_index(0..$#starts_of_regions_to_mask)
