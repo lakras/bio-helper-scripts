@@ -161,7 +161,11 @@ foreach my $alignment_file(@alignment_files)
 # verifies that reference sequences without gaps are all identical
 if(scalar %reference_sequences_without_gaps > 1)
 {
-	print STDERR "Error: more than one distinct reference provided.\n";
+	print STDERR "Error: more than one distinct reference provided:\n";
+	foreach my $reference_sequence(keys %reference_sequences_without_gaps)
+	{
+		print STDERR $reference_sequence."\n\n";
+	}
 }
 
 
