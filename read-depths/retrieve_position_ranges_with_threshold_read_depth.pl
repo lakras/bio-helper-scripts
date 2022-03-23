@@ -4,11 +4,11 @@
 
 # Usage:
 # perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth]
-# [read depth table]
+# [read depth table] [optional 1 to print output as one line]
 
 # Prints to console. To print to file, use
 # perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth]
-# [read depth table] > [output path]
+# [read depth table] [optional 1 to print output as one line] > [output path]
 
 
 use strict;
@@ -16,7 +16,8 @@ use warnings;
 
 
 my $minimum_read_depth = $ARGV[0];
-my $read_depth_table = $ARGV[1];
+my $read_depth_table = $ARGV[1]; # read depth table produced by samtools with tab separated columns: name of reference, position relative to reference (1-indexed), read depth
+my $print_as_one_line = $ARGV[2]; # if 1, prints all position ranges in one line with no other columns
 
 
 # columns in read-depth tables produced by samtools:
@@ -30,10 +31,13 @@ my $DELIMITER = "\t";
 my $NO_DATA = "NA";
 
 
-my $PRINT_DISTANCE_BETWEEN_RANGES = 1; # if 1, prints number of bases between ranges
-my $PRINT_RANGE_LENGTHS = 1; # if 1, prints lengths of ranges
+my $PRINT_DISTANCE_BETWEEN_RANGES = 0; # if 1, prints number of bases between ranges
+my $PRINT_RANGE_LENGTHS = 0; # if 1, prints lengths of ranges
 my $PRINT_RANGE_START_END_AS_SEPARATE_COLUMNS = 0; # if 1, prints start and end of range as two separate columns
 my $RANGE_START_END_SEPARATOR = " - "; # printed between the start and end of a range
+
+my $PRINT_AS_ONE_LINE_RANGE_START_END_SEPARATOR = " "; # printed between the start and end of a range when all position ranges printed on one line
+my $PRINT_AS_ONE_LINE_RANGES_SEPARATOR = " "; # printed between position ranges when all position ranges printed on one line
 
 
 # verifies that input file exists and is non-empty
@@ -106,7 +110,7 @@ foreach my $reference(sort keys %reference_to_position_to_read_depth)
 			if(!$currently_in_range_passing_threshold)
 			{
 				# prints distance from previous range
-				if($PRINT_DISTANCE_BETWEEN_RANGES)
+				if(!$print_as_one_line and $PRINT_DISTANCE_BETWEEN_RANGES)
 				{
 					if($previous_position_passing_threshold != -1)
 					{
@@ -122,14 +126,22 @@ foreach my $reference(sort keys %reference_to_position_to_read_depth)
 				# open new range
 				$currently_in_range_passing_threshold = 1;
 				$current_range_start = $position;
-				print $reference.$DELIMITER.$position;
-				if($PRINT_RANGE_START_END_AS_SEPARATE_COLUMNS)
+				if(!$print_as_one_line)
 				{
-					print $DELIMITER;
+					print $reference.$DELIMITER.$position;
+					if($PRINT_RANGE_START_END_AS_SEPARATE_COLUMNS)
+					{
+						print $DELIMITER;
+					}
+					else
+					{
+						print $RANGE_START_END_SEPARATOR;
+					}
 				}
 				else
 				{
-					print $RANGE_START_END_SEPARATOR;
+					# print as one line
+					print $position.$PRINT_AS_ONE_LINE_RANGE_START_END_SEPARATOR;
 				}
 			}
 			$previous_position_passing_threshold = $position;
@@ -143,12 +155,20 @@ foreach my $reference(sort keys %reference_to_position_to_read_depth)
 				print $previous_position;
 				
 				# print length of range
-				my $range_length = $previous_position - $current_range_start + 1;
-				if($PRINT_RANGE_LENGTHS)
+				if(!$print_as_one_line)
 				{
-					print $DELIMITER.$range_length;
+					my $range_length = $previous_position - $current_range_start + 1;
+					if($PRINT_RANGE_LENGTHS)
+					{
+						print $DELIMITER.$range_length;
+					}
+					print $NEWLINE;
 				}
-				print $NEWLINE;
+				else
+				{
+					# print as one line
+					print $PRINT_AS_ONE_LINE_RANGES_SEPARATOR;
+				}
 				
 				# close range
 				$currently_in_range_passing_threshold = 0;
