@@ -22,7 +22,7 @@ use warnings;
 
 
 my $alignment_file = $ARGV[0]; # fasta alignment; reference sequence must appear first
-my @starts_and_ends_of_regions_to_mask = @ARGV[1..$#ARGV]; # first position in region to mask (1-indexed, relative to reference), last position in region to mask (1-indexed, relative to reference), first position in another region to mask, last position in another region to mask, etc.
+my @starts_and_ends_of_input_regions = @ARGV[1..$#ARGV]; # first position in region to mask (1-indexed, relative to reference), last position in region to mask (1-indexed, relative to reference), first position in another region to mask, last position in another region to mask, etc.
 
 
 my $NEWLINE = "\n";
@@ -56,7 +56,7 @@ if(-z $alignment_file)
 my @starts_of_regions_to_mask = ();
 my @ends_of_regions_to_mask = ();
 my $index = 0;
-foreach my $position(@starts_and_ends_of_regions_to_mask)
+foreach my $position(@starts_and_ends_of_input_regions)
 {
 	if($index % 2 == 0)
 	{
@@ -99,7 +99,7 @@ foreach my $region_index(0..$#starts_of_regions_to_mask)
 
 
 # creates easy look-up of whether or not position should be mask
-my %mask_position = (); # key: position -> value: 1 if position should be masked
+my %position_is_in_input_region = (); # key: position -> value: 1 if position should be masked
 foreach my $region_index(0..$#starts_of_regions_to_mask)
 {
 	my $start_of_region_to_mask = $starts_of_regions_to_mask[$region_index];
@@ -107,7 +107,7 @@ foreach my $region_index(0..$#starts_of_regions_to_mask)
 	
 	foreach my $position($start_of_region_to_mask..$end_of_region_to_mask)
 	{
-		$mask_position{$position} = 1;
+		$position_is_in_input_region{$position} = 1;
 	}
 }
 
@@ -195,9 +195,9 @@ sub process_sequence
 	}
 	
 	# masks positions to mask
-	foreach my $position(keys %mask_position)
+	foreach my $position(keys %position_is_in_input_region)
 	{
-		if($mask_position{$position})
+		if($position_is_in_input_region{$position}) # this position is in region marked for masking
 		{
 			# retrieves string index corresponding to this position
 			# (if no gaps in reference, string index will be position-1)
@@ -205,7 +205,7 @@ sub process_sequence
 			{
 				my $string_index = $position_to_string_index{$position};
 			
-				# verifies that position (1-indexed) is within range
+				# verifies that position (1-indexed) is within region
 				if($string_index < length($current_sequence))
 				{
 					my $observed_current_allele = substr($current_sequence, $string_index, 1);
@@ -218,12 +218,12 @@ sub process_sequence
 				else
 				{
 					print STDERR "Warning: position ".$position." (string index ".$string_index
-						.") is out of range of sequence ".$current_sequence_name.".\n";
+						.") is out of region of sequence ".$current_sequence_name.".\n";
 				}
 			}
 			else
 			{
-				print STDERR "Warning: position ".$position." is out of range of sequence "
+				print STDERR "Warning: position ".$position." is out of region of sequence "
 					.$current_sequence_name.".\n";
 			}
 		}
@@ -267,3 +267,4 @@ sub is_base
 # July 14, 2021
 # November 11, 2021
 # March 20, 2022
+# March 24, 2022
