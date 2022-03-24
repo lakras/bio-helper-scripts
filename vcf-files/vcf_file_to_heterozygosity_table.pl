@@ -21,10 +21,12 @@
 # Usage:
 # perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq]
 # [1 to filter output, 0 to not filter]
+# [optional 1 to not print reference column in output, to save space]
 
 # Prints to console. To print to file, use
 # perl vcf_file_to_heterozygosity_table.pl [vcf file output by LoFreq]
-# [1 to filter output, 0 to not filter] > [output file path]
+# [1 to filter output, 0 to not filter]
+# [optional 1 to not print reference column in output, to save space] > [output file path]
 
 
 use strict;
@@ -33,6 +35,7 @@ use Math::Round;
 
 my $vcf_file = $ARGV[0]; # output of LoFreq, uncompressed or .gz
 my $filter_output = $ARGV[1]; # if 1, filters output using thresholds for including a heterozygous position; if 0, includes all positions with heterozygosity in output
+my $dont_print_reference_column = $ARGV[2]; # to save space, enter 1 to not print first column of output (reference, same for all lines)
 
 
 # thresholds for including a heterozygous position
@@ -158,7 +161,12 @@ for my $assembly_reference(sort keys %chr_to_position_to_allele_to_readcount)
 		if(scalar keys %{$chr_to_position_to_allele_to_readcount{$assembly_reference}{$position}} >= 2)
 		{
 			# saves start of line
-			my $output_line = $assembly_reference.$DELIMITER.$position;
+			my $output_line = "";
+			if(!$dont_print_reference_column)
+			{
+				$output_line .= $assembly_reference.$DELIMITER;
+			}
+			$output_line .= $position;
 			
 			# retrieves read depth at this position
 			my $read_depth = $chr_to_position_to_read_depth{$assembly_reference}{$position};
