@@ -64,6 +64,10 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_containing_queries.pl [fasta file path] "[query 1]" "[query 2]" "[query 3]" [etc.] > [output fasta file path]`_
 
+- [`retrieve_sequences_by_position_in_fasta_file.pl`](/fasta/retrieve_sequences_by_position_in_fasta_file.pl): Retrieves query sequences by position from fasta file.
+
+   _Usage: `perl retrieve_sequences_by_position_in_fasta_file.pl [fasta file path] [position of sequence to retrieve (1-indexed)] [position of another sequence to retrieve] [etc.] > [output fasta file path]`_
+
 - [`select_random_sequences.pl`](/fasta/select_random_sequences.pl): Selects a certain number of sequences at random from input fasta file.
 
    _Usage: `perl select_random_sequences.pl [fasta sequence file] [number sequences to select at random] > [output fasta file path]`_
