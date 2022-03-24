@@ -75,32 +75,35 @@ close READ_DEPTH_TABLE;
 
 
 # prints header line
-my $printed_values_title_piece = "passing_threshold";
-if($print_positions_below_threshold)
+if(!$print_as_one_line)
 {
-	$printed_values_title_piece = "not_".$printed_values_title_piece;
-}
+	my $printed_values_title_piece = "passing_threshold";
+	if($print_positions_below_threshold)
+	{
+		$printed_values_title_piece = "not_".$printed_values_title_piece;
+	}
 
-if($PRINT_DISTANCE_BETWEEN_RANGES)
-{
-	print "distance_from_previous_range".$DELIMITER;
+	if($PRINT_DISTANCE_BETWEEN_RANGES)
+	{
+		print "distance_from_previous_range".$DELIMITER;
+	}
+	print "reference".$DELIMITER;
+	if($PRINT_RANGE_START_END_AS_SEPARATE_COLUMNS)
+	{
+		print "position_range_".$printed_values_title_piece."_start";
+		print $DELIMITER;
+		print "position_range_".$printed_values_title_piece."_end";
+	}
+	else
+	{
+		print "position_range_".$printed_values_title_piece;
+	}
+	if($PRINT_RANGE_LENGTHS)
+	{
+		print $DELIMITER."position_range_length";
+	}
+	print $NEWLINE;
 }
-print "reference".$DELIMITER;
-if($PRINT_RANGE_START_END_AS_SEPARATE_COLUMNS)
-{
-	print "position_range_".$printed_values_title_piece."_start";
-	print $DELIMITER;
-	print "position_range_".$printed_values_title_piece."_end";
-}
-else
-{
-	print "position_range_".$printed_values_title_piece;
-}
-if($PRINT_RANGE_LENGTHS)
-{
-	print $DELIMITER."position_range_length";
-}
-print $NEWLINE;
 
 
 # calculates and prints ranges of positions with read depths at or above minimum
