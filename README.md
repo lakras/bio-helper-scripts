@@ -227,7 +227,7 @@ Input read depth tables must be in format produced by [`samtools depth`](http://
 
 - [`retrieve_position_ranges_with_threshold_read_depth.pl`](/read-depths/retrieve_position_ranges_with_threshold_read_depth.pl): Prints ranges of positions with read depths at or above minimum read depth.
 
-   _Usage: `perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth] [read depth table] [optional 1 to print output as one line] > [output path]`_
+   _Usage: `perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth] [read depth table] [optional 1 to print output as one line] [optional 1 to print position ranges NOT passing read depth threshold, rather than positions that do] > [output path]`_
 
 - [`aligned-fasta/mask_low_read_depth_alleles.pl`](/aligned-fasta/mask_low_read_depth_alleles.pl): Masks (replaces with Ns) alleles with low read depths.
 

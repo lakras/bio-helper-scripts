@@ -5,10 +5,13 @@
 # Usage:
 # perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth]
 # [read depth table] [optional 1 to print output as one line]
+# [optional 1 to print position ranges NOT passing read depth threshold, rather than positions that do]
 
 # Prints to console. To print to file, use
 # perl retrieve_position_ranges_with_threshold_read_depth.pl [minimum read depth]
-# [read depth table] [optional 1 to print output as one line] > [output path]
+# [read depth table] [optional 1 to print output as one line]
+# [optional 1 to print position ranges NOT passing read depth threshold, rather than positions that do]
+# > [output path]
 
 
 use strict;
@@ -18,7 +21,7 @@ use warnings;
 my $minimum_read_depth = $ARGV[0];
 my $read_depth_table = $ARGV[1]; # read depth table produced by samtools with tab separated columns: name of reference, position relative to reference (1-indexed), read depth
 my $print_as_one_line = $ARGV[2]; # if 1, prints all position ranges in one line with no other columns
-
+my $print_positions_below_threshold = $ARGV[3]; # if 1, prints positions NOT passing threshold, rather than positions that DO pass threshold
 
 # columns in read-depth tables produced by samtools:
 my $READ_DEPTH_REFERENCE_COLUMN = 0; # reference must be same across all input files
@@ -72,6 +75,12 @@ close READ_DEPTH_TABLE;
 
 
 # prints header line
+my $printed_values_title_piece = "passing_threshold";
+if($print_positions_below_threshold)
+{
+	$printed_values_title_piece = "not_".$printed_values_title_piece;
+}
+
 if($PRINT_DISTANCE_BETWEEN_RANGES)
 {
 	print "distance_from_previous_range".$DELIMITER;
@@ -79,13 +88,13 @@ if($PRINT_DISTANCE_BETWEEN_RANGES)
 print "reference".$DELIMITER;
 if($PRINT_RANGE_START_END_AS_SEPARATE_COLUMNS)
 {
-	print "position_range_passing_threshold_start";
+	print "position_range_".$printed_values_title_piece."_start";
 	print $DELIMITER;
-	print "position_range_passing_threshold_end";
+	print "position_range_".$printed_values_title_piece."_end";
 }
 else
 {
-	print "position_range_passing_threshold";
+	print "position_range_".$printed_values_title_piece;
 }
 if($PRINT_RANGE_LENGTHS)
 {
@@ -104,7 +113,8 @@ foreach my $reference(sort keys %reference_to_position_to_read_depth)
 	foreach my $position(sort {$a <=> $b} keys %{$reference_to_position_to_read_depth{$reference}})
 	{
 		# read depth at position passes threshold
-		if($reference_to_position_to_read_depth{$reference}{$position} >= $minimum_read_depth)
+		if(!$print_positions_below_threshold and $reference_to_position_to_read_depth{$reference}{$position} >= $minimum_read_depth
+			or $print_positions_below_threshold and $reference_to_position_to_read_depth{$reference}{$position} < $minimum_read_depth)
 		{
 			# check for state change
 			if(!$currently_in_range_passing_threshold)
@@ -200,3 +210,4 @@ foreach my $reference(sort keys %reference_to_position_to_read_depth)
 
 
 # November 8, 2021
+# March 24, 2022
