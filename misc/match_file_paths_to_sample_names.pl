@@ -19,7 +19,7 @@ use warnings;
 
 
 my $sample_names_file = $ARGV[0]; # file containing list of sample names, one per line
-my $file_paths_file = $ARGV[0]; # file containing list of file paths, one per line
+my $file_paths_file = $ARGV[1]; # file containing list of file paths, one per line
 
 
 my $DELIMITER = "\t";
@@ -138,7 +138,10 @@ foreach my $sample_name(keys %all_samples)
 	{
 		print $sample_name;
 		print $DELIMITER;
-		print $sample_name_to_file_path{$sample_name};
+		if($sample_name_to_file_path{$sample_name})
+		{
+			print $sample_name_to_file_path{$sample_name};
+		}
 		print $NEWLINE;
 	}
 }
