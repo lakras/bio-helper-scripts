@@ -21,7 +21,7 @@ my $fasta_file = $ARGV[0];
 my @positions = @ARGV[1..$#ARGV];
 
 
-# verifies that query sequence names have been provided
+# verifies that query sequence positions have been provided
 if(!scalar @positions)
 {
 	print STDERR "Error: no query sequence positions provided. Exiting.\n";
