@@ -7,13 +7,13 @@
 
 # Usage:
 # perl align_to_reference.pl [reference sequence]
-# [file path of MAFFT executable file (mafft.bat)] [fasta file path]
-# [another fasta file path] [another fasta file path] [etc.]
+# [file path of MAFFT executable file (mafft.bat)]
+# [file with list of fasta file paths, one per line]
 
 # Prints to console. To print to file, use
 # perl align_to_reference.pl [reference sequence]
-# [file path of MAFFT executable file (mafft.bat)] [fasta file path]
-# [another fasta file path] [another fasta file path] [etc.] > [output fasta file path]
+# [file path of MAFFT executable file (mafft.bat)]
+# [file with list of fasta file paths, one per line] > [output fasta file path]
 
 # Temp files are created at filepath of old file with "_aligned_to_ref.fasta" appended to
 # the end and with "_temp.fasta" appended to the end. Files already at those paths will be
@@ -31,7 +31,8 @@ use warnings;
 
 my $reference_sequence = $ARGV[0];
 my $mafft_file_path = $ARGV[1];
-my @input_fastas = @ARGV[2..$#ARGV];
+my $input_fastas_list = $ARGV[2];
+# my @input_fastas = @ARGV[2..$#ARGV];
 
 
 my $NEWLINE = "\n";
@@ -40,6 +41,38 @@ my $NO_DATA = "NA";
 my $TEMP_FILE_EXTENSION = "_temp.fasta";
 my $ALIGNMENT_FILE_EXTENSION = "_aligned_to_ref.fasta";
 my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
+my $USE_EXISTING_ALIGNMENTS_IF_AVAILABLE = 1;
+
+
+# verifies that list of input fasta files exists
+if(!$input_fastas_list or !-e $input_fastas_list or -z $input_fastas_list)
+{
+	print STDERR "Error: list of input fasta files not provided, does not exist, or empty:\n\t"
+		.$input_fastas_list."\n";
+	die;
+}
+
+
+# reads in list of input fasta files
+my @input_fastas = ();
+open INPUT_FASTAS, "<$input_fastas_list" || die "Could not open $input_fastas_list to read; terminating =(\n";
+while(<INPUT_FASTAS>) # for each line in the file
+{
+	chomp;
+	if($_ =~ /\S/) # header line
+	{
+		push(@input_fastas, $_);
+	}
+}
+close INPUT_FASTAS;
+
+
+# verifies that we have read in a list of input fasta files
+if(!scalar @input_fastas)
+{
+	print STDERR "Error: no input fastas provided. Exiting.\n";
+	die;
+}
 
 
 # verifies that input reference fasta exists
@@ -47,7 +80,7 @@ if(!$reference_sequence or !-e $reference_sequence or -z $reference_sequence)
 {
 	print STDERR "Error: input reference fasta not provided, does not exist, or empty:\n\t"
 		.$reference_sequence."\n";
-	next;
+	die;
 }
 
 # verifies that mafft executable exists
@@ -55,7 +88,7 @@ if(!$mafft_file_path or !-e $mafft_file_path or -z $mafft_file_path)
 {
 	print STDERR "Error: mafft executable not provided, does not exist, or empty:\n\t"
 		.$mafft_file_path."\n";
-	next;
+	die;
 }
 
 
@@ -168,35 +201,43 @@ foreach my $input_fasta(@input_fastas_one_sequence_per_file)
 	my $temp_file = $input_fasta.$TEMP_FILE_EXTENSION;
 	my $aligned_fasta = $input_fasta.$ALIGNMENT_FILE_EXTENSION;
 	
-	# verifies that we are not overwriting temp file or output file
-	if(!$OVERWRITE and (-e $temp_file or -e $aligned_fasta))
+	if($USE_EXISTING_ALIGNMENTS_IF_AVAILABLE and -e $aligned_fasta and !-z $aligned_fasta)
 	{
-		print STDERR "Error: exiting to avoid overwriting. Set \$OVERWRITE to 1 to allow "
-			."overwriting.\n";
-		die;
-	}
-	
-	# verifies that input fasta exists and is not empty
-	if(!$input_fasta or !-e $input_fasta or -z $input_fasta)
-	{
-		print STDERR "Error: input fasta not provided, does not exist, or empty:\n\t"
-			.$input_fasta."\n";
-		next;
-	}
-	else
-	{
-		# adds reference sequence to fasta file
-		`cat $reference_sequence $input_fasta > $temp_file`;
-
-		# aligns
-		`$mafft_file_path $temp_file > $aligned_fasta`;
-
-		# removes temp file
-		`rm $temp_file`;
-		
 		# saves path of alignment file
 		push(@alignment_files, $aligned_fasta);
-		push(@temp_files_to_delete_at_end, $aligned_fasta);
+	}
+	else # generate alignment file
+	{
+		# verifies that we are not overwriting temp file or output file
+		if(!$OVERWRITE and (-e $temp_file or -e $aligned_fasta))
+		{
+			print STDERR "Error: exiting to avoid overwriting. Set \$OVERWRITE to 1 to allow "
+				."overwriting.\n";
+			die;
+		}
+	
+		# verifies that input fasta exists and is not empty
+		if(!$input_fasta or !-e $input_fasta or -z $input_fasta)
+		{
+			print STDERR "Error: input fasta not provided, does not exist, or empty:\n\t"
+				.$input_fasta."\n";
+			next;
+		}
+		else
+		{
+			# adds reference sequence to fasta file
+			`cat $reference_sequence $input_fasta > $temp_file`;
+
+			# aligns
+			`$mafft_file_path $temp_file > $aligned_fasta`;
+
+			# removes temp file
+			`rm $temp_file`;
+		
+			# saves path of alignment file
+			push(@alignment_files, $aligned_fasta);
+			push(@temp_files_to_delete_at_end, $aligned_fasta);
+		}
 	}
 }
 
@@ -338,10 +379,10 @@ if(scalar %reference_sequences_without_gaps > 1)
 
 
 # removes temp files
-foreach my $temp_file(@temp_files_to_delete_at_end)
-{
-	`rm $temp_file`;
-}
+# foreach my $temp_file(@temp_files_to_delete_at_end)
+# {
+# 	`rm $temp_file`;
+# }
 
 
 # returns 1 if base is A, T, C, G; returns 0 if not
