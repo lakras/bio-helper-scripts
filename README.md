@@ -522,6 +522,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl erase_empty_files.pl [file to check and potentially erase] [another file to check and potentially erase] [a third file to check and potentially erase] etc.`_
 
+- [`bulk_delete_files_in_list.pl`](/misc/bulk_delete_files_in_list.pl): Deletes files in input list.
+
+   _Usage: `perl bulk_delete_files_in_list.pl [file containing list of paths of files to delete, one per line]`_
+
 - [`match_file_paths_to_sample_names.pl`](/misc/match_file_paths_to_sample_names.pl): Matches each sample name to a file path containing that sample name. Outputs sample names with file paths, tab-separated, one sample per line.
 
    _Usage: `perl match_file_paths_to_sample_names.pl [file containing list of sample names, one per line] [file containing list of file paths, one per line] > [output table path]`_
