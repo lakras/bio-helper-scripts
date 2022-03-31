@@ -56,7 +56,7 @@ my $REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT = 1;
 # thresholds for calling a transmission event
 my $FIXED_FREQUENCY = 0.9999; # minimum frequency at which we consider an allele to be fixed in a patient
 my $MAXIMUM_INITIAL_ISNV_FREQUENCY = 0.90; # 90%; maximum frequency allele can be in index case
-my $MAXIMUM_OTHER_CONSENSUS_DIFFERENCES = 1; # maximum number differences between consensus genomes other than transmitted iSNVs (comparing unambiguous bases, substitutions only)
+my $MAXIMUM_OTHER_CONSENSUS_DIFFERENCES = 0; # maximum number differences between consensus genomes other than transmitted iSNVs (comparing unambiguous bases, substitutions only)
 
 # thresholds for marking position as heterozygous
 my $MINIMUM_MINOR_ALLELE_READCOUNT = 10;
@@ -170,6 +170,30 @@ while(<ALIGNED_CONSENSUS_SEQUENCES>) # for each line in the file
 	}
 }
 close ALIGNED_CONSENSUS_SEQUENCES;
+
+
+# removes sequences with no neighboring collection dates
+my %collection_date_has_samples = (); # key: collection date -> value: 1 if a sample has this collection date
+my %collection_date_to_samples = (); # key: collection date -> value: list of samples with this collection date
+if($collection_date_table)
+{
+	foreach my $sample_name(keys %sample_names)
+	{
+		my $collection_date = $sample_name_to_collection_date{$sample_name};
+		$collection_date_has_samples{$collection_date} = 1;
+		push(@{$collection_date_to_samples{$collection_date}}, $sample_name);
+	}
+}
+
+my %sample_names_with_neighbors = (); # key: name of sample -> value: 1
+foreach my $sample_name(keys %sample_name_to_collection_date)
+{
+	if(sample_has_potential_neighbors_by_collection_date($sample_name))
+	{
+		$sample_names_with_neighbors{$sample_name} = 1;
+	}
+}
+%sample_names = %sample_names_with_neighbors;
 
 
 # reads in read depth tables if provided
@@ -463,6 +487,7 @@ foreach my $sample_name_1(keys %sample_names)
 {
 	if($sample_has_iSNVs{$sample_name_1})
 	{
+		print STDERR "\t".$sample_name_1."\n";
 		foreach my $sample_name_2(potential_recipient_sample_names_with_collection_dates_consistent_with_index($sample_name_1))
 		{
 			if($sample_name_1 ne $sample_name_2)
@@ -822,6 +847,38 @@ sub absolute_value
 	return $value;
 }
 
+# returns 1 if there are any samples with collection date within 6 days of this sample's
+# collection date, 0 if not
+sub sample_has_potential_neighbors_by_collection_date
+{
+	my $sample_name = $_[0];
+	
+	# exit right away if we didn't read in collection dates
+	if(!$collection_date_table)
+	{
+		return 1;
+	}
+	
+	# retrieve collection date of index
+	my $collection_date = $sample_name_to_collection_date{$sample_name};
+	
+	for(my $distance = -1 * $MAXIMUM_COLLECTION_DATE_DISTANCE; $distance <= $MAXIMUM_COLLECTION_DATE_DISTANCE; $distance++)
+	{
+		my $distance_collection_date = add_days_to_date($collection_date, $distance);
+		if($collection_date_has_samples{$distance_collection_date})
+		{
+			foreach my $other_sample_name(@{$collection_date_to_samples{$distance_collection_date}})
+			{
+				if($other_sample_name ne $sample_name)
+				{
+					return 1;
+				}
+			}
+		}
+	}
+	return 0; # no potential neighbors found
+}
+
 # returns a list of names of potential recipient samples with collection dates consistent
 # with parameter index sample name
 sub potential_recipient_sample_names_with_collection_dates_consistent_with_index
@@ -836,18 +893,37 @@ sub potential_recipient_sample_names_with_collection_dates_consistent_with_index
 	
 	# retrieve collection date of index
 	my $index_collection_date = $sample_name_to_collection_date{$index_sample_name};
+	
+	# retrieve all sample names that could be potential recipients
 	my @sample_names_to_return = ();
-	foreach my $potential_recipient_sample_name(keys %sample_names)
+	my $minimum_distance = -1 * $MAXIMUM_COLLECTION_DATE_DISTANCE;
+	if($REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT)
 	{
-		my $potential_recipient_collection_date = $sample_name_to_collection_date{$potential_recipient_sample_name};
-		my $date_difference = date_difference($index_collection_date, $potential_recipient_collection_date); # recipient collection date - index collection date
-		
-		if((!$REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT or $date_difference > 0) # index collection date < recipient collection date
-			and (absolute_value($date_difference) <= $MAXIMUM_COLLECTION_DATE_DISTANCE)) # checks that recipient collection date - index collection date <= 6
+		$minimum_distance = 1;
+	}
+	for(my $distance = $minimum_distance; $distance <= $MAXIMUM_COLLECTION_DATE_DISTANCE; $distance++)
+	{
+		my $distance_collection_date = add_days_to_date($index_collection_date, $distance);
+		if($collection_date_has_samples{$distance_collection_date})
 		{
-			push(@sample_names_to_return, $potential_recipient_sample_name);
+			push(@sample_names_to_return, @{$collection_date_to_samples{$distance_collection_date}});
 		}
 	}
+	
+# 	foreach my $potential_recipient_sample_name(keys %sample_names)
+# 	{
+# 		if($index_sample_name ne $potential_recipient_sample_name)
+# 		{
+# 			my $potential_recipient_collection_date = $sample_name_to_collection_date{$potential_recipient_sample_name};
+# 			my $date_difference = date_difference($index_collection_date, $potential_recipient_collection_date); # recipient collection date - index collection date
+# 		
+# 			if((!$REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT or $date_difference > 0) # index collection date < recipient collection date
+# 				and (absolute_value($date_difference) <= $MAXIMUM_COLLECTION_DATE_DISTANCE)) # checks that recipient collection date - index collection date <= 6
+# 			{
+# 				push(@sample_names_to_return, $potential_recipient_sample_name);
+# 			}
+# 		}
+# 	}
 	return @sample_names_to_return;
 }
 
@@ -861,6 +937,123 @@ sub is_leap_year
 		return 1;
 	}
 	return 0;
+}
+
+sub add_days_to_date
+{
+	my $date = $_[0];
+	my $days_to_add = $_[1];
+	
+	my %days_in_months = (1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31,
+		6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31);
+	
+	# parses date
+	my $year = 0;
+	my $month = 0;
+	my $day = 0;
+	if($date =~ /^(\d{4})-(\d+)-(\d+)$/)
+	{
+		# retrieves date
+		$year = int($1);
+		$month = int($2);
+		$day = int($3);
+	}
+	else
+	{
+		print STDERR "Error: could not parse date: ".$date.".\n";
+		return "";
+	}
+	if(!$days_in_months{$month})
+	{
+		print STDERR "Error: month not recognized: ".$month.".\n";
+		return "";
+	}
+	
+	if(is_leap_year($year))
+	{
+		$days_in_months{2} = 29;
+	}
+	else
+	{
+		$days_in_months{2} = 28;
+	}
+	
+	# adds to days
+	$day += $days_to_add;
+	while($day > $days_in_months{$month})
+	{
+		# April 32 = May 2
+		$day -= $days_in_months{$month};
+		$month++;
+		if($month > 12)
+		{
+			$year++;
+			$month = 1;
+			if(is_leap_year($year))
+			{
+				$days_in_months{2} = 29;
+			}
+			else
+			{
+				$days_in_months{2} = 28;
+			}
+		}
+	}
+	while($day < 1)
+	{
+		# April 1 = April 1
+		# April 0 = March 31
+		# April -1 = March 30
+		# April -2 = March 29
+		$month--;
+		if($month < 1)
+		{
+			$year--;
+			$month = 12;
+			if(is_leap_year($year))
+			{
+				$days_in_months{2} = 29;
+			}
+			else
+			{
+				$days_in_months{2} = 28;
+			}
+		}
+		$day += $days_in_months{$month};
+	}
+	
+	# prepares output
+	# pads month and/or day with 0s if necessary
+	if(length($month) < 2)
+	{
+		$month = "0".$month;
+	}
+	if(length($day) < 2)
+	{
+		$day = "0".$day;
+	}
+	
+	# pads year with 20 if necessary
+	if(length($year) == 2)
+	{
+		$year = "20".$year;
+	}
+	elsif(length($year) != 4)
+	{
+		print STDERR "Error: year ".$year." in date ".$date." not 4 or 2 digits. Exiting.\n";
+	}
+	
+	# puts date back together
+	my $output = $year."-".$month."-".$day;
+	
+	# verifies that output is in correct format
+	if($output =~ /^\d{4}-\d{2}-\d{2}$/)
+	{
+		return $output;
+	}
+	print STDERR "Error: result ".$output." of reformatting date ".$date." not in "
+		."YYYY-MM-DD format. Please fix code.\n";
+	die;
 }
 
 # returns date 2 - date 1, in days
