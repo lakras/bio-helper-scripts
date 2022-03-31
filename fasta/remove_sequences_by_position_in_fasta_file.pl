@@ -56,7 +56,7 @@ foreach my $position(@positions)
 
 # reads in fasta file and retrieves sequences matching query sequence names
 open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
-my $printing_this_sequence = 0; # 1 if we are printing the sequence we are currently reading
+my $printing_this_sequence = 1; # 1 if we are printing the sequence we are currently reading
 my %position_found = (); # key: sequence position in fasta file -> value: 1 if sequence has been found and printed
 my $sequence_position = 0;
 while(<FASTA_FILE>) # for each line in the file

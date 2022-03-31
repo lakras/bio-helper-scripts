@@ -118,7 +118,7 @@ foreach my $region_index(0..$#starts_of_regions_to_mask)
 }
 
 
-# creates easy look-up of whether or not position should be mask
+# creates easy look-up of whether or not position should be masked
 my %mask_position = (); # key: position -> value: 1 if position should be masked
 foreach my $region_index(0..$#starts_of_regions_to_mask)
 {
@@ -132,7 +132,7 @@ foreach my $region_index(0..$#starts_of_regions_to_mask)
 }
 
 
-# reads in heterozygosity table; prints version with position masked out
+# reads in heterozygosity table; prints version with positions masked out
 open HETEROZYGOSITY_TABLE, "<$heterozygosity_table" || die "Could not open $heterozygosity_table to read; terminating =(\n";
 while(<HETEROZYGOSITY_TABLE>) # for each line in the file
 {
