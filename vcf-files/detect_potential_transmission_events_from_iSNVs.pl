@@ -3,6 +3,9 @@
 # Detects potential transmission events from iSNVs, assuming an average transmission
 # bottleneck of one virus per transmission.
 
+# If collection dates are provided, only compares sequences within hardcoded maximum
+# collection date distance.
+
 # Reference sequence must be first sequence in alignment fasta. Positions in
 # heterozygosity tables must be relative to same reference as the alignment fasta.
 
@@ -23,12 +26,14 @@
 # perl detect_potential_transmission_events_from_iSNVs.pl
 # [consensus sequences alignment fasta file path] [list of heterozygosity tables]
 # [optional file containing list of read depth tables]
+# [optional tab-separated table mapping sample names to collection dates (YYYY-MM-DD)]
 # [0 to print one line per sample pair, 1 to print one line per iSNV]
 
 # Prints to console. To print to file, use
 # perl detect_potential_transmission_events_from_iSNVs.pl
 # [consensus sequences alignment fasta file path] [list of heterozygosity tables]
 # [optional file containing list of read depth tables]
+# [optional tab-separated table mapping sample names to collection dates (YYYY-MM-DD)]
 # [0 to print one line per sample pair, 1 to print one line per iSNV]
 # > [output fasta file path]
 
@@ -40,13 +45,18 @@ use warnings;
 my $consensus_sequences_aligned = $ARGV[0]; # fasta alignment of consensus sequences; reference sequence must appear first
 my $heterozygosity_tables = $ARGV[1]; # file containing a list of heterozygosity table files, one for each sample; positions must be relative to same reference used in fasta alignment file; filenames must contain sample names used in consensus genome alignment
 my $read_depth_files = $ARGV[2]; # optional file containing a list of read depth files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
-my $print_one_line_per_iSNV = $ARGV[3]; # if 0, prints one line per sample pair; if 1, prints line for each iSNV matched in each sample pair
+my $collection_date_table = $ARGV[3]; # optional table with two columns: sample names (must match names of consensus sequences) and collection dates, tab-separated
+my $print_one_line_per_iSNV = $ARGV[4]; # if 0, prints one line per sample pair; if 1, prints line for each iSNV matched in each sample pair
 
+
+# thresholds for comparing two samples
+my $MAXIMUM_COLLECTION_DATE_DISTANCE = 6;
+my $REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT = 1;
 
 # thresholds for calling a transmission event
 my $FIXED_FREQUENCY = 0.9999; # minimum frequency at which we consider an allele to be fixed in a patient
 my $MAXIMUM_INITIAL_ISNV_FREQUENCY = 0.90; # 90%; maximum frequency allele can be in index case
-my $MAXIMUM_OTHER_CONSENSUS_DIFFERENCES = 1; # maximum number differences between consensus genomes other than transmitted iSNVs (comparing unambiguous bases, substitutions only)
+my $MAXIMUM_OTHER_CONSENSUS_DIFFERENCES = 0; # 1; # maximum number differences between consensus genomes other than transmitted iSNVs (comparing unambiguous bases, substitutions only)
 
 # thresholds for marking position as heterozygous
 my $MINIMUM_MINOR_ALLELE_READCOUNT = 10;
@@ -67,6 +77,10 @@ my $HETEROZYGOSITY_TABLE_MINOR_ALLELE_FREQUENCY_COLUMN = 7;
 my $READ_DEPTH_REFERENCE_COLUMN = 0; # reference must be same across all input files
 my $READ_DEPTH_POSITION_COLUMN = 1; # 1-indexed
 my $READ_DEPTH_COLUMN = 2;
+
+# columns in collection dates table
+my $COLLECTION_DATE_SAMPLE_NAME_COLUMN = 0;
+my $COLLECTION_DATE_COLUMN = 1;
 
 my $DELIMITER = "\t";
 my $NEWLINE = "\n";
@@ -108,54 +122,52 @@ if(-z $heterozygosity_tables)
 }
 
 
-# reads in aligned consensus sequences
-my %sample_name_to_consensus_sequence = (); # key: sequence name -> value: consensus sequencw, including gaps froms alignment
-my %sample_names = (); # key: name of sample -> value: 1
-my $reference_sequence = ""; # first sequence in alignment
-my $reference_sequence_name = ""; # name of first sequence in alignment
+# reads in collection dates
+my %sample_name_to_collection_date = (); # key: sequence name -> value: collection date
+if($collection_date_table)
+{
+	open COLLECTION_DATE_TABLE, "<$collection_date_table"
+		|| die "Could not open $collection_date_table to read; terminating =(\n";
+	while(<COLLECTION_DATE_TABLE>) # for each line in the file
+	{
+		chomp;
+		my $line = $_;
+		if($line =~ /\S/) # non-empty line
+		{
+			# parses this line
+			my @items = split($DELIMITER, $line);
+			my $sample_name = $items[$COLLECTION_DATE_SAMPLE_NAME_COLUMN];
+			my $collection_date = $items[$COLLECTION_DATE_COLUMN];
 
+			# saves collection date
+			$sample_name_to_collection_date{$sample_name} = $collection_date;
+		}
+	}
+	close COLLECTION_DATE_TABLE;
+}
+
+
+# reads in sequence names
+my $reference_sequence_name = ""; # name of first sequence in alignment
+my %sample_names = (); # key: name of sample -> value: 1
 open ALIGNED_CONSENSUS_SEQUENCES, "<$consensus_sequences_aligned" || die "Could not open $consensus_sequences_aligned to read; terminating =(\n";
-my $sequence = "";
-my $sequence_name = "";
 while(<ALIGNED_CONSENSUS_SEQUENCES>) # for each line in the file
 {
 	chomp;
 	if($_ =~ /^>(.*)/) # header line
 	{
-		# process previous sequence
-		$sequence = uc($sequence);
-		if($sequence and $sequence_name)
-		{
-			if(!$reference_sequence) # reference sequence is first sequence in alignment
-			{
-				$reference_sequence = $sequence;
-				$reference_sequence_name = $sequence_name;
-			}
-			else # not reference sequence
-			{
-				$sample_name_to_consensus_sequence{$sequence_name} = $sequence;
-			}
-			
-		}
-	
 		# prepare for next sequence
-		$sequence = "";
-		$sequence_name = $1;
-		if($reference_sequence_name) # if reference sequence has already been read in
+		my $sequence_name = $1;
+		if(!$reference_sequence_name)
 		{
-			# this sequence name is a sample name
+			$reference_sequence_name = $sequence_name;
+		}
+		elsif(!$collection_date_table or $sample_name_to_collection_date{$sequence_name})
+		{
+			# only include sequence if it has a collection date, unless we did not read in collection dates
 			$sample_names{$sequence_name} = 1;
 		}
 	}
-	else
-	{
-		$sequence .= $_;
-	}
-}
-# process final sequence
-if($sequence and $sequence_name)
-{
-	$sample_name_to_consensus_sequence{$sequence_name} = uc($sequence);
 }
 close ALIGNED_CONSENSUS_SEQUENCES;
 
@@ -242,35 +254,81 @@ if($read_depth_files)
 }
 
 
-# reads in base at each position in each consensus sequence
-# only includes positions passing read depth filter
+# reads in aligned consensus sequences
+my %sample_name_to_consensus_sequence_string_length = (); # key: sequence name -> value: length of consensus sequence string
+my $reference_sequence_string_length = 0;
 my %sample_to_position_to_consensus_allele = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: base in consensus sequence
-my @reference_bases = split(//, $reference_sequence);
-foreach my $sample_name(keys %sample_name_to_consensus_sequence)
+my @reference_bases;
+open ALIGNED_CONSENSUS_SEQUENCES, "<$consensus_sequences_aligned" || die "Could not open $consensus_sequences_aligned to read; terminating =(\n";
+my $sequence = "";
+my $sequence_name = "";
+while(<ALIGNED_CONSENSUS_SEQUENCES>) # for each line in the file
 {
-	my $consensus_genome = $sample_name_to_consensus_sequence{$sample_name};
-	my @consensus_genome_bases = split(//, $consensus_genome);
-	
-	my $position = 0; # 1-indexed relative to reference
-	for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++)
+	chomp;
+	if($_ =~ /^>(.*)/) # header line
 	{
-		my $reference_base = $reference_bases[$base_index];
-		if(is_base($reference_base))
+		# process previous sequence
+		$sequence = uc($sequence);
+		if($sequence and $sequence_name)
 		{
-			# increments position only if valid base in reference sequence
-			$position++;
-	
-			# retrieves and saves sample's base at this position
-			my $base = $consensus_genome_bases[$base_index];
-			if(is_unambiguous_base($base)
-				and (!$read_depth_read_in_for_sample{$sample_name}
-					or $sample_to_position_to_read_depth{$sample_name}{$position} >= $MINIMUM_READ_DEPTH))
+			if(!$reference_sequence_string_length) # reference sequence is first sequence in alignment
 			{
-				$sample_to_position_to_consensus_allele{$sample_name}{$position} = $base;
+				$reference_sequence_string_length = length $sequence;
+				$reference_sequence_name = $sequence_name;
+				@reference_bases = split(//, $sequence);
+			}
+			elsif($sample_names{$sequence_name}) # included sequence
+			{
+				process_sequence();
 			}
 		}
+	
+		# prepare for next sequence
+		$sequence = "";
+		$sequence_name = $1;
+	}
+	else
+	{
+		$sequence .= uc($_);
 	}
 }
+# process final sequence
+if($sequence and $sequence_name and $sample_names{$sequence_name})
+{
+	process_sequence();
+}
+close ALIGNED_CONSENSUS_SEQUENCES;
+
+
+# reads in base at each position in each consensus sequence
+# only includes positions passing read depth filter
+# my %sample_to_position_to_consensus_allele = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: base in consensus sequence
+# my @reference_bases = split(//, $reference_sequence);
+# foreach my $sample_name(keys %sample_name_to_consensus_sequence)
+# {
+# 	my $consensus_genome = $sample_name_to_consensus_sequence{$sample_name};
+# 	my @consensus_genome_bases = split(//, $consensus_genome);
+# 	
+# 	my $position = 0; # 1-indexed relative to reference
+# 	for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++)
+# 	{
+# 		my $reference_base = $reference_bases[$base_index];
+# 		if(is_base($reference_base))
+# 		{
+# 			# increments position only if valid base in reference sequence
+# 			$position++;
+# 	
+# 			# retrieves and saves sample's base at this position
+# 			my $base = $consensus_genome_bases[$base_index];
+# 			if(is_unambiguous_base($base)
+# 				and (!$read_depth_read_in_for_sample{$sample_name}
+# 					or $sample_to_position_to_read_depth{$sample_name}{$position} >= $MINIMUM_READ_DEPTH))
+# 			{
+# 				$sample_to_position_to_consensus_allele{$sample_name}{$position} = $base;
+# 			}
+# 		}
+# 	}
+# }
 
 
 # reads in heterozygosity tables
@@ -401,7 +459,15 @@ close HETEROZYGOSITY_TABLES_LIST;
 if($print_one_line_per_iSNV)
 {
 	print "from_sample".$DELIMITER;
+	if($collection_date_table)
+	{
+		print "from_sample_collection_date".$DELIMITER;
+	}
 	print "to_sample".$DELIMITER;
+	if($collection_date_table)
+	{
+		print "to_sample_collection_date".$DELIMITER;
+	}
 	print "position".$DELIMITER;
 	print "base".$DELIMITER;
 	print "frequency_in_index_case".$DELIMITER;
@@ -413,7 +479,15 @@ if($print_one_line_per_iSNV)
 else
 {
 	print "index_case".$DELIMITER;
+	if($collection_date_table)
+	{
+		print "index_case_collection_date".$DELIMITER;
+	}
 	print "proposed_secondary_case".$DELIMITER;
+	if($collection_date_table)
+	{
+		print "proposed_secondary_case_collection_date".$DELIMITER;
+	}
 	print "number_matched_iSNVs".$DELIMITER;
 	print "median_matched_iSNV_frequency".$DELIMITER;
 	print "min_matched_iSNV_frequency".$DELIMITER;
@@ -428,12 +502,13 @@ else
 # prints potential transmission event if:
 # - at least one allele in sample_1 at <100% frequency appears at 100% frequency in sample_2
 # - consensus sequences otherwise have at most one other base difference (only substitutions compared)
-my %sample_pairs_ = (); # key: sample 1 sample 2 -> value: 1
+# - sample_1 collection date < sample_2 collection date
+# - sample_2 - sample_1 <= 6
 foreach my $sample_name_1(keys %sample_names)
 {
 	if($sample_has_iSNVs{$sample_name_1})
 	{
-		foreach my $sample_name_2(keys %sample_names)
+		foreach my $sample_name_2(potential_recipient_sample_names_with_collection_dates_consistent_with_index($sample_name_1))
 		{
 			if($sample_name_1 ne $sample_name_2)
 			{
@@ -463,8 +538,8 @@ foreach my $sample_name_1(keys %sample_names)
 				my @consensus_sequence_differences = ();
 				if(scalar keys %iSNV_position_to_base)
 				{
-					my $sample_1_length = length $sample_name_to_consensus_sequence{$sample_name_1};
-					my $sample_2_length = length $sample_name_to_consensus_sequence{$sample_name_2};
+					my $sample_1_length = $sample_name_to_consensus_sequence_string_length{$sample_name_1};
+					my $sample_2_length = $sample_name_to_consensus_sequence_string_length{$sample_name_2};
 					
 					my $position = 1;
 					my $number_other_consensus_differences = 0;
@@ -531,7 +606,15 @@ foreach my $sample_name_1(keys %sample_names)
 						if($print_one_line_per_iSNV)
 						{
 							print $sample_name_1.$DELIMITER;
+							if($collection_date_table)
+							{
+								print $sample_name_to_collection_date{$sample_name_1}.$DELIMITER;
+							}
 							print $sample_name_2.$DELIMITER;
+							if($collection_date_table)
+							{
+								print $sample_name_to_collection_date{$sample_name_2}.$DELIMITER;
+							}
 							print $position.$DELIMITER;
 							print $base.$DELIMITER;
 							print $sample_1_frequency.$DELIMITER;
@@ -561,7 +644,15 @@ foreach my $sample_name_1(keys %sample_names)
 					
 						# prints line
 						print $sample_name_1.$DELIMITER;
+						if($collection_date_table)
+						{
+							print $sample_name_to_collection_date{$sample_name_1}.$DELIMITER;
+						}
 						print $sample_name_2.$DELIMITER;
+						if($collection_date_table)
+						{
+							print $sample_name_to_collection_date{$sample_name_2}.$DELIMITER;
+						}
 						print scalar(@iSNV_frequencies).$DELIMITER;
 						print round_value(100*median(@iSNV_frequencies), 1)."%".$DELIMITER;
 						print round_value(100*min(@iSNV_frequencies), 1)."%".$DELIMITER;
@@ -576,6 +667,37 @@ foreach my $sample_name_1(keys %sample_names)
 	}
 }
 
+
+# processes and saves information on consensus sequence read in
+sub process_sequence
+{
+	# saves length of consensus sequence string
+	$sample_name_to_consensus_sequence_string_length{$sequence_name} = length $sequence;
+	
+	# reads in base at each position in each consensus sequence
+	# only includes positions passing read depth filter
+	my @consensus_genome_bases = split(//, $sequence);
+	
+	my $position = 0; # 1-indexed relative to reference
+	for(my $base_index = 0; $base_index < $reference_sequence_string_length; $base_index++)
+	{
+		my $reference_base = $reference_bases[$base_index];
+		if(is_base($reference_base))
+		{
+			# increments position only if valid base in reference sequence
+			$position++;
+	
+			# retrieves and saves sample's base at this position
+			my $base = $consensus_genome_bases[$base_index];
+			if(is_unambiguous_base($base)
+				and (!$read_depth_read_in_for_sample{$sequence_name}
+					or $sample_to_position_to_read_depth{$sequence_name}{$position} >= $MINIMUM_READ_DEPTH))
+			{
+				$sample_to_position_to_consensus_allele{$sequence_name}{$position} = $base;
+			}
+		}
+	}
+}
 
 # returns 1 if base is A, T, C, G; returns 0 if not
 # input base must be capitalized
@@ -734,5 +856,184 @@ sub median
 	}
 }
 
+# returns absolute value of input
+sub absolute_value
+{
+	my $value = $_[0];
+	if($value < 0)
+	{
+		$value *= -1;
+	}
+	return $value;
+}
+
+# returns a list of names of potential recipient samples with collection dates consistent
+# with parameter index sample name
+sub potential_recipient_sample_names_with_collection_dates_consistent_with_index
+{
+	my $index_sample_name = $_[0];
+	
+	# exit right away if we didn't read in collection dates
+	if(!$collection_date_table)
+	{
+		return keys %sample_names;
+	}
+	
+	# retrieve collection date of index
+	my $index_collection_date = $sample_name_to_collection_date{$index_sample_name};
+	my @sample_names_to_return = ();
+	foreach my $potential_recipient_sample_name(keys %sample_names)
+	{
+		my $potential_recipient_collection_date = $sample_name_to_collection_date{$potential_recipient_sample_name};
+		my $date_difference = date_difference($index_collection_date, $potential_recipient_collection_date); # recipient collection date - index collection date
+		
+		if((!$REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT or $date_difference > 0) # index collection date < recipient collection date
+			and (absolute_value($date_difference) <= $MAXIMUM_COLLECTION_DATE_DISTANCE)) # checks that recipient collection date - index collection date <= 6
+		{
+			push(@sample_names_to_return, $potential_recipient_sample_name);
+		}
+	}
+	return @sample_names_to_return;
+}
+
+# returns 1 if input year is a leap year, 0 if not
+# input example: 2001
+sub is_leap_year
+{
+	my $year = $_[0];
+	if($year % 4 == 0)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+# returns date 2 - date 1, in days
+# for a use case like checking collection date - vaccine dose date >= 14
+# input format example: 2021-07-24
+sub date_difference
+{
+	my $date_1 = $_[0];
+	my $date_2 = $_[1];
+	
+	my %days_in_months = (1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31,
+		6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31);
+	my $days_in_year = 365;
+	
+	# verifies that we have two non-empty dates to compare
+	if(!defined $date_1 or !length $date_1 or !$date_1
+		or $date_1 eq "NA" or $date_1 eq "N/A" or $date_1 eq "NaN"
+		or $date_1 !~ /\S/)
+	{
+		return "";
+	}
+	if(!defined $date_2 or !length $date_2 or !$date_2
+		or $date_2 eq "NA" or $date_2 eq "N/A" or $date_2 eq "NaN"
+		or $date_2 !~ /\S/)
+	{
+		return "";
+	}
+	
+	# parses date 1
+	my $year_1 = 0;
+	my $month_1 = 0;
+	my $day_1 = 0;
+	if($date_1 =~ /^(\d{4})-(\d+)-(\d+)$/)
+	{
+		# retrieves date
+		$year_1 = int($1);
+		$month_1 = int($2);
+		$day_1 = int($3);
+	}
+	else
+	{
+		print STDERR "Error: could not parse date: ".$date_1.".\n";
+		return "";
+	}
+	if(!$days_in_months{$month_1})
+	{
+		print STDERR "Error: month not recognized: ".$month_1.".\n";
+		return "";
+	}
+	
+	# parses date 2
+	my $year_2 = 0;
+	my $month_2 = 0;
+	my $day_2 = 0;
+	if($date_2 =~ /^(\d{4})-(\d+)-(\d+)$/)
+	{
+		# retrieves date
+		$year_2 = int($1);
+		$month_2 = int($2);
+		$day_2 = int($3);
+	}
+	else
+	{
+		print STDERR "Error: could not parse date: ".$date_2.".\n";
+		return "";
+	}
+	if(!$days_in_months{$month_2})
+	{
+		print STDERR "Error: month not recognized: ".$month_2.".\n";
+		return "";
+	}
+	
+	# converts months to days
+	$month_1--;
+	while($month_1)
+	{
+		if(is_leap_year($year_1) and $month_1 == 2)
+		{
+			$day_1 ++;
+		}
+		$day_1 += $days_in_months{$month_1};
+		$month_1--;
+	}
+	$month_2--;
+	while($month_2)
+	{
+		if(is_leap_year($year_2) and $month_2 == 2)
+		{
+			$day_2 ++;
+		}
+		$day_2 += $days_in_months{$month_2};
+		$month_2--;
+	}
+	
+	# retrieves smallest of the two years
+	my $smallest_year = $year_2;
+	if($year_1 < $year_2)
+	{
+		$smallest_year = $year_1;
+	}
+	
+	# converts years to days since smallest year
+	$year_1--;
+	while($year_1 >= $smallest_year)
+	{
+		if(is_leap_year($year_1))
+		{
+			$day_1 += 1;
+		}
+		$day_1 += $days_in_year;
+		$year_1--;
+	}
+	$year_2--;
+	while($year_2 >= $smallest_year)
+	{
+		if(is_leap_year($year_2))
+		{
+			$day_2 += 1;
+		}
+		$day_2 += $days_in_year;
+		$year_2--;
+	}
+	
+	# calculates and returns difference between dates
+	my $difference = $day_2 - $day_1;
+	return $difference;
+}
+
 
 # November 27, 2021
+# March 31, 2022
