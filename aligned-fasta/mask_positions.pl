@@ -27,7 +27,6 @@ my @starts_and_ends_of_input_regions = @ARGV[1..$#ARGV]; # first position in reg
 
 my $NEWLINE = "\n";
 
-
 my $MASKED_ALLELE = "N"; # replacement to masked alelles
 my $MASK_REFERENCE_SEQUENCE = 0; # if 1, masks positions in reference sequence as well
 
@@ -98,7 +97,7 @@ foreach my $region_index(0..$#starts_of_regions_to_mask)
 }
 
 
-# creates easy look-up of whether or not position should be mask
+# creates easy look-up of whether or not position should be masked
 my %position_is_in_input_region = (); # key: position -> value: 1 if position should be masked
 foreach my $region_index(0..$#starts_of_regions_to_mask)
 {
