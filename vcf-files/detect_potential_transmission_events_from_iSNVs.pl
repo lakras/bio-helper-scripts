@@ -56,7 +56,7 @@ my $REQUIRE_INDEX_COLLECTION_DATE_BEFORE_RECIPIENT = 1;
 # thresholds for calling a transmission event
 my $FIXED_FREQUENCY = 0.9999; # minimum frequency at which we consider an allele to be fixed in a patient
 my $MAXIMUM_INITIAL_ISNV_FREQUENCY = 0.90; # 90%; maximum frequency allele can be in index case
-my $MAXIMUM_OTHER_CONSENSUS_DIFFERENCES = 0; # 1; # maximum number differences between consensus genomes other than transmitted iSNVs (comparing unambiguous bases, substitutions only)
+my $MAXIMUM_OTHER_CONSENSUS_DIFFERENCES = 1; # maximum number differences between consensus genomes other than transmitted iSNVs (comparing unambiguous bases, substitutions only)
 
 # thresholds for marking position as heterozygous
 my $MINIMUM_MINOR_ALLELE_READCOUNT = 10;
@@ -300,47 +300,10 @@ if($sequence and $sequence_name and $sample_names{$sequence_name})
 close ALIGNED_CONSENSUS_SEQUENCES;
 
 
-# reads in base at each position in each consensus sequence
-# only includes positions passing read depth filter
-# my %sample_to_position_to_consensus_allele = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: base in consensus sequence
-# my @reference_bases = split(//, $reference_sequence);
-# foreach my $sample_name(keys %sample_name_to_consensus_sequence)
-# {
-# 	my $consensus_genome = $sample_name_to_consensus_sequence{$sample_name};
-# 	my @consensus_genome_bases = split(//, $consensus_genome);
-# 	
-# 	my $position = 0; # 1-indexed relative to reference
-# 	for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++)
-# 	{
-# 		my $reference_base = $reference_bases[$base_index];
-# 		if(is_base($reference_base))
-# 		{
-# 			# increments position only if valid base in reference sequence
-# 			$position++;
-# 	
-# 			# retrieves and saves sample's base at this position
-# 			my $base = $consensus_genome_bases[$base_index];
-# 			if(is_unambiguous_base($base)
-# 				and (!$read_depth_read_in_for_sample{$sample_name}
-# 					or $sample_to_position_to_read_depth{$sample_name}{$position} >= $MINIMUM_READ_DEPTH))
-# 			{
-# 				$sample_to_position_to_consensus_allele{$sample_name}{$position} = $base;
-# 			}
-# 		}
-# 	}
-# }
-
-
 # reads in heterozygosity tables
 my %sample_has_iSNVs = (); # key: sample name -> value: 1 if sample has at least one position with heterozygosity
 my %sample_to_position_to_base_to_frequency = (); # key: sample name -> key: position (1-indexed relative to reference) -> key: base -> value: frequency of allele
 my %sample_to_position_to_base_to_readcount = (); # key: sample name -> key: position (1-indexed relative to reference) -> key: base -> value: allele readcount
-# my %sample_to_position_to_consensus_allele_frequency = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: frequency of consensus base
-# my %sample_to_position_to_consensus_allele_readcount = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: readcount of consensus base
-# my %sample_to_position_to_minor_allele = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: minor allele
-# my %sample_to_position_to_minor_allele_frequency = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: frequency of minor allele
-# my %sample_to_position_to_minor_allele_readcount = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: readcount of minor allele
-
 open HETEROZYGOSITY_TABLES_LIST, "<$heterozygosity_tables" || die "Could not open $heterozygosity_tables to read; terminating =(\n";
 while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 {
@@ -424,20 +387,12 @@ while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 										.") and in heterozygosity table (".$consensus_allele
 										.") disagree for position ".$position." in sample "
 										.$sample_name.".\n";
-# 										.". Using allele from heterozygosity table.\n";
-# 									$sample_to_position_to_consensus_allele{$sample_name}{$position} = $consensus_allele;
 								}
 							}
 							elsif(is_unambiguous_base($consensus_allele))
 							{
 								$sample_to_position_to_consensus_allele{$sample_name}{$position} = $consensus_allele;
 							}
-
-# 							$sample_to_position_to_consensus_allele_frequency{$sample_name}{$position} = $consensus_allele_frequency;
-# 							$sample_to_position_to_consensus_allele_readcount{$sample_name}{$position} = $consensus_allele_readcount;
-# 							$sample_to_position_to_minor_allele{$sample_name}{$position} = $minor_allele;
-# 							$sample_to_position_to_minor_allele_frequency{$sample_name}{$position} = $minor_allele_frequency;
-# 							$sample_to_position_to_minor_allele_readcount{$sample_name}{$position} = $minor_allele_readcount;
 
 							$sample_has_iSNVs{$sample_name} = 1;
 							$sample_to_position_to_base_to_frequency{$sample_name}{$position}{$consensus_allele} = $consensus_allele_frequency;
