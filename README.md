@@ -222,6 +222,10 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
    _Usage: `perl mask_positions_in_heterozygosity_table.pl [heterozygosity table] [first position in region to mask] [last position in region to mask] [first position in another region to mask] [last position in another region to mask] [etc.] > [output heterozygosity table file path]`_
 
+- [`mask_positions_in_heterozygosity_table_in_bulk.pl`](/vcf-files/mask_positions_in_heterozygosity_table_in_bulk.pl): Masks (removes lines corresponding to) alleles at indicated positions. Operates separately on multiple files as described in input table. See script for input file format. Positions must be relative to reference used in heterozygosity table.
+
+   _Usage: `perl mask_positions_in_heterozygosity_table_in_bulk.pl [tab-separated table containing filepath of heterozygosity table in first column, first and last positions of regions to mask in this heterozygosity table, space separated, in second column] [optional first position in additional region to mask in all heterozygosity tables] [optional last position in additional region to mask in all heterozygosity tables] [optional first position in another additional region to mask in all heterozygosity tables] [optional last position in another additional region to mask in all heterozygosity tables] [etc.]`_
+
 - [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
