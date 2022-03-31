@@ -526,6 +526,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl bulk_delete_files_in_list.pl [file containing list of paths of files to delete, one per line]`_
 
+- [`bulk_move_files_in_list.pl`](/misc/bulk_move_files_in_list.pl): Moves files in input list to provided directory.
+
+   _Usage: `perl bulk_move_files_in_list.pl [file containing list of paths of files to move, one per line] [directory to move files to]`_
+
 - [`match_file_paths_to_sample_names.pl`](/misc/match_file_paths_to_sample_names.pl): Matches each sample name to a file path containing that sample name. Outputs sample names with file paths, tab-separated, one sample per line.
 
    _Usage: `perl match_file_paths_to_sample_names.pl [file containing list of sample names, one per line] [file containing list of file paths, one per line] > [output table path]`_
