@@ -25,6 +25,8 @@ my $file_paths_file = $ARGV[1]; # file containing list of file paths, one per li
 my $DELIMITER = "\t";
 my $NEWLINE = "\n";
 
+my $SEARCH_FOR_MATCH_QUICKLY = 1; # if 0, uses pattern matching at O(n^2); if 1, trims extension off filename until match is found
+my $VERIFY_MATCHES_FOUND = 0;
 my $ONLY_PRINT_SAMPLE_NAMES_WITH_MATCHING_FILE_PATHS = 0;
 
 
@@ -68,18 +70,55 @@ while(<FILE_PATHS_LIST>) # for each line in the file
 	my $file_path = $_;
 	if($file_path =~ /\S/) # non-empty string
 	{
-		# retrieve sample name from file name
-		my $sample_name = "";
-		foreach my $potential_sample_name(sort {length $a <=> length $b} keys %all_samples)
+		# retrieves file name from file path
+		my $file_name = $file_path;
+		if($file_name =~ /^.*\/(.+)$/)
 		{
-			if($file_path =~ /$potential_sample_name/)
+			$file_name = $1;
+		}
+		
+		my $sample_name = "";
+		if($SEARCH_FOR_MATCH_QUICKLY) # fastest option
+		{
+			# removes extensions until file name matches a sample name or is empty
+			my $potential_sample_name = $file_name;
+			while($potential_sample_name and !$sample_name)
 			{
-				$sample_name = $potential_sample_name;
+				if($all_samples{$potential_sample_name})
+				{
+					# sample name matched
+					$sample_name = $potential_sample_name;
+				}
+				else
+				{
+					# trims off extension
+					if($potential_sample_name =~ /(.*)[.].+/)
+					{
+						$potential_sample_name = $1;
+					}
+					else
+					{
+						$potential_sample_name = "";
+					}
+				}
+			}
+		}
+		else # slowest but most thorough option
+		{
+			# retrieve sample name from file name
+			my $sample_name = "";
+			foreach my $potential_sample_name(sort {length $a <=> length $b} keys %all_samples)
+			{
+				if($file_path =~ /$potential_sample_name/)
+				{
+					$sample_name = $potential_sample_name;
+					last;
+				}
 			}
 		}
 		
 		# verifies that we haven't already matched a file path to this sample name
-		if($sample_name and $sample_name_to_file_path{$sample_name})
+		if($sample_name_to_file_path{$sample_name})
 		{
 			print STDERR "Warning: multiple file paths mapped to sample name "
 				.$sample_name.":\n\t".$sample_name_to_file_path{$sample_name}
@@ -89,7 +128,7 @@ while(<FILE_PATHS_LIST>) # for each line in the file
 		# saves matched sample name
 		if($sample_name)
 		{
-			$sample_name_to_file_path{$sample_name} = $file_path;
+			$sample_name_to_file_path{$sample_name} .= $file_path;
 		}
 		else
 		{
@@ -100,32 +139,35 @@ while(<FILE_PATHS_LIST>) # for each line in the file
 close FILE_PATHS_LIST;
 
 
-# verifies that we found a file path for each sample
-my @sample_names_without_file_paths = ();
-foreach my $sample_name(keys %all_samples)
+if($VERIFY_MATCHES_FOUND)
 {
-	if(!$sample_name_to_file_path{$sample_name})
+	# verifies that we found a file path for each sample
+	my @sample_names_without_file_paths = ();
+	foreach my $sample_name(keys %all_samples)
 	{
-		push(@sample_names_without_file_paths, $sample_name);
+		if(!$sample_name_to_file_path{$sample_name})
+		{
+			push(@sample_names_without_file_paths, $sample_name);
+		}
 	}
-}
-if(scalar @sample_names_without_file_paths)
-{
-	print STDERR "Warning: sample names without matching file paths:\n";
-	foreach my $sample_name(sort @sample_names_without_file_paths)
+	if(scalar @sample_names_without_file_paths)
 	{
-		print STDERR "\t".$sample_name."\n";
+		print STDERR "Warning: sample names without matching file paths:\n";
+		foreach my $sample_name(sort @sample_names_without_file_paths)
+		{
+			print STDERR "\t".$sample_name."\n";
+		}
 	}
-}
 
 
-# verifies that we found a sample name for each file path
-if(scalar @file_paths_without_sample_names)
-{
-	print STDERR "Warning: file paths without matching sample names:\n";
-	foreach my $file_path(sort @file_paths_without_sample_names)
+	# verifies that we found a sample name for each file path
+	if(scalar @file_paths_without_sample_names)
 	{
-		print STDERR "\t".$file_path."\n";
+		print STDERR "Warning: file paths without matching sample names:\n";
+		foreach my $file_path(sort @file_paths_without_sample_names)
+		{
+			print STDERR "\t".$file_path."\n";
+		}
 	}
 }
 
