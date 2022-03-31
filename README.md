@@ -283,6 +283,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl delete_columns.pl [table] "[title of column to delete]" "[title of another column to delete]" "[title of another column to delete]" [etc.] > [output table path]`_
 
+- [`replace_whole_column_with_empty_values.pl`](/tables/replace_whole_column_with_empty_values.pl): Replaces whole column (including title unless hardcoded option selected) with empty values.
+
+   _Usage: `perl replace_whole_column_with_empty_values.pl [table] "[column title]" "[another column title]" [etc.] > [output table path]`_
+
 - [`duplicate_columns.pl`](/tables/duplicate_columns.pl): Duplicates selected columns.
 
    _Usage: `perl duplicate_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
