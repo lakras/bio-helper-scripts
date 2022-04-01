@@ -61,6 +61,7 @@
 # Usage:
 # perl split_file_into_2n_overlapping_files.pl [file path] [number equal slices (n)]
 # [1 to generate N=2*n approximately equal sized files, 0 to generate N=2*n+1 output files with lines that are also consecutive in the input]
+# [optional 1 to NOT print half-sized overhang files (can be used only if previous option is set to 0)]
 
 # New files are created at filepath of old file with "_1_of_[N].txt", "_2_of_[N].txt",
 # etc. appended to the end. Files already at those paths will be overwritten.
@@ -73,6 +74,7 @@ use warnings;
 my $file = $ARGV[0];
 my $number_slices = $ARGV[1];
 my $equal_sized_outputs = $ARGV[2]; # 1 to generate 2*n approximately equal sized files, 0 to generate 2*n+1 output files with lines that are also consecutive in the input
+my $dont_print_jagged_files = $ARGV[3]; # 1 to NOT print half-sized overhang files (can be used only if equal_sized_outputs is set to 0)
 
 
 my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
@@ -213,6 +215,34 @@ while(<FILE>) # for each line in the file
 }
 close FILE;
 close OUT_FILE;
+
+
+# if needed, deletes jagged files and renames current files
+# of course suboptimal and lazily coded, sorry
+if(!$equal_sized_outputs and $dont_print_jagged_files)
+{
+	# deletes first jagged file
+	$output_file = $file."_".$jagged_first_file_file_number."_of_".$total_number_files.".txt";
+	`rm $output_file`;
+	
+	# deletes last jagged file
+	$output_file = $file."_".$total_number_files."_of_".$total_number_files.".txt";
+	`rm $output_file`;
+	
+	# rename printed files
+	my $corrected_file_number = 1;
+	my $corrected_total_number_files = $total_number_files - 2;
+	for my $printed_file_number(1..$total_number_files)
+	{
+		my $printed_output_file = $file."_".$printed_file_number."_of_".$total_number_files.".txt";
+		if(-e $printed_output_file)
+		{
+			my $corrected_output_file = $file."_".$corrected_file_number."_of_".$corrected_total_number_files.".txt";
+			`mv $printed_output_file $corrected_output_file`;
+			$corrected_file_number++;
+		}
+	}
+}
 
 
 # if overwriting not allowed (if $OVERWRITE is set to 0), prints an error and exits
