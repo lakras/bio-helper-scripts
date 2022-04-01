@@ -279,9 +279,8 @@ if($read_depth_files)
 
 
 # reads in aligned consensus sequences
-my %sample_name_to_consensus_sequence_string_length = (); # key: sequence name -> value: length of consensus sequence string
 my $reference_sequence_string_length = 0;
-my %sample_to_position_to_consensus_allele = (); # key: sample name -> key: position (1-indexed relative to reference) -> value: base in consensus sequence
+my %sample_name_to_consensus_sequence = (); # key: sample name -> value: sequence
 my @reference_bases;
 open ALIGNED_CONSENSUS_SEQUENCES, "<$consensus_sequences_aligned" || die "Could not open $consensus_sequences_aligned to read; terminating =(\n";
 my $sequence = "";
@@ -303,7 +302,8 @@ while(<ALIGNED_CONSENSUS_SEQUENCES>) # for each line in the file
 			}
 			elsif($sample_names{$sequence_name}) # included sequence
 			{
-				process_sequence();
+				# saves aligned sequence string
+				$sample_name_to_consensus_sequence{$sequence_name} = $sequence;
 			}
 		}
 	
@@ -319,7 +319,8 @@ while(<ALIGNED_CONSENSUS_SEQUENCES>) # for each line in the file
 # process final sequence
 if($sequence and $sequence_name and $sample_names{$sequence_name})
 {
-	process_sequence();
+	# saves aligned sequence string
+	$sample_name_to_consensus_sequence{$sequence_name} = $sequence;
 }
 close ALIGNED_CONSENSUS_SEQUENCES;
 
@@ -401,22 +402,22 @@ while(<HETEROZYGOSITY_TABLES_LIST>) # for each line in the file
 							and $minor_allele_readcount + $consensus_allele_readcount >= $MINIMUM_READ_DEPTH) # read depth
 						{
 							# verifies that consensus allele matches that in alignment
-							if(defined $sample_to_position_to_consensus_allele{$sample_name}{$position})
-							{
-								if($sample_to_position_to_consensus_allele{$sample_name}{$position}
-									ne $consensus_allele and is_unambiguous_base($consensus_allele))
-								{
-									print STDERR "Warning: consensus allele in alignment ("
-										.$sample_to_position_to_consensus_allele{$sample_name}{$position}
-										.") and in heterozygosity table (".$consensus_allele
-										.") disagree for position ".$position." in sample "
-										.$sample_name.".\n";
-								}
-							}
-							elsif(is_unambiguous_base($consensus_allele))
-							{
-								$sample_to_position_to_consensus_allele{$sample_name}{$position} = $consensus_allele;
-							}
+# 							if(defined $sample_to_position_to_consensus_allele{$sample_name}{$position})
+# 							{
+# 								if($sample_to_position_to_consensus_allele{$sample_name}{$position}
+# 									ne $consensus_allele and is_unambiguous_base($consensus_allele))
+# 								{
+# 									print STDERR "Warning: consensus allele in alignment ("
+# 										.$sample_to_position_to_consensus_allele{$sample_name}{$position}
+# 										.") and in heterozygosity table (".$consensus_allele
+# 										.") disagree for position ".$position." in sample "
+# 										.$sample_name.".\n";
+# 								}
+# 							}
+# 							elsif(is_unambiguous_base($consensus_allele))
+# 							{
+# 								$sample_to_position_to_consensus_allele{$sample_name}{$position} = $consensus_allele;
+# 							}
 
 							$sample_has_iSNVs{$sample_name} = 1;
 							$sample_to_position_to_base_to_frequency{$sample_name}{$position}{$consensus_allele} = $consensus_allele_frequency;
@@ -477,21 +478,43 @@ else
 }
 
 
+# maps position relative to reference to position in sequence alignment string
+my %position_to_alignment_base_index = (); # key: position relative to reference, 1-indexed -> value: position in sequence alignment string, 0-indexed
+my %alignment_base_index_to_position = (); # key: position in sequence alignment string, 0-indexed -> value: position relative to reference, 1-indexed
+
+my $position = 0; # 1-indexed relative to reference
+for(my $base_index = 0; $base_index < $reference_sequence_string_length; $base_index++)
+{
+	my $reference_base = $reference_bases[$base_index];
+	if(is_base($reference_base))
+	{
+		# increments position only if valid base in reference sequence
+		$position++;
+
+		$position_to_alignment_base_index{$position} = $base_index;
+		$alignment_base_index_to_position{$base_index} = $position;
+	}
+}
+my $max_position = $position;
+
+
 # compares all pairs of samples
 # prints potential transmission event if:
 # - at least one allele in sample_1 at <100% frequency appears at 100% frequency in sample_2
 # - consensus sequences otherwise have at most one other base difference (only substitutions compared)
 # - sample_1 collection date < sample_2 collection date
 # - sample_2 - sample_1 <= 6
-foreach my $sample_name_1(keys %sample_names)
+foreach my $sample_name_1(sort keys %sample_names)
 {
 	if($sample_has_iSNVs{$sample_name_1})
 	{
-		print STDERR "\t".$sample_name_1."\n";
+		my @sample_1_alignment_bases = split(//, $sample_name_to_consensus_sequence{$sample_name_1});
+		
 		foreach my $sample_name_2(potential_recipient_sample_names_with_collection_dates_consistent_with_index($sample_name_1))
 		{
 			if($sample_name_1 ne $sample_name_2)
 			{
+				my @sample_2_alignment_bases = split(//, $sample_name_to_consensus_sequence{$sample_name_2});
 				my %iSNV_position_to_base = (); # key: position -> value: base that is iSNV in sample 1 and fixed in sample 2
 			
 				# checks if at least one allele in sample_1 at <100% frequency appears
@@ -501,14 +524,17 @@ foreach my $sample_name_1(keys %sample_names)
 					foreach my $base(keys %{$sample_to_position_to_base_to_frequency{$sample_name_1}{$position}}) # for each allele at position in sample 1
 					{
 						# check if allele appears at consensus level in sample 2 near 100%
-						if($sample_to_position_to_base_to_frequency{$sample_name_1}{$position}{$base} <= $MAXIMUM_INITIAL_ISNV_FREQUENCY # allele frequency in sample 1 is not too high
-							and defined $sample_to_position_to_consensus_allele{$sample_name_2}{$position}
-							and $sample_to_position_to_consensus_allele{$sample_name_2}{$position} eq $base # allele is at consensus level in sample 2
-							and (!exists $sample_to_position_to_base_to_frequency{$sample_name_2}{$position} # no heterozygosity at this position in sample 2
-								or (defined $sample_to_position_to_base_to_frequency{$sample_name_2}{$position}{$base}
-									and $sample_to_position_to_base_to_frequency{$sample_name_2}{$position}{$base} >= $FIXED_FREQUENCY))) # or allele is near enough to 100% frequency in sample 2
+						if($sample_to_position_to_base_to_frequency{$sample_name_1}{$position}{$base} <= $MAXIMUM_INITIAL_ISNV_FREQUENCY) # allele frequency in sample 1 is not too high
 						{
-							$iSNV_position_to_base{$position} = $base;
+							my $sample_2_consensus_allele = $sample_2_alignment_bases[$position_to_alignment_base_index{$position}];
+							if(defined $sample_2_consensus_allele and is_unambiguous_base($sample_2_consensus_allele)
+								and $sample_2_consensus_allele eq $base # allele is at consensus level in sample 2
+								and (!exists $sample_to_position_to_base_to_frequency{$sample_name_2}{$position} # no heterozygosity at this position in sample 2
+									or (defined $sample_to_position_to_base_to_frequency{$sample_name_2}{$position}{$base}
+										and $sample_to_position_to_base_to_frequency{$sample_name_2}{$position}{$base} >= $FIXED_FREQUENCY))) # or allele is near enough to 100% frequency in sample 2
+							{
+								$iSNV_position_to_base{$position} = $base;
+							}
 						}
 					}
 				}
@@ -518,21 +544,20 @@ foreach my $sample_name_1(keys %sample_names)
 				my @consensus_sequence_differences = ();
 				if(scalar keys %iSNV_position_to_base)
 				{
-					my $sample_1_length = $sample_name_to_consensus_sequence_string_length{$sample_name_1};
-					my $sample_2_length = $sample_name_to_consensus_sequence_string_length{$sample_name_2};
-					
 					my $position = 1;
 					my $number_other_consensus_differences = 0;
-					while($position <= min($sample_1_length, $sample_2_length)
+					while($position <= $max_position # $position <= min($sample_1_length, $sample_2_length)
 						and !$consensus_sequences_have_too_many_other_differences)
 					{
 						if(!$iSNV_position_to_base{$position}) # if this isn't a position where an allele is an iSNV in sample 1 and fixed is sample 2
 						{
-							my $sample_1_consensus_allele = $sample_to_position_to_consensus_allele{$sample_name_1}{$position};
-							my $sample_2_consensus_allele = $sample_to_position_to_consensus_allele{$sample_name_2}{$position};
-						
+							my $alignment_base_index = $position_to_alignment_base_index{$position};
+							my $sample_1_consensus_allele = $sample_1_alignment_bases[$alignment_base_index];
+							my $sample_2_consensus_allele = $sample_2_alignment_bases[$alignment_base_index];
+
 							# assumes all saved bases are unambiguous bases
 							if(defined $sample_1_consensus_allele and defined $sample_2_consensus_allele
+								and is_unambiguous_base($sample_1_consensus_allele) and is_unambiguous_base($sample_2_consensus_allele)
 								and $sample_1_consensus_allele ne $sample_2_consensus_allele)
 							{
 								$number_other_consensus_differences++;
@@ -651,13 +676,13 @@ foreach my $sample_name_1(keys %sample_names)
 # processes and saves information on consensus sequence read in
 sub process_sequence
 {
-	# saves length of consensus sequence string
-	$sample_name_to_consensus_sequence_string_length{$sequence_name} = length $sequence;
-	
+	my $sequence_name = $_[0];
+	my $sequence = $_[1];
+
 	# reads in base at each position in each consensus sequence
 	# only includes positions passing read depth filter
 	my @consensus_genome_bases = split(//, $sequence);
-	
+	my %position_to_consensus_allele = (); # key: position relative to reference (1-indexed) -> value: consensus allele in input sequence
 	my $position = 0; # 1-indexed relative to reference
 	for(my $base_index = 0; $base_index < $reference_sequence_string_length; $base_index++)
 	{
@@ -673,10 +698,11 @@ sub process_sequence
 				and (!$read_depth_read_in_for_sample{$sequence_name}
 					or $sample_to_position_to_read_depth{$sequence_name}{$position} >= $MINIMUM_READ_DEPTH))
 			{
-				$sample_to_position_to_consensus_allele{$sequence_name}{$position} = $base;
+				$position_to_consensus_allele{$position} = $base;
 			}
 		}
 	}
+	return \%position_to_consensus_allele;
 }
 
 # returns 1 if base is A, T, C, G; returns 0 if not
