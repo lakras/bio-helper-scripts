@@ -534,4 +534,8 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl match_file_paths_to_sample_names.pl [file containing list of sample names, one per line] [file containing list of file paths, one per line] > [output table path]`_
 
+- [`combine_files_and_delete_duplicate_lines.pl`](/misc/combine_files_and_delete_duplicate_lines.pl): Combines input files. Prints each line only once (no duplicate lines). Prints lines in order in which they first appear in all the input files.
+
+   _Usage: `perl combine_files_and_delete_duplicate_lines.pl [input file] [another input file] [another input file] [etc.] > [output table path]`_
+
 More coming soon :)
