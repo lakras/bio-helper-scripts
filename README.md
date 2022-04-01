@@ -517,7 +517,11 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`split_file_into_n_files.pl`](/misc/split_file_into_n_files.pl): Splits file with multiple lines up into a number of smaller files, each with about the same number of lines.
 
    _Usage: `perl split_file_into_n_files.pl [file path]  [number output files to generate]`_
-   
+  
+- [`split_file_into_2n_overlapping_files.pl`](/misc/split_file_into_2n_overlapping_files.pl): Splits file with multiple lines up into a number of overlapping smaller files. Each line will appear in two files. Either all output files will have about the same number of lines, or there will be two "jagged" half-sized output files if it is a priority for all output files to only have lines that are consecutive in the input. See script for example input and output.
+
+   _Usage: `perl split_file_into_2n_overlapping_files.pl [file path] [number equal slices (n)] [1 to generate N=2*n approximately equal sized files, 0 to generate N=2*n+1 output files with lines that are also consecutive in the input]`_
+ 
 - [`erase_empty_files.pl`](/misc/erase_empty_files.pl): Erases empty files.
 
    _Usage: `perl erase_empty_files.pl [file to check and potentially erase] [another file to check and potentially erase] [a third file to check and potentially erase] etc.`_
