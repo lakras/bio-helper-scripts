@@ -238,6 +238,9 @@ if(!$equal_sized_outputs and $dont_print_jagged_files)
 		if(-e $printed_output_file)
 		{
 			my $corrected_output_file = $file."_".$corrected_file_number."_of_".$corrected_total_number_files.".txt";
+			print "A\n";
+			verify_output_file_ok_to_write($corrected_output_file);
+			print "B\n";
 			`mv $printed_output_file $corrected_output_file`;
 			$corrected_file_number++;
 		}
