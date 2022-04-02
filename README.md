@@ -498,6 +498,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl run_script_on_multiple_files.pl [file path of script to run] [file with list of input files to run script on] [optional extension to add to input file path to create output file path] [optional second parameter to provide script] [optional third parameter to provide script] [etc.]`_
 
+- [`summarize_files.pl`](/misc/summarize_files.pl): Summarizes files. Generates table with filepath, filename, filename with extensions trimmed off, and number lines, words, and characters in the file.
+
+   _Usage: `perl summarize_files.pl [file with list of files to summarize, one per line] > [output file path]`_
+
 - [`download_files.pl`](/misc/download_files.pl): Downloads files listed in input file from online or from google storage bucket.
 
    _Usage: `perl download_files.pl [file with list of files to download] [optional output directory]`_
