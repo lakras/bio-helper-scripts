@@ -270,6 +270,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`make_r_friendly_table.pl`](/tables/make_r_friendly_table.pl): Converts table to R-friendly format. See script for example inputs and outputs.
 
    _Usage: `perl make_r_friendly_table.pl [table file path] [first data column index] > [output table path]`_
+   
+- [`convert_variable_value_lists_to_table.pl`](/tables/convert_variable_value_lists_to_table.pl): Converts lists of variable values, such as those output by Terra, to a table. Lists of values must appear with variable on one line followed by values in the following line, comma-separated and surrounded by brackets. Lines not matching this format are ignored. Variable names must be unique (cannot repeat). List items must be in order for all variables. Expects all variables to have identical numbers of values: ignores variables with less than the largest number of values. See code for example of input and output formats.
+
+   _Usage: `perl convert_variable_value_lists_to_table.pl [file containing input lists] [optional list item separator, ", " by default] [optional list start, "[" by default] [optional list end, "]" by default] > [output table path]`_
 
 ### Column title manipulation
 
