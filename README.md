@@ -395,6 +395,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl condense_list_values_into_one_item.pl [table] [0 to use the first value, 1 to use the smallest value, 2 to use the greatest value] "[title of column to replace lists in]" "[title of another column to replace lists in]" "[title of another column to replace lists in]" [etc.] > [output table path]`_
 
+- [`add_filename_column_from_filepath_column.pl`](/tables/add_filename_column_from_filepath_column.pl): Retrieves filepaths from specified column (or first column by default). Adds new column with filenames retrieved from these filepaths.
+
+   _Usage: `perl add_filename_column_from_filepath_column.pl [table to add new column to] [optional title of column containing filepaths (if not provided, uses first column)] [optional 1 to remove all file extensions in output filenames (such that filename contains no .s)] > [output table path]`_
+
 ### Column manipulation with dates
 
 - [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
