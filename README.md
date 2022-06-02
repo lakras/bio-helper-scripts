@@ -514,9 +514,13 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl download_files.pl [file with list of files to download] [optional output directory]`_
 
-- [`bulk_replace.pl`](/misc/bulk_replace.pl): Replaces all occurrences of values to mapped replacement values. Values to replace must be surrounded by whitespace or appear at the start or end of a line.
+- [`combine_files_and_delete_duplicate_lines.pl`](/misc/combine_files_and_delete_duplicate_lines.pl): Combines input files. Prints each line only once (no duplicate lines). Prints lines in order in which they first appear in all the input files.
 
-   _Usage: `perl bulk_replace.pl [tab-separated file mapping current values (first column) to new values (second column)] [path of file in which to replace values] [path of second file in which to replace values] [etc.]`_
+   _Usage: `perl combine_files_and_delete_duplicate_lines.pl [input file] [another input file] [another input file] [etc.] > [output table path]`_
+
+- [`bulk_rename.pl`](/misc/bulk_rename.pl): Replaces all occurrences of values in file paths to mapped replacement values. Values to replace should not overlap or be substrings of each other. Files already at replacement paths will be overwritten. Paths of files to rename can be provided directly as arguments or as one file with a list of filepaths, one per line.
+
+   _Usage: `perl bulk_rename.pl [tab-separated file mapping current values (first column) to new values (second column)] [filepaths of at least two files to rename OR path of file containing filepaths of files to rename, one per line]`_
 
 - [`bulk_grep.pl`](/misc/bulk_grep.pl): Searches all input files for queries listed in query list file.
 
