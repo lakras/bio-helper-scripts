@@ -44,9 +44,9 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] > [output table file path]`_
 
-- [`align_to_reference.pl`](/fasta/align_to_reference.pl): Aligns each input sequence with reference independently, then combines all into one fasta alignment. Bases aligned to a gap in the reference are removed. Sequences in input fastas must have unique names.
+- [`align_to_reference.pl`](/fasta/align_to_reference.pl): Aligns each input sequence with reference independently, then combines all into one fasta alignment. Bases aligned to a gap in the reference are removed. Sequences in input fastas must have unique names. Paths of fasta sequences to align can be provided directly as arguments or as one file with a list of filepaths, one per line.
 
-   _Usage: `perl align_to_reference.pl [reference sequence] [file path of MAFFT executable file (mafft.bat)] [file with list of fasta file paths, one per line] > [output fasta file path]`_
+   _Usage: `perl align_to_reference.pl [reference sequence] [file path of MAFFT executable file (mafft.bat)] [filepaths of at least fasta files OR path of file containing file with list of fasta file paths, one per line] > [output fasta file path]`_
 
 - [`align_each_fasta_file_with_reference_separately.pl`](/fasta/align_each_fasta_file_with_reference_separately.pl): Adds reference sequence to the top of each fasta file and aligns each file separately. New files are created at filepath of old file with "_aligned_to_ref.fasta" appended to the end. Temp files created with "_temp.fasta" appended to the end. Files already at those paths will be overwritten.
 

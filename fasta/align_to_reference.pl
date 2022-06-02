@@ -3,17 +3,21 @@
 # Aligns each input sequence with reference independently, then combines all into one
 # fasta alignment. Bases aligned to a gap in the reference are removed.
 
-# Sequences in input fastas must have unique names.
+# Sequences in input fastas must have unique names. Paths of fasta sequences to align can
+# be provided directly as arguments or as one file with a list of filepaths, one per line.
 
 # Usage:
 # perl align_to_reference.pl [reference sequence]
 # [file path of MAFFT executable file (mafft.bat)]
 # [file with list of fasta file paths, one per line]
+# [filepaths of at least fasta files OR path of file containing file with list of fasta
+# file paths, one per line]
 
 # Prints to console. To print to file, use
 # perl align_to_reference.pl [reference sequence]
 # [file path of MAFFT executable file (mafft.bat)]
-# [file with list of fasta file paths, one per line] > [output fasta file path]
+# [filepaths of at least fasta files OR path of file containing file with list of fasta
+# file paths, one per line] > [output fasta file path]
 
 # Temp files are created at filepath of old file with "_aligned_to_ref.fasta" appended to
 # the end and with "_temp.fasta" appended to the end. Files already at those paths will be
@@ -31,8 +35,16 @@ use warnings;
 
 my $reference_sequence = $ARGV[0];
 my $mafft_file_path = $ARGV[1];
-my $input_fastas_list = $ARGV[2];
-# my @input_fastas = @ARGV[2..$#ARGV];
+my $input_fastas_list;
+my @input_fastas;
+if(scalar @ARGV > 3)
+{
+	@input_fastas = @ARGV[2..$#ARGV];
+}
+else
+{
+	$input_fastas_list = $ARGV[2];
+}
 
 
 my $NEWLINE = "\n";
@@ -45,26 +57,35 @@ my $USE_EXISTING_ALIGNMENTS_IF_AVAILABLE = 1;
 
 
 # verifies that list of input fasta files exists
-if(!$input_fastas_list or !-e $input_fastas_list or -z $input_fastas_list)
+if((!$input_fastas_list or !-e $input_fastas_list or -z $input_fastas_list)
+	and !scalar @input_fastas)
 {
-	print STDERR "Error: list of input fasta files not provided, does not exist, or empty:\n\t"
-		.$input_fastas_list."\n";
+	print STDERR "Error: list of input fasta files not provided, does not exist, or "
+		."empty. Exiting.\n";
 	die;
 }
 
 
-# reads in list of input fasta files
-my @input_fastas = ();
-open INPUT_FASTAS, "<$input_fastas_list" || die "Could not open $input_fastas_list to read; terminating =(\n";
-while(<INPUT_FASTAS>) # for each line in the file
+# if needed, reads in list of input fasta files
+if($input_fastas_list and !scalar @input_fastas)
 {
-	chomp;
-	if($_ =~ /\S/) # header line
+	open INPUT_FASTAS, "<$input_fastas_list" || die "Could not open $input_fastas_list to read; terminating =(\n";
+	while(<INPUT_FASTAS>) # for each line in the file
 	{
-		push(@input_fastas, $_);
+		chomp;
+		if($_ =~ /\S/) # header line
+		{
+			push(@input_fastas, $_);
+		}
 	}
+	close INPUT_FASTAS;
 }
-close INPUT_FASTAS;
+if(!scalar @input_fastas)
+{
+	print STDERR "Error: list of input fasta files not provided, does not exist, or "
+		."empty. Exiting.\n";
+	die;
+}
 
 
 # verifies that we have read in a list of input fasta files
