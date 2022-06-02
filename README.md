@@ -25,7 +25,7 @@ Includes the following scripts—
    
 - [`summarize_lineage_defining_SNPs.pl`](/lineages/summarize_lineage_defining_SNPs.pl): Prints list of lineage-defining positions and the lineage(s) consistent with each allele.
 
-   _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]`_
+   _Usage: `perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] [optional 1 to compare all positions, including with gaps or ambiguous bases] > [output file path]`_
    
 - [`estimate_allele_lineages.pl`](/lineages/estimate_allele_lineages.pl): Generates table listing lineage(s) consistent with each sample's consensus and minor alleles. See script for descriptions of input files and output table.
 

@@ -10,9 +10,12 @@
 
 # Usage:
 # perl summarize_lineage_defining_SNPs.pl [alignment fasta file path]
+# [optional 1 to compare all positions, including with gaps or ambiguous bases]
 
 # Prints to console. To print to file, use
-# perl summarize_lineage_defining_SNPs.pl [alignment fasta file path] > [output file path]
+# perl summarize_lineage_defining_SNPs.pl [alignment fasta file path]
+# [optional 1 to compare all positions, including with gaps or ambiguous bases]
+# > [output file path]
 
 
 use strict;
@@ -20,6 +23,7 @@ use warnings;
 
 
 my $lineages_aligned_fasta = $ARGV[0]; # lineages aligned to reference; reference must be first sequence in file
+my $compare_ambiguous_bases_and_gaps = $ARGV[1]; # by default, if 0, only compare positions with unambiguous bases in all sequences; if 1, compare all positions, including with gaps or ambiguous bases
 
 
 my $DELIMITER = "\t";
@@ -102,67 +106,67 @@ for(my $base_index = 0; $base_index < length($reference_sequence); $base_index++
 	{
 		# increments position only if valid base in reference sequence
 		$position++;
+	}
 	
-		# retrieves each lineage's base at this position
-		# verifies that we have unambiguous bases in all lineages
-		my %lineage_name_to_base = (); # key: lineage sequence name -> value: base at lineage
-		my $all_lineages_have_unambiguous_bases = 1;
-		foreach my $lineage_name(keys %lineage_name_to_genome)
+	# retrieves each lineage's base at this position
+	# verifies that we have unambiguous bases in all lineages
+	my %lineage_name_to_base = (); # key: lineage sequence name -> value: base at lineage
+	my $all_lineages_have_unambiguous_bases = 1;
+	foreach my $lineage_name(keys %lineage_name_to_genome)
+	{
+		my $lineage_genome = $lineage_name_to_genome{$lineage_name};
+		if($base_index >= length($lineage_genome)) # no sequence at this index; we've gone out of range
 		{
-			my $lineage_genome = $lineage_name_to_genome{$lineage_name};
-			if($base_index >= length($lineage_genome)) # no sequence at this index; we've gone out of range
+			$all_lineages_have_unambiguous_bases = 0;
+		}
+		else
+		{
+			my $base = substr($lineage_genome, $base_index, 1);
+			if(!is_unambiguous_base($base))
 			{
 				$all_lineages_have_unambiguous_bases = 0;
 			}
+			$lineage_name_to_base{$lineage_name} = $base;
+		}
+	}
+
+	# saves base from each lineage if this is a lineage-defining position
+	if($all_lineages_have_unambiguous_bases or $compare_ambiguous_bases_and_gaps)
+	{
+		# checks if all lineages have the same base at this position
+		my $same_base_in_all_lineages = 1;
+		my $previous_base = "";
+		foreach my $lineage_name(keys %lineage_name_to_base)
+		{
+			my $lineage_base = $lineage_name_to_base{$lineage_name};
+			if($previous_base)
+			{
+				if($lineage_base ne $previous_base)
+				{
+					$same_base_in_all_lineages = 0;
+				}
+			}
 			else
 			{
-				my $base = substr($lineage_genome, $base_index, 1);
-				if(!is_unambiguous_base($base))
-				{
-					$all_lineages_have_unambiguous_bases = 0;
-				}
-				$lineage_name_to_base{$lineage_name} = $base;
+				$previous_base = $lineage_base;
 			}
 		}
 	
-		# saves base from each lineage if this is a lineage-defining position
-		if($all_lineages_have_unambiguous_bases)
+		# saves each lineage's base at this lineage-defining position
+		if(!$same_base_in_all_lineages) # lineage-defining position
 		{
-			# checks if all lineages have the same base at this position
-			my $same_base_in_all_lineages = 1;
-			my $previous_base = "";
-			foreach my $lineage_name(keys %lineage_name_to_base)
+			# records that this is a lineage-defining position
+			$is_lineage_defining_position{$position} = 1;
+		
+			# records lineage(s) matching each base
+			foreach my $lineage_name(sort keys %lineage_name_to_base)
 			{
 				my $lineage_base = $lineage_name_to_base{$lineage_name};
-				if($previous_base)
+				if($position_to_base_to_matching_lineage{$position}{$lineage_base})
 				{
-					if($lineage_base ne $previous_base)
-					{
-						$same_base_in_all_lineages = 0;
-					}
+					$position_to_base_to_matching_lineage{$position}{$lineage_base} .= ", ";
 				}
-				else
-				{
-					$previous_base = $lineage_base;
-				}
-			}
-		
-			# saves each lineage's base at this lineage-defining position
-			if(!$same_base_in_all_lineages) # lineage-defining position
-			{
-				# records that this is a lineage-defining position
-				$is_lineage_defining_position{$position} = 1;
-			
-				# records lineage(s) matching each base
-				foreach my $lineage_name(sort keys %lineage_name_to_base)
-				{
-					my $lineage_base = $lineage_name_to_base{$lineage_name};
-					if($position_to_base_to_matching_lineage{$position}{$lineage_base})
-					{
-						$position_to_base_to_matching_lineage{$position}{$lineage_base} .= ", ";
-					}
-					$position_to_base_to_matching_lineage{$position}{$lineage_base} .= $lineage_name;
-				}
+				$position_to_base_to_matching_lineage{$position}{$lineage_base} .= $lineage_name;
 			}
 		}
 	}
