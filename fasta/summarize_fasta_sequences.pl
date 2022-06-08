@@ -4,7 +4,7 @@
 # C+G, Ns, gaps, As, Ts, Cs, Gs, other bases).
 
 # Usage:
-# perl summarize_fasta_sequences.pl [fasta file path]
+# perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.]
 
 # Output columns:
 # - sequence_name
@@ -21,14 +21,15 @@
 # - additional columns for any other bases appearing in any sequence
 
 # Prints to console. To print to file, use
-# perl summarize_fasta_sequences.pl [fasta file path] > [output file path]
+# perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.]
+# > [output file path]
 
 
 use strict;
 use warnings;
 
 
-my $fasta_file = $ARGV[0]; # sequence names may not appear more than once
+my @fasta_files = @ARGV; # sequence names may not appear more than once across all files
 
 
 # characters whose frequencies we should print first (in order)
@@ -40,20 +41,22 @@ my $DELIMITER = "\t";
 
 
 # verifies that fasta file exists and is non-empty
-if(!$fasta_file)
+if(!scalar @fasta_files)
 {
-	print STDERR "Error: no input fasta file provided. Exiting.\n";
+	print STDERR "Error: no input fasta files provided. Exiting.\n";
 	die;
 }
-if(!-e $fasta_file)
+foreach my $fasta_file(@fasta_files)
 {
-	print STDERR "Error: input fasta file does not exist:\n\t".$fasta_file."\nExiting.\n";
-	die;
-}
-if(-z $fasta_file)
-{
-	print STDERR "Error: input fasta file is empty:\n\t".$fasta_file."\nExiting.\n";
-	die;
+	if(!-e $fasta_file)
+	{
+		print STDERR "Error: input fasta file does not exist:\n\t".$fasta_file."\nExiting.\n";
+		die;
+	}
+	if(-z $fasta_file)
+	{
+		print STDERR "Warning: input fasta file is empty:\n\t".$fasta_file."\n";
+	}
 }
 
 
@@ -74,55 +77,58 @@ my @sequence_names = (); # all sequence names appearing in fasta file, in the or
 my %sequence_name_to_number_appearances = (); # key: sequence name -> value: number of times sequence name has been seen
 
 # reads in fasta file and catalogues characters appearing in each sequence
-open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
-my $sequence = ""; # sequence currently being read in
-my $sequence_name = ""; # name of sequence currently being read in
-while(<FASTA_FILE>) # for each line in the file
+foreach my $fasta_file(@fasta_files)
 {
-	chomp;
-	if($_ =~ /^>(.*)/) # header line
+	open FASTA_FILE, "<$fasta_file" || die "Could not open $fasta_file to read; terminating =(\n";
+	my $sequence = ""; # sequence currently being read in
+	my $sequence_name = ""; # name of sequence currently being read in
+	while(<FASTA_FILE>) # for each line in the file
 	{
-		# process previous sequence
-		catalogue_characters_in_sequence($sequence_name, $sequence);
-
-		# prepare for next sequence
-		$sequence = "";
-		$sequence_name = $1;
-		
-		# records that we have seen this sequence
-		$sequence_name_to_number_appearances{$sequence_name}++;
-		
-		# verifies that we have not seen this new sequence name before
-		if($sequence_name_to_number_appearances{$sequence_name} > 1)
+		chomp;
+		if($_ =~ /^>(.*)/) # header line
 		{
-			print STDERR "Warning: sequence name ".$sequence_name." appears more than once. ";
-			
-			# tries to give sequence a new name
-			$sequence_name .= "__name_dup".($sequence_name_to_number_appearances{$sequence_name}-1);
-			
-			# if new name is also taken, adds to the end of it until it isn't
-			while($sequence_name_to_number_appearances{$sequence_name})
-			{
-				$sequence_name .= "_name_dup";
-			}
-			
-			# records that we have used this name
-			$sequence_name_to_number_appearances{$sequence_name}++;
-			
-			print STDERR "Renaming to ".$sequence_name.".\n";
-		}
+			# process previous sequence
+			catalogue_characters_in_sequence($sequence_name, $sequence);
+
+			# prepare for next sequence
+			$sequence = "";
+			$sequence_name = $1;
 		
-		# saves sequence name in order it should appear in the output table
-		push(@sequence_names, $sequence_name);
+			# records that we have seen this sequence
+			$sequence_name_to_number_appearances{$sequence_name}++;
+		
+			# verifies that we have not seen this new sequence name before
+			if($sequence_name_to_number_appearances{$sequence_name} > 1)
+			{
+				print STDERR "Warning: sequence name ".$sequence_name." appears more than once. ";
+			
+				# tries to give sequence a new name
+				$sequence_name .= "__name_dup".($sequence_name_to_number_appearances{$sequence_name}-1);
+			
+				# if new name is also taken, adds to the end of it until it isn't
+				while($sequence_name_to_number_appearances{$sequence_name})
+				{
+					$sequence_name .= "_name_dup";
+				}
+			
+				# records that we have used this name
+				$sequence_name_to_number_appearances{$sequence_name}++;
+			
+				print STDERR "Renaming to ".$sequence_name.".\n";
+			}
+		
+			# saves sequence name in order it should appear in the output table
+			push(@sequence_names, $sequence_name);
+		}
+		else
+		{
+			$sequence .= $_;
+		}
 	}
-	else
-	{
-		$sequence .= $_;
-	}
+	# process final sequence
+	catalogue_characters_in_sequence($sequence_name, $sequence);
+	close FASTA_FILE;
 }
-# process final sequence
-catalogue_characters_in_sequence($sequence_name, $sequence);
-close FASTA_FILE;
 
 
 # prints header line of output table: most important characters, in order, then all others
