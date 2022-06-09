@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
-# Retrieves query sequences by position from fasta file.
+# Retrieves query sequences by position from fasta file (in other words, retrieves the
+# first fasta sequence in the file, or the second, or the third, and so on).
 
 # Usage:
 # perl retrieve_sequences_by_position_in_fasta_file.pl [fasta file path]
