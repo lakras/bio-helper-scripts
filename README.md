@@ -266,6 +266,10 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl determine_regions_not_covered_by_amplicons.pl [amplicons bed file path] > [output bed file path]`_
 
+- [`calculate_proportions_bed_file_covered_by_other_bed_files.pl`](/bed-files/calculate_proportions_bed_file_covered_by_other_bed_files.pl): Takes in one bed file and at least one other bed file to compare it to. Outputs proportion of the sequence in the regions described in the first bed file that is captured in the regions described in each additional bed file. Outputs each bed file path and the proportion it covers of the first bed file. Assumes all rows come from only one reference sequence.
+
+   _Usage: `perl calculate_proportions_bed_file_covered_by_other_bed_files.pl [bed file path] [other bed file path] [another bed file path] [and another] [etc.] > [output file path]`_
+
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
 
