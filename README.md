@@ -258,6 +258,10 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl retrieve_amplicon_regions_from_primer_regions.pl [primers bed file path] > [amplicons bed file path]`_
 
+- [`remove_bed_file_rows_overlapping_positions.pl`](/bed-files/remove_bed_file_rows_overlapping_positions.pl): Removes rows in bed file that overlap with parameter positions.
+
+   _Usage: `perl remove_bed_file_rows_overlapping_positions.pl [bed file path] [position (0-indexed); any rows overlapping this position will be removed] [another position] [another position] [etc.] > [output bed file path]`_
+
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
 
