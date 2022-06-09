@@ -254,6 +254,10 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
 
+- [`retrieve_amplicon_regions_from_primer_regions.pl`](/bed-files/retrieve_amplicon_regions_from_primer_regions.pl): Reads in positions of primers and outputs positions of amplicons between those primers. Uses primer names to match left and right primers. Primer names must end in the primer number and \_LEFT or \_RIGHT, for example nCoV-2019\_1\_LEFT or nCoV-2019\_26\_RIGHT.
+
+   _Usage: `perl retrieve_amplicon_regions_from_primer_regions.pl [primers bed file path] > [amplicons bed file path]`_
+
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
 
