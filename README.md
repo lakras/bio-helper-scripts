@@ -7,6 +7,7 @@ Helper scripts for processing genomic sequence data.
 - [FASTA alignment file processing](#fasta-alignment-file-processing-aligned-fasta)
 - [BLAST](#blast-blast)
 - [VCF file processing](#vcf-file-processing-vcf-files)
+- [BED file processing](#bed-file-processing-bed-files)
 - [Read depth file processing](#read-depth-file-processing-read-depths)
 - [Tables](#tables-tables)
    - [Table Format](#table-format)
@@ -43,10 +44,6 @@ Includes the following scripts—
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.] > [output table file path]`_
-
-- [`pull_out_sequences_described_in_bed_file.pl`](/fasta/pull_out_sequences_described_in_bed_file.pl): Pulls out subsets of sequences by name and position within that sequence from bed file.
-
-   _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
 
 - [`align_to_reference.pl`](/fasta/align_to_reference.pl): Aligns each input sequence with reference independently, then combines all into one fasta alignment. Bases aligned to a gap in the reference are removed. Sequences in input fastas must have unique names. Paths of fasta sequences to align can be provided directly as arguments or as one file with a list of filepaths, one per line.
 
@@ -139,6 +136,10 @@ Includes the following scripts—
 - [`blast/extract_hits_or_sequences_with_top_hit_in_taxon.pl`](/blast/extract_hits_or_sequences_with_top_hit_in_taxon.pl): Retrieves blast hits or fasta sequences of sequences with top hit or any hit at all in taxon of interest or its children.
 
    _Usage: `perl extract_hits_or_sequences_with_top_hit_in_taxon.pl [blast output table] [fasta file that was input to blast] [nodes.dmp file from NCBI] [taxon id of taxon of interest] [1 to print fasta sequences, 0 to print subset of blast output] > [output file path]`_
+
+- [`bed-files/pull_out_sequences_described_in_bed_file.pl`](/bed-files/pull_out_sequences_described_in_bed_file.pl): Pulls out subsets of sequences by name and position within that sequence from bed file.
+
+   _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
 
 ## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 
@@ -245,6 +246,13 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 - [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
+
+## BED file processing ([`bed-files`](/bed-files))
+Read a description of the BED file format [on Wikipedia](https://en.wikipedia.org/wiki/BED_(file_format)).
+
+- [`pull_out_sequences_described_in_bed_file.pl`](/bed-files/pull_out_sequences_described_in_bed_file.pl): Pulls out subsets of sequences by name and position within that sequence from bed file.
+
+   _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
 
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
