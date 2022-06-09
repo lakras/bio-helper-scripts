@@ -44,6 +44,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.] > [output table file path]`_
 
+- [`pull_out_sequences_described_in_bed_file.pl`](/fasta/pull_out_sequences_described_in_bed_file.pl): Pulls out subsets of sequences by name and position within that sequence from bed file.
+
+   _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
+
 - [`align_to_reference.pl`](/fasta/align_to_reference.pl): Aligns each input sequence with reference independently, then combines all into one fasta alignment. Bases aligned to a gap in the reference are removed. Sequences in input fastas must have unique names. Paths of fasta sequences to align can be provided directly as arguments or as one file with a list of filepaths, one per line.
 
    _Usage: `perl align_to_reference.pl [reference sequence] [file path of MAFFT executable file (mafft.bat)] [filepaths of at least fasta files OR path of file containing file with list of fasta file paths, one per line] > [output fasta file path]`_
