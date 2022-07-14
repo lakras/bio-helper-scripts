@@ -124,7 +124,7 @@ while(<INPUT_TABLE>) # for each row in the file
 		{
 			# removes [" and "] from file path if it is there
 			my $file_to_download = $items_in_line[$column_with_filepaths];
-			if($file_to_download =~ /\["(.*)"\]/)
+			if($file_to_download =~ /^\["(.*)"\]$/)
 			{
 				$file_to_download = $1;
 			}
