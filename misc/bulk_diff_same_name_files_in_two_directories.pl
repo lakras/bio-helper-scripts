@@ -16,6 +16,9 @@ my $directory_1 = $ARGV[0];
 my $directory_2 = $ARGV[1];
 
 
+my $NEWLINE = "\n";
+
+
 # adds final slash to directories if it isn't there
 if($directory_1 !~ /\/$/)
 {
@@ -59,7 +62,15 @@ foreach my $file_name(sort keys %filename_appears_in_directory_1)
 		my $filepath_2 = $directory_2.$file_name;
 		
 		# compares the two files
-		`diff $filepath_1 $filepath_2`;
+		my $differences = `diff $filepath_1 $filepath_2`;
+		
+		# prints differences if there are any
+		if($differences)
+		{
+			print $filepath_1.$NEWLINE;
+			print $filepath_2.$NEWLINE;
+			print $differences.$NEWLINE;
+		}
 	}
 }
 
