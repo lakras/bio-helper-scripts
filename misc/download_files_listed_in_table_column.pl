@@ -69,7 +69,7 @@ else
 
 
 # reads in and processes input table; generates script to download files
-my $output_script = $table_with_files_to_download."__".$column_title_for_filepath."__download.pl";
+my $output_script = $table_with_files_to_download."_".$column_title_for_filepath."_download.pl";
 if(-e $output_script)
 {
 	print STDERR "Warning: output script already exists. Overwriting:\n\t"
