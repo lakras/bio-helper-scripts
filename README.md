@@ -550,6 +550,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl download_files_listed_in_table_column.pl [table with list of files to download in one of the columns] [title of column containing filepaths to download] [optional output directory]`_
 
+- [`retrieve_all_filepaths_in_directories.pl`](/misc/retrieve_all_filepaths_in_directories.pl): Retrieves filepaths of all files in provided directories.
+
+   _Usage: `perl retrieve_all_filepaths_in_directories.pl [directory path] [another directory path] [another directory path] [etc.] > [output file path]`_
+
 - [`combine_files_and_delete_duplicate_lines.pl`](/misc/combine_files_and_delete_duplicate_lines.pl): Combines input files. Prints each line only once (no duplicate lines). Prints lines in order in which they first appear in all the input files.
 
    _Usage: `perl combine_files_and_delete_duplicate_lines.pl [input file] [another input file] [another input file] [etc.] > [output table path]`_
