@@ -11,6 +11,10 @@
 # perl download_files.pl [file with list of files to download] [optional output directory]
 
 
+use strict;
+use warnings;
+
+
 my $files_to_download = $ARGV[0]; # file containing list of files to download, one per line
 my $output_directory = $ARGV[1]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
 
@@ -99,7 +103,7 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 		else
 		{
 			# determines if file is on GCP or elsewhere
-			$gcp = 0;
+			my $gcp = 0;
 			if($file_to_download =~ /^gs:\/\//) # if file path starts with gs://, it is a GCP file
 			{
 				$gcp = 1;
