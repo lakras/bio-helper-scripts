@@ -554,6 +554,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl retrieve_all_filepaths_in_directories.pl [directory path] [another directory path] [another directory path] [etc.] > [output file path]`_
 
+- [`bulk_diff_same_name_files_in_two_directories.pl`](/misc/bulk_diff_same_name_files_in_two_directories.pl): Compares all files with the same name in the two input directories. Prints any differences between same-name files. The two directories must contain files with the same names.
+
+   _Usage: `perl bulk_diff_same_name_files_in_two_directories.pl [first directory] [second directory]`_
+
 - [`combine_files_and_delete_duplicate_lines.pl`](/misc/combine_files_and_delete_duplicate_lines.pl): Combines input files. Prints each line only once (no duplicate lines). Prints lines in order in which they first appear in all the input files.
 
    _Usage: `perl combine_files_and_delete_duplicate_lines.pl [input file] [another input file] [another input file] [etc.] > [output table path]`_
