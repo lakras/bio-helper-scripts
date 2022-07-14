@@ -15,7 +15,7 @@ my $files_to_download = $ARGV[0]; # file containing list of files to download, o
 my $output_directory = $ARGV[1]; # optional directory to download to--if not provided, output directory identical to input file path sans file extension
 
 
-my $OVERWRITE = 1; # set to 0 to prevent overwriting (stop script rather than overwrite)
+my $OVERWRITE = 0; # set to 0 to prevent overwriting (stop script rather than overwrite)
 
 
 # generates directory to contain downloaded files
@@ -59,7 +59,7 @@ if(-e $output_script)
 {
 	print STDERR "Warning: output script already exists. Overwriting:\n\t"
 		.$output_script."\n";
-	die_if_overwrite_not_allowed();
+# 	die_if_overwrite_not_allowed();
 }
 my %used_output_file_paths = (); # key: output file path -> 1 if it's already been claimed
 open OUT_SCRIPT, ">$output_script" || die "Could not open $output_script to write; terminating =(\n";
@@ -94,26 +94,28 @@ while(<FILES_TO_DOWNLOAD>) # for each line in the file
 		{
 			print STDERR "Warning: output file path already exists. Overwriting:\n\t"
 				.$output_file_path."\n";
-			die_if_overwrite_not_allowed();
-		}
-		
-		# determines if file is on GCP or elsewhere
-		$gcp = 0;
-		if($file_to_download =~ /^gs:\/\//) # if file path starts with gs://, it is a GCP file
-		{
-			$gcp = 1;
-		}
-		
-		# adds line to download script
-		if($gcp)
-		{
-			print OUT_SCRIPT "`gsutil -m cp ".$file_to_download." ".$output_file_path."`;\n";
+# 			die_if_overwrite_not_allowed();
 		}
 		else
 		{
-			print OUT_SCRIPT "`curl ".$file_to_download." > ".$output_file_path."`;\n";
+			# determines if file is on GCP or elsewhere
+			$gcp = 0;
+			if($file_to_download =~ /^gs:\/\//) # if file path starts with gs://, it is a GCP file
+			{
+				$gcp = 1;
+			}
+		
+			# adds line to download script
+			if($gcp)
+			{
+				print OUT_SCRIPT "`gsutil -m cp ".$file_to_download." ".$output_file_path."`;\n";
+			}
+			else
+			{
+				print OUT_SCRIPT "`curl ".$file_to_download." > ".$output_file_path."`;\n";
+			}
+			$used_output_file_paths{$output_file_path} = 1;
 		}
-		$used_output_file_paths{$output_file_path} = 1;
 	}
 }
 close FILES_TO_DOWNLOAD;
