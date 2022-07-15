@@ -36,7 +36,10 @@ opendir DIRECTORY_1, $directory_1;
 while(my $file = readdir(DIRECTORY_1))
 {
 	# saves filename
-	$filename_appears_in_directory_1{$file} = 1;
+	if($file !~ /^[.]+$/)
+	{
+		$filename_appears_in_directory_1{$file} = 1;
+	}
 }
 close DIRECTORY_1;
 
@@ -47,7 +50,10 @@ opendir DIRECTORY_2, $directory_2;
 while(my $file = readdir(DIRECTORY_2))
 {
 	# saves filename
-	$filename_appears_in_directory_2{$file} = 1;
+	if($file !~ /^[.]+$/)
+	{
+		$filename_appears_in_directory_2{$file} = 1;
+	}
 }
 close DIRECTORY_2;
 
@@ -57,6 +63,7 @@ foreach my $file_name(sort keys %filename_appears_in_directory_1)
 {
 	if($filename_appears_in_directory_2{$file_name}) # file name appears in both directories
 	{
+# 		print "comparing ".$file_name."\n";
 		# generates file paths for each directory
 		my $filepath_1 = $directory_1.$file_name;
 		my $filepath_2 = $directory_2.$file_name;
