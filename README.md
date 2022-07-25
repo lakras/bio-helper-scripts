@@ -534,6 +534,14 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
    _Usage: `perl calculate_date_range_in_column.pl [column number of column with dates (0-indexed)] [table] [another table] [another table] [etc.]`_
 
 ## Miscellaneous ([`misc`](/misc))
+- [`add_commas_to_all_numbers_in_file.pl`](/misc/add_commas_to_all_numbers_in_file.pl): Detects all numbers in contents of file and adds thousands-separator commas where needed.
+
+   _Usage: `perl add_commas_to_all_numbers_in_file.pl [input file to add commas to] > [output file path]`_
+
+- [`add_commas_to_all_numbers.pl`](/misc/add_commas_to_all_numbers.pl): Detects all numbers in input text and adds thousands-separator commas where needed.
+
+   _Usage: `perl add_commas_to_all_numbers.pl "[text to add commas to]" > [output file path]`_
+
 - [`run_script_on_multiple_files.pl`](/misc/run_script_on_multiple_files.pl): Runs script individually on multiple input files, otherwise using the same input parameters. Script must accept input file as first parameter.
 
    _Usage: `perl run_script_on_multiple_files.pl [file path of script to run] [file with list of input files to run script on] [optional extension to add to input file path to create output file path] [optional second parameter to provide script] [optional third parameter to provide script] [etc.]`_
