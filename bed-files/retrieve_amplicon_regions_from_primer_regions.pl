@@ -40,6 +40,7 @@ use warnings;
 
 my $primers_bed_file = $ARGV[0]; # tab-separated table with columns: sequence name, first position (0-indexed), non-inclusive end position (0-indexed), primer name--primer names must end in the primer number and _LEFT or _RIGHT
 
+
 # in input bed file:
 my $SEQUENCE_NAME_COLUMN = 0;
 my $START_POSITION_COLUMN = 1;
