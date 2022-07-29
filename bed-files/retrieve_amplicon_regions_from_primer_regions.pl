@@ -1,8 +1,15 @@
 #!/usr/bin/env perl
 
 # Reads in positions of primers and outputs positions of amplicons between those primers.
-# Uses primer names to match left and right primers. Primer names must end in the primer
+# Uses primer names to match left and right primers. Primer names must include the primer
 # number and _LEFT or _RIGHT, for example nCoV-2019_1_LEFT or nCoV-2019_26_RIGHT.
+
+# If more multiple start primers or multiple end primers are provided for an amplicon,
+# the amplicon is set to encompass all its provided primers.
+
+# Input primer positions are assumed to be indicated by first position (0-indexed) and
+# non-inclusive end position (0-indexed). Output amplicon positions are also indicated by
+# first position (0-indexed) and non-inclusive end position (0-indexed).
 
 # Example rows of an input bed file, from the ARTICv3 primer set:
 
@@ -33,8 +40,7 @@ use warnings;
 
 my $primers_bed_file = $ARGV[0]; # tab-separated table with columns: sequence name, first position (0-indexed), non-inclusive end position (0-indexed), primer name--primer names must end in the primer number and _LEFT or _RIGHT
 
-
-# in bed file:
+# in input bed file:
 my $SEQUENCE_NAME_COLUMN = 0;
 my $START_POSITION_COLUMN = 1;
 my $END_POSITION_COLUMN = 2;
@@ -85,28 +91,33 @@ while(<BED_FILE>) # for each line in the file
 		my $primer_end = $values[$END_POSITION_COLUMN]; # non-inclusive end position (0-indexed)
 		
 		# determines whether this is a left primer or a right primer, and the primer number
-		if($primer_name =~ /(.*_)(\d+)_($LEFT_PRIMER|$RIGHT_PRIMER)$/)
-# 		if($primer_name =~ /(.*_)(\d+)_($LEFT_PRIMER|$RIGHT_PRIMER)(.*)/)
+		if($primer_name =~ /(.*_)(\d+)_($LEFT_PRIMER|$RIGHT_PRIMER)/)
 		{
 			# retrieves primer number and left or right from name
 			my $start_of_primer_name = $1;
 			my $primer_number = $2;
 			my $primer_type = $3;
-# 			my $end_of_primer_name = $4;
 			
 			# determines amplicon name
 			my $amplicon_name = $start_of_primer_name.$primer_number;
-# 			my $amplicon_name = $start_of_primer_name.$primer_number.$end_of_primer_name;
 			$amplicon_name_to_amplicon_number{$amplicon_name} = $primer_number;
 			
 			# determines and saves start or end of amplicon
 			if($primer_type eq $LEFT_PRIMER)
 			{
-				$amplicon_name_to_start{$amplicon_name} = $primer_end;
+				if(!$amplicon_name_to_start{$amplicon_name}
+					or $primer_end < $amplicon_name_to_start{$amplicon_name})
+				{
+					$amplicon_name_to_start{$amplicon_name} = $primer_end;
+				}
 			}
 			elsif($primer_type eq $RIGHT_PRIMER)
 			{
-				$amplicon_name_to_end{$amplicon_name} = $primer_start;
+				if(!$amplicon_name_to_end{$amplicon_name}
+					or $primer_start > $amplicon_name_to_end{$amplicon_name})
+				{
+					$amplicon_name_to_end{$amplicon_name} = $primer_start;
+				}
 			}
 			else
 			{
@@ -120,8 +131,6 @@ while(<BED_FILE>) # for each line in the file
 		{
 			print STDERR "Error: could not parse primer name ".$primer_name."\n";
 		}
-		
-		
 	}
 }
 close BED_FILE;
@@ -132,14 +141,6 @@ foreach my $amplicon_name(
 	sort {$amplicon_name_to_amplicon_number{$a} <=> $amplicon_name_to_amplicon_number{$b}}
 	keys %amplicon_name_to_sequence_name)
 {
-	# if amplicon name ends in _alt0, _alt2, or _alt followed by any other number,
-	# retrieves back-up amplicon name for looking up start and end positions
-# 	my $nonalt_amplicon_name = $amplicon_name;
-# 	if($nonalt_amplicon_name =~ /(.*)_alt\d+/)
-# 	{
-# 		$nonalt_amplicon_name = $1;
-# 	}
-
 	# retrieves values
 	my $sequence_name = "";
 	if($amplicon_name_to_sequence_name{$amplicon_name})
@@ -152,20 +153,12 @@ foreach my $amplicon_name(
 	{
 		$amplicon_start = $amplicon_name_to_start{$amplicon_name};
 	}
-# 	elsif($amplicon_name_to_start{$nonalt_amplicon_name})
-# 	{
-# 		$amplicon_start = $amplicon_name_to_start{$nonalt_amplicon_name};
-# 	}
 	
 	my $amplicon_end = "";
 	if($amplicon_name_to_end{$amplicon_name})
 	{
 		$amplicon_end = $amplicon_name_to_end{$amplicon_name};
 	}
-# 	elsif($amplicon_name_to_end{$nonalt_amplicon_name})
-# 	{
-# 		$amplicon_end = $amplicon_name_to_end{$nonalt_amplicon_name};
-# 	}
 	
 	# prints values
 	print $sequence_name.$DELIMITER;

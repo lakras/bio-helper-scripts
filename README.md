@@ -254,7 +254,7 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
 
-- [`retrieve_amplicon_regions_from_primer_regions.pl`](/bed-files/retrieve_amplicon_regions_from_primer_regions.pl): Reads in positions of primers and outputs positions of amplicons between those primers. Uses primer names to match left and right primers. Primer names must end in the primer number and \_LEFT or \_RIGHT, for example nCoV-2019\_1\_LEFT or nCoV-2019\_26\_RIGHT.
+- [`retrieve_amplicon_regions_from_primer_regions.pl`](/bed-files/retrieve_amplicon_regions_from_primer_regions.pl): # Reads in positions of primers and outputs positions of amplicons between those primers. Uses primer names to match left and right primers. Primer names must include the primer number and _LEFT or _RIGHT, for example nCoV-2019_1_LEFT or nCoV-2019_26_RIGHT. If more multiple start primers or multiple end primers are provided for an amplicon, the amplicon is set to encompass all its provided primers.
 
    _Usage: `perl retrieve_amplicon_regions_from_primer_regions.pl [primers bed file path] > [amplicons bed file path]`_
 
