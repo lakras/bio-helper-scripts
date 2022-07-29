@@ -5,7 +5,7 @@
 # number and _LEFT or _RIGHT, for example nCoV-2019_1_LEFT or nCoV-2019_26_RIGHT.
 
 # If more multiple start primers or multiple end primers are provided for an amplicon,
-# the amplicon is set to encompass all its provided primers.
+# the amplicon is set to be the largest possible with all its provided primers.
 
 # Input primer positions are assumed to be indicated by first position (0-indexed) and
 # non-inclusive end position (0-indexed). Output amplicon positions are also indicated by
