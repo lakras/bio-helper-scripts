@@ -104,10 +104,10 @@ while(<BED_FILE>) # for each line in the file
 		}
 		
 		# prints line
-		print STDERR $sequence_name.$DELIMITER;
-		print STDERR $start.$DELIMITER;
-		print STDERR $end.$DELIMITER;
-		print STDERR $rest_of_line.$NEWLINE;
+		print $sequence_name.$DELIMITER;
+		print $start.$DELIMITER;
+		print $end.$DELIMITER;
+		print $rest_of_line.$NEWLINE;
 	}
 }
 close BED_FILE;
