@@ -262,7 +262,6 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl modify_start_end_position_indexing_and_inclusivity.pl [bed file path] [1 if input is 1-indexed, 0 if input is 0-indexed] [1 if input has inclusive end, 0 if input has non-inclusive end] [1 if output should be 1-indexed, 0 if output should be 0-indexed] [1 if output should have inclusive end, 0 if output should have non-inclusive end] > [output bed file path]`_
 
-
 - [`remove_bed_file_rows_overlapping_positions.pl`](/bed-files/remove_bed_file_rows_overlapping_positions.pl): Removes rows in bed file that overlap with parameter positions.
 
    _Usage: `perl remove_bed_file_rows_overlapping_positions.pl [bed file path] [position (0-indexed); any rows overlapping this position will be removed] [another position] [another position] [etc.] > [output bed file path]`_
