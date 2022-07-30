@@ -46,7 +46,7 @@ while(<TABLE>) # for each row in the file
 		my @items_in_line = split($DELIMITER, $line, -1);
 		if($first_line) # column titles
 		{
-			# identifies column to delete
+			# identifies column to fill in
 			my $column = 0;
 			foreach my $column_title(@items_in_line)
 			{
