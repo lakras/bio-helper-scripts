@@ -254,9 +254,14 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
 
-- [`retrieve_amplicon_regions_from_primer_regions.pl`](/bed-files/retrieve_amplicon_regions_from_primer_regions.pl): # Reads in positions of primers and outputs positions of amplicons between those primers. Uses primer names to match left and right primers. Primer names must include the primer number and \_LEFT or \_RIGHT, for example nCoV-2019\_1\_LEFT or nCoV-2019\_26_RIGHT. If more multiple start primers or multiple end primers are provided for an amplicon, the amplicon is set to be the largest possible with all its provided primers.
+- [`retrieve_amplicon_regions_from_primer_regions.pl`](/bed-files/retrieve_amplicon_regions_from_primer_regions.pl): Reads in positions of primers and outputs positions of amplicons between those primers. Uses primer names to match left and right primers. Primer names must include the primer number and \_LEFT or \_RIGHT, for example nCoV-2019\_1\_LEFT or nCoV-2019\_26_RIGHT. If more multiple start primers or multiple end primers are provided for an amplicon, the amplicon is set to be the largest possible with all its provided primers.
 
    _Usage: `perl retrieve_amplicon_regions_from_primer_regions.pl [primers bed file path] > [amplicons bed file path]`_
+
+- [`modify_start_end_position_indexing_and_inclusivity.pl`](/bed-files/modify_start_end_position_indexing_and_inclusivity.pl): Modifies start and end positions in bed file from 0-indexed or 1-indexed to 0-indexed or 1-indexed and from inclusive end or non-iclusive end to inclusive end or non-iclusive end.
+
+   _Usage: `perl modify_start_end_position_indexing_and_inclusivity.pl [bed file path] [1 if input is 1-indexed, 0 if input is 0-indexed] [1 if input has inclusive end, 0 if input has non-inclusive end] [1 if output should be 1-indexed, 0 if output should be 0-indexed] [1 if output should have inclusive end, 0 if output should have non-inclusive end] > [output bed file path]`_
+
 
 - [`remove_bed_file_rows_overlapping_positions.pl`](/bed-files/remove_bed_file_rows_overlapping_positions.pl): Removes rows in bed file that overlap with parameter positions.
 
