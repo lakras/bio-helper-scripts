@@ -11,7 +11,7 @@
 # Usage:
 # perl download_files_listed_in_table_column.pl
 # [table with list of files to download in one of the columns]
-# [title of column containing filepaths to download] [optional output directory]
+# "[title of column containing filepaths to download]" [optional output directory]
 
 
 use strict;

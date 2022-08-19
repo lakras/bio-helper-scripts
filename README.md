@@ -564,7 +564,7 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
 - [`download_files_listed_in_table_column.pl`](/misc/download_files_listed_in_table_column.pl): Downloads files from addresses listed in specified table column in input table. Downloads files from online or from google storage bucket to new directory. If no output directory provided, output directory set to input file path sans extension followed by column name.
 
-   _Usage: `perl download_files_listed_in_table_column.pl [table with list of files to download in one of the columns] [title of column containing filepaths to download] [optional output directory]`_
+   _Usage: `perl download_files_listed_in_table_column.pl [table with list of files to download in one of the columns] "[title of column containing filepaths to download]" [optional output directory]`_
 
 - [`retrieve_all_filepaths_in_directories.pl`](/misc/retrieve_all_filepaths_in_directories.pl): Retrieves filepaths of all files in provided directories.
 
