@@ -371,6 +371,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl merge_columns_with_conflict_detail_column.pl [table to merge] "[title of column to print in merge conflict message]" "[title of column to merge]" "[title of another column to merge]" "[title of another column to merge]" [etc.] > [output table path]`_
 
+- [`add_column_with_number_occurrences_of_column_values.pl`](/tables/add_column_with_number_occurrences_of_column_values.pl): Adds column indicating number occurrences of that row's value(s) in the entirety of the parameter column(s).
+
+   _Usage: `perl add_column_with_number_occurrences_of_column_values.pl [tab-separated table] "[column title]" "[optional additional column title]" "[optional additional column title]" [etc.] > [output table path]`_
+
 - [`replace_values_in_columns.pl`](/tables/replace_values_in_columns.pl): Replaces query with replacement text in specified columns.
 
    _Usage: `perl replace_values_in_columns.pl [table] "[query text to replace]" "[replacement text]" [1 to exactly match full column value only, 0 to allow search and replace within text of column value] "[title of column to search]" "[title of another column to search]" "[title of another column to search]" [etc.] > [output table path]`_
@@ -520,6 +524,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`summarize_table_columns.pl`](/tables/summarize_table_columns.pl): Summarizes values in table columns. Similar to str in R.
 
    _Usage: `perl summarize_table_columns.pl [tab-separated table] > [output table path]`_
+
+- [`summarize_column_value_combination_frequencies.pl`](/tables/summarize_column_value_combination_frequencies.pl): Summarizes frequency of all column values and combinations of column values in columns of interest in table.
+
+   _Usage: `perl summarize_column_value_combination_frequencies.pl [table to summarize] "[title of column of interest]" "[optional title of another column of interest]" "[optional title of another column of interest]" [etc.] > [output table path]`_
 
 - [`add_column_indicating_presence_of_query.pl`](/tables/add_column_indicating_presence_of_query.pl): Adds column with values indicating presence of query in row.
 
