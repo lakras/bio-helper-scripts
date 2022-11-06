@@ -278,6 +278,10 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl annotate_positions_with_regions_they_overlap.pl [table containing positions to annotate] "[title of column containing positions to annotate]" [table containing start and end positions and names of regions] [optional output column title (overlapping_regions by default)] > [output table path]`_
 
+- [`retrieve_amplicon_regions_from_primer_regions_and_count_number_amplicons_overlapping_each_position.pl`](/bed-files/retrieve_amplicon_regions_from_primer_regions_and_count_number_amplicons_overlapping_each_position.pl): Reads in positions of primers and determines positions of amplicons between those primers. Outputs total number amplicons overlapping each position.
+
+   _Usage: `perl retrieve_amplicon_regions_from_primer_regions_and_count_number_amplicons_overlapping_each_position.pl [primers bed file path] > [amplicons bed file path]`_
+
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
 
