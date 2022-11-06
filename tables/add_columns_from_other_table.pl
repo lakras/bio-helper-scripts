@@ -223,16 +223,25 @@ while(<TABLE_1>) # for each row in the file
 			# prints line as is
 			print $line;
 			
-			# prints new column values
-			if(defined $value_to_merge_by_to_new_column_values{$value_to_merge_by})
+			if(defined $value_to_merge_by)
 			{
-				print $DELIMITER;
-				print $value_to_merge_by_to_new_column_values{$value_to_merge_by};
+				# prints new column values
+				if(defined $value_to_merge_by_to_new_column_values{$value_to_merge_by})
+				{
+					print $DELIMITER;
+					print $value_to_merge_by_to_new_column_values{$value_to_merge_by};
+				}
+				else
+				{
+	# 				print STDERR "Warning: value to merge by ".$value_to_merge_by." not found "
+	# 					."in table with columns to add:\n\t".$table_2."\n";
+					print $DELIMITER;
+					print $no_columns_added_string;
+				}
 			}
 			else
 			{
-# 				print STDERR "Warning: value to merge by ".$value_to_merge_by." not found "
-# 					."in table with columns to add:\n\t".$table_2."\n";
+				print STDERR "Error: value to merge by not defined in line:\n$line\n";
 				print $DELIMITER;
 				print $no_columns_added_string;
 			}

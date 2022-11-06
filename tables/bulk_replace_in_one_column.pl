@@ -93,7 +93,7 @@ while(<TABLE>) # for each row in the file
 		my @items_in_line = split($DELIMITER, $line, -1);
 		if($first_line) # column titles
 		{
-			# identifies columns to include
+			# identifies column to search
 			my $column = 0;
 			foreach my $column_title(@items_in_line)
 			{
@@ -110,7 +110,7 @@ while(<TABLE>) # for each row in the file
 				$column++;
 			}
 			
-			# verifies that we have found all column
+			# verifies that we have found column
 			if($column_to_search == -1)
 			{
 				print STDERR "Error: expected column title ".$title_of_column_to_search
@@ -125,7 +125,7 @@ while(<TABLE>) # for each row in the file
 		}
 		else # column values (not column titles)
 		{
-			# prints all values, replacing values in columns to search
+			# prints all values, replacing values in column to search
 			my $column = 0;
 			foreach my $value(@items_in_line)
 			{
