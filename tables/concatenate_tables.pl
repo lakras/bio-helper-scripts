@@ -22,6 +22,7 @@ my $DELIMITER = "\t";
 my $NO_DATA = "";
 
 
+my $READ_FILEPATHS_FROM_INPUT_FILE = 1; # if 1, the input files are actually lists of input files, one per line
 my $ADD_SOURCE_FILE_AS_FIRST_COLUMN = 1; # if 1, prints name of source file as first column; if 0, does not
 
 
@@ -31,7 +32,7 @@ if(!scalar @input_tables)
 	print STDERR "Error: no input tables provided. Exiting.\n";
 	die;
 }
-if(scalar @input_tables == 1)
+if(scalar @input_tables == 1 and !$READ_FILEPATHS_FROM_INPUT_FILE)
 {
 	print STDERR "Error: only one input table provided. Nothing for me to do. Exiting.\n";
 	die;
@@ -53,6 +54,27 @@ foreach my $input_table(@input_tables)
 		print STDERR "Error: input table is empty:\n\t".$input_table."\nExiting.\n";
 		die;
 	}
+}
+
+
+# reads in list(s) of input files if needed
+if($READ_FILEPATHS_FROM_INPUT_FILE)
+{
+	my @input_tables_listed_in_files = ();
+	foreach my $input_table(@input_tables)
+	{
+		my $first_line = 1;
+		open INPUT_FILE, "<$input_table" || die "Could not open $input_table to read; terminating =(\n";
+		while(<INPUT_FILE>) # for each row in the file
+		{
+			chomp;
+			if($_ =~ /\S/) # if row not empty
+			{
+				push(@input_tables_listed_in_files, $_);
+			}
+		}
+	}
+	@input_tables = @input_tables_listed_in_files;
 }
 
 
