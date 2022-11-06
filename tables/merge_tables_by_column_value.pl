@@ -4,9 +4,9 @@
 
 # Input table has one row per table with tab-separated columns:
 # - input table path
-# - title column to merge by in 
-# - optional: Remaining tab-separated columns list titles of columns to include in output.
-#   If no column titles are provided, all columns are printed in the output.
+# - title of column to merge by in 
+# - optional: Remaining tab-separated list of titles of columns to include in output.
+#   (If no column titles are provided, all columns are printed in the output.)
 
 # Lines starting with # in input table are treated as comments and ignored.
 
