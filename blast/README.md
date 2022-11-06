@@ -213,7 +213,7 @@ docker run \
   -v $HOME/queries:/blast/queries:ro \
   -v $HOME/results:/blast/results:rw \
   ncbi/blast \
-  blastx -task blastx-fast -query /blast/queries/[my_query_file].fa -db "nr [my-protein-database]" -num_threads 32 \
+  blastx -task blastx-fast -query /blast/queries/[my_query_file].fa -db "nr [my-protein-database]" -num_threads 16 \
   -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
   -out /blast/results/blastx-fast.[my_file_name].out
 ```
