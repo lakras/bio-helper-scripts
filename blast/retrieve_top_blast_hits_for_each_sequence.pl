@@ -58,6 +58,7 @@ while(<BLAST_OUTPUT>)
 # 		my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
 		my $evalue = $items[$EVALUE_COLUMN];
 		
+		# new sequence, so at least the first match has lowest e-value
 		if($sequence_name ne $previous_sequence_name)
 		{
 			print $_;
@@ -65,16 +66,22 @@ while(<BLAST_OUTPUT>)
 			
 			$is_top_evalue = 1;
 		}
+		
+		# not first match for this sequence, but the e-value is the same as the e-value
+		# of the first match for this sequence
 		elsif($is_top_evalue and $evalue == $previous_evalue)
 		{
 			print $_;
 			print $NEWLINE;
 		}
+		
+		# not same e-value as first match for this sequence
 		else
 		{
 			$is_top_evalue = 0;
 		}
 		
+		# prepares for next sequence
 		$previous_sequence_name = $sequence_name;
 		$previous_evalue = $evalue;
 	}
