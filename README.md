@@ -451,6 +451,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl add_column_comparing_two_columns.pl [tab-separated table] "[title of first column to compare]" "[title of second column to compare]" [1 to print the actual values when different] "[optional new column title]" "[optional new column value if values are identical]" "[optional new column value if values are different]" "[optional new column value if one value missing]" "[optional new column value if both values missing]" > [output table path]`_
 
+- [`replace_column_values_with_other_column_where_yet_another_column_has_query_value.pl`](/tables/replace_column_values_with_other_column_where_yet_another_column_has_query_value.pl): Fills in values in column of interest with values from other column when they are present.
+
+   _Usage: `perl replace_column_values_with_other_column_where_yet_another_column_has_query_value.pl [table] "[title of column to replace values in]" "[title of column with potential replacement values]" "[title of column to search]" "[query value]" > [output table path]`_
+
 ### Column manipulation with dates
 
 - [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
