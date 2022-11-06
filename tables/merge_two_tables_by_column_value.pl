@@ -61,6 +61,11 @@ if($table_1_column_to_merge_by < 0 or $table_2_column_to_merge_by < 0)
 	die;
 }
 
+# verifies that column numbers are not strings
+# (needs to be redone)
+$table_1_column_to_merge_by/5;
+$table_2_column_to_merge_by/5;
+
 
 # reads in table 1
 my $table_1_column_to_merge_by_title = "";
@@ -105,6 +110,10 @@ while(<TABLE_1>) # for each row in the file
 				{
 					print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
 						."once in table 1. Merging rows.\n";
+					if($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value} ne $line)
+					{
+						print STDERR "(Corresponding rows are NOT identical.)\n";
+					}
 				}
 				$column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}
 					= merge_values_to_print($column_to_merge_by_value_to_table_1_line{$column_to_merge_by_value}, $line);
@@ -156,6 +165,10 @@ while(<TABLE_2>) # for each row in the file
 			{
 				print STDERR "Warning: value ".$column_to_merge_by_value." appears more than "
 					."once in table 2. Merging rows.\n";
+				if($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value} ne $line)
+					{
+						print STDERR "(Corresponding rows are NOT identical.)\n";
+					}
 			}
 			$column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value}
 				= merge_values_to_print($column_to_merge_by_value_to_table_2_line{$column_to_merge_by_value}, $line);
