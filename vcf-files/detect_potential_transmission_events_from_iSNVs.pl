@@ -47,7 +47,7 @@ my $heterozygosity_tables = $ARGV[1]; # file containing a list of heterozygosity
 my $read_depth_files = $ARGV[2]; # optional file containing a list of read depth files, one for each sample; positions must be relative to same reference used in both fasta alignment files; filenames must contain sample names used in consensus genome alignment
 my $collection_date_table = $ARGV[3]; # optional table with two columns: sample names (must match names of consensus sequences) and collection dates, tab-separated
 my $print_one_line_per_iSNV = $ARGV[4]; # if 0, prints one line per sample pair; if 1, prints line for each iSNV matched in each sample pair
-
+my $file_with_samples_already_considered_as_index = $ARGV[5]; # optional, to restart where we left off, if we are restarting
 
 # thresholds for comparing two samples
 my $MAXIMUM_COLLECTION_DATE_DISTANCE = 6;
@@ -119,6 +119,25 @@ if(-z $heterozygosity_tables)
 {
 	print STDERR "Error: heterozygosity tables file is empty:\n\t".$heterozygosity_tables."\nExiting.\n";
 	die;
+}
+
+
+# reads in samples not to consider as index this time
+my %dont_consider_sample_as_index = (); # key: sequence name -> value: 1 if sample should not be considered as index
+if($file_with_samples_already_considered_as_index)
+{
+	open SAMPLES_NOT_TO_CONSIDER_AS_INDEX, "<$file_with_samples_already_considered_as_index"
+		|| die "Could not open $file_with_samples_already_considered_as_index to read; terminating =(\n";
+	while(<SAMPLES_NOT_TO_CONSIDER_AS_INDEX>) # for each line in the file
+	{
+		chomp;
+		my $line = $_;
+		if($line =~ /\S/) # non-empty line
+		{
+			$dont_consider_sample_as_index{$line} = 1;
+		}
+	}
+	close SAMPLES_NOT_TO_CONSIDER_AS_INDEX;
 }
 
 
@@ -506,7 +525,8 @@ my $max_position = $position;
 # - sample_2 - sample_1 <= 6
 foreach my $sample_name_1(sort keys %sample_names)
 {
-	if($sample_has_iSNVs{$sample_name_1})
+	print STDERR "\t".$sample_name_1."\n";
+	if($sample_has_iSNVs{$sample_name_1} and !$dont_consider_sample_as_index{$sample_name_1})
 	{
 		my @sample_1_alignment_bases = split(//, $sample_name_to_consensus_sequence{$sample_name_1});
 		
@@ -671,6 +691,7 @@ foreach my $sample_name_1(sort keys %sample_names)
 		}
 	}
 }
+print STDERR "DONE\n";
 
 
 # processes and saves information on consensus sequence read in
