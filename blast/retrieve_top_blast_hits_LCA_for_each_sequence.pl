@@ -3,6 +3,9 @@
 # For each sequence, extracts all top hits with same e-values (assumes they are in order
 # in blast output). Prints lowest common ancestor (LCA) of top hits for each sequence.
 
+# Input nodes.dpm file must be from same date as database used for input blast search
+# results.
+
 # Output table has columns (tab-separated):
 # - sequence name
 # - LCA taxon id
@@ -58,12 +61,13 @@ my $RANK_COLUMN = 2;		# nodes.dmp
 my $NAMES_COLUMN = 1;		# names.dmp
 my $NAME_TYPE_COLUMN = 3;	# names.dmp
 
-my $SPECIES = "S";
-my $GENUS = "G";
-my $FAMILY = "F";
+my $SPECIES = "species";
+my $GENUS = "genus";
+my $FAMILY = "family";
 
 # 1 to print top blast hits to STDERR (for testing)
-my $PRINT_TOP_BLAST_HITS_TO_STDERR = 1;
+my $PRINT_TOP_BLAST_HITS_TO_STDERR = 0;
+my $LOUD = 0;
 
 
 # verifies that all input files exist and are non-empty
@@ -82,6 +86,7 @@ if(!$blast_output or !-e $blast_output or -z $blast_output)
 
 
 # reads in nodes file
+print STDERR "reading in nodes file....\n" if $LOUD;
 my %taxonid_to_parent = (); # key: taxon id -> value: taxon id of parent taxon
 my %taxonid_to_rank = (); # key: taxon id -> value: rank of taxon
 open NODES_FILE, "<$nodes_file" || die "Could not open $nodes_file to read\n";
@@ -103,6 +108,7 @@ close NODES_FILE;
 
 
 # reads in blast output and extracts top blast hits for each sequence
+print STDERR "processing blast output....\n" if $LOUD;
 open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
 
 my $previous_sequence_name = "";
@@ -124,6 +130,8 @@ while(<BLAST_OUTPUT>)
 	chomp;
 	if($_ =~ /\S/)
 	{
+# 		print STDERR $_."\n";
+		
 		my @items = split($DELIMITER, $_);
 		my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
 		my $matched_taxon_id = $items[$MATCHED_TAXONID_COLUMN];
@@ -216,7 +224,24 @@ while(<BLAST_OUTPUT>)
 							$taxon_id_updated = 1;
 						}
 					}
-					my $matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
+					if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
+					{
+						$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
+						if($matched_taxon_id_ancestor == $taxonid_to_parent{$matched_taxon_id_ancestor})
+						{
+							$LCA_found = 1;
+							$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
+						}
+						else
+						{
+							$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
+						}
+					}
+					else
+					{
+						$LCA_found = 1;
+						$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
+					}
 				}
 			}
 			
@@ -226,7 +251,8 @@ while(<BLAST_OUTPUT>)
 				%taxon_id_is_in_current_LCA_taxon_path = ();
 				my $taxon_id = $sequence_name_to_top_hits_LCA_taxon_id{$sequence_name};
 				$taxon_id_is_in_current_LCA_taxon_path{$taxon_id} = 1;
-				while($taxonid_to_parent{$taxon_id} != $taxon_id)
+				while(defined $taxonid_to_parent{$taxon_id}
+					and $taxonid_to_parent{$taxon_id} != $taxon_id)
 				{
 					$taxon_id_is_in_current_LCA_taxon_path{$taxon_id} = 1;
 					$taxon_id = $taxonid_to_parent{$taxon_id};
@@ -269,39 +295,52 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	my $LCA_taxon_family = $NO_DATA;
 	
 	my $matched_taxon_id_ancestor = $LCA_match_taxon_id;
-	while($taxonid_to_parent{$matched_taxon_id_ancestor} != $matched_taxon_id_ancestor)
+	do
 	{
-		if($taxonid_to_rank{$matched_taxon_id_ancestor} eq $SPECIES)
+		if(defined $taxonid_to_rank{$matched_taxon_id_ancestor})
 		{
-			$LCA_taxon_species = $matched_taxon_id_ancestor;
+			if($taxonid_to_rank{$matched_taxon_id_ancestor} eq $SPECIES)
+			{
+				$LCA_taxon_species = $matched_taxon_id_ancestor;
+			}
+			elsif($taxonid_to_rank{$matched_taxon_id_ancestor} eq $GENUS)
+			{
+				$LCA_taxon_genus = $matched_taxon_id_ancestor;
+			}
+			elsif($taxonid_to_rank{$matched_taxon_id_ancestor} eq $FAMILY)
+			{
+				$LCA_taxon_family = $matched_taxon_id_ancestor;
+			}
 		}
-		elsif($taxonid_to_rank{$matched_taxon_id_ancestor} eq $GENUS)
+		if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
 		{
-			$LCA_taxon_genus = $matched_taxon_id_ancestor;
+			$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
 		}
-		elsif($taxonid_to_rank{$matched_taxon_id_ancestor} eq $FAMILY)
-		{
-			$LCA_taxon_family = $matched_taxon_id_ancestor;
-		}
-		$matched_taxon_id_ancestor = $taxonid_to_parent{$taxon_id};
 	}
+	while(defined $taxonid_to_parent{$matched_taxon_id_ancestor}
+		and $taxonid_to_parent{$matched_taxon_id_ancestor} != $matched_taxon_id_ancestor);
 
 	# prints output line for LCA match for this sequence
 	print $sequence_name.$DELIMITER;
 	print $LCA_match_taxon_id.$DELIMITER;
-	print $taxonid_to_rank{$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name}}.$DELIMITER;
+	if($taxonid_to_rank{$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name}})
+	{
+		print $taxonid_to_rank{$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name}};
+	}
+	print $DELIMITER;
 	print $LCA_taxon_species.$DELIMITER;
 	print $LCA_taxon_genus.$DELIMITER;
 	print $LCA_taxon_family.$DELIMITER;
 	print $sequence_name_to_top_hits_evalue{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_min_top_hit_pident{$sequence_name}.$DELIMITER;
-	print ($sequence_name_to_sum_top_hits_pident{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}).$DELIMITER;
+	print $sequence_name_to_sum_top_hits_pident{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_pident{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_min_top_hit_qcovs{$sequence_name}.$DELIMITER;
-	print ($sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}).$DELIMITER;
+	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_number_top_hits{$sequence_name}.$NEWLINE;
 }
 
 
 # November 4, 2022
+
