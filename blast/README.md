@@ -35,7 +35,7 @@ The contents of this file are based on [this excellent tutorial](https://github.
 - https://www.ncbi.nlm.nih.gov/books/NBK279684/table/appendices.T.blastx_application_options/
 
 ## Starting up a VM
-Create a Google Cloud Virtual Machine:
+Create a Google Cloud Virtual Machine (go to [cloud.google.com](https://cloud.google.com/), click Console at top right, click the hamburger menu at top left, and then Compute Engine, VM instances, and CREATE INSTANCE):
 - location closest to you
 - n2-highmem-16
 - change boot disk to a 500GB Ubuntu 20.04 LTS
@@ -172,7 +172,7 @@ docker run --rm \
 ## Running BLAST
 megablast example:
 ```
-docker run --rm \
+docker run \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
   -v $HOME/results:/blast/results:rw \
@@ -184,7 +184,7 @@ docker run --rm \
 
 blastn example:
 ```
-docker run --rm \
+docker run \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
   -v $HOME/results:/blast/results:rw \
@@ -196,7 +196,7 @@ docker run --rm \
 
 blastx example:
 ```
-docker run --rm \
+docker run \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
   -v $HOME/results:/blast/results:rw \
@@ -208,12 +208,12 @@ docker run --rm \
 
 blastx-fast example:
 ```
-docker run --rm \
+docker run \
   -v $HOME/blastdb:/blast/blastdb:ro -v $HOME/blastdb_custom:/blast/blastdb_custom:ro \
   -v $HOME/queries:/blast/queries:ro \
   -v $HOME/results:/blast/results:rw \
   ncbi/blast \
-  blastx -task blastx-fast -query /blast/queries/[my_query_file].fa -db "nr [my-protein-database]" -num_threads 32 \
+  blastx -task blastx-fast -query /blast/queries/[my_query_file].fa -db "nr [my-protein-database]" -num_threads 16 \
   -outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue" \
   -out /blast/results/blastx-fast.[my_file_name].out
 ```
