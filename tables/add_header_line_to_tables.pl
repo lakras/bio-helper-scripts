@@ -34,8 +34,8 @@ if(scalar @tables < 1)
 }
 
 
-# replaces \ts with tabs in the header line
-$header_line =~ s/\G[ ]{2}/\t/g;
+# replaces spaces with tabs in the header line
+$header_line =~ s/    /\t/g;
 
 # reads in and prints each table
 foreach my $table(@tables)
