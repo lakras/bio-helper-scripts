@@ -525,6 +525,11 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl add_newline_between_lines_with_nonconsecutive_values.pl [table] [column with integer values] > [output table path]`_
 
+- [`add_header_line_to_tables.pl`](/tables/add_header_line_to_tables.pl): Adds header line to all input files. Saves output tables in new files at same path with _with_header_line.txt extension. Four spaces in the input header line are replaced with tabs.
+
+   _Usage: `perl add_header_line_to_tables.pl "[header line]" [table] [optional additional table] [etc.]`_
+
+
 ### Replicates
 
 - [`annotate_replicates.pl`](/tables/annotate_replicates.pl): Assigns a source number to all replicates from the same source. Adds source number as a column to table to annotate.
