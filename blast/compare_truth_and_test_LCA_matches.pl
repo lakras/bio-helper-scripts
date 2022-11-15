@@ -55,13 +55,13 @@
 
 
 # Usage:
-# perl compare_two_sequence_LCA_matches
+# perl compare_truth_and_test_LCA_matches.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search, to be treated as ground truth]
 # [output of another retrieve_top_blast_hits_LCA_for_each_sequence.pl for another blast search, to compare to ground truth]
 # [nodes.dmp file from NCBI]
 
 # Prints to console. To print to file, use
-# perl compare_two_sequence_LCA_matches
+# perl compare_truth_and_test_LCA_matches.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search, to be treated as ground truth]
 # [output of another retrieve_top_blast_hits_LCA_for_each_sequence.pl for another blast search, to compare to ground truth]
 # [nodes.dmp file from NCBI] > [output table]
