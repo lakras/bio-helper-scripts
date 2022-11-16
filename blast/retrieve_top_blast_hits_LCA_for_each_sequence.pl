@@ -134,135 +134,142 @@ while(<BLAST_OUTPUT>)
 		
 		my @items = split($DELIMITER, $_);
 		my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
-		my $matched_taxon_id = $items[$MATCHED_TAXONID_COLUMN];
+		my $matched_taxon_id_as_provided = $items[$MATCHED_TAXONID_COLUMN];
 		my $percent_id = $items[$PERCENT_ID_COLUMN];
 		my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
 		my $evalue = $items[$EVALUE_COLUMN];
 		
-		# new sequence, so at least the first match has lowest e-value
-		if($sequence_name ne $previous_sequence_name)
+		# if multiple matched taxon ids listed, handles each taxon id separately
+		my @matched_taxon_ids = split($TAXONID_SEPARATOR, $matched_taxon_id_as_provided);
+		foreach my $matched_taxon_id(@matched_taxon_ids)
 		{
-			if($PRINT_TOP_BLAST_HITS_TO_STDERR)
-			{
-				print STDERR $_;
-				print STDERR $NEWLINE;
-			}
-			$is_top_evalue = 1;
-			%taxon_id_is_in_current_LCA_taxon_path = ();
-		}
 		
-		# not first match for this sequence, but the e-value is the same as the e-value
-		# of the first match for this sequence
-		elsif($is_top_evalue and $evalue == $previous_evalue)
-		{
-			if($PRINT_TOP_BLAST_HITS_TO_STDERR)
-			{
-				print STDERR $_;
-				print STDERR $NEWLINE;
-			}
-		}
-		
-		# not same e-value as first match for this sequence
-		else
-		{
-			$is_top_evalue = 0;
-		}
-		
-		# processes this hit if it is a top hit for this sequence
-		if($is_top_evalue)
-		{
-			# updates percent identity, percent coverage, and e-value stats
-			if($sequence_name ne $previous_sequence_name
-				or $percent_id < $sequence_name_to_min_top_hit_pident{$sequence_name})
-			{
-				$sequence_name_to_min_top_hit_pident{$sequence_name} = $percent_id;
-			}
-			if($sequence_name ne $previous_sequence_name
-				or $percent_id > $sequence_name_to_max_top_hit_pident{$sequence_name})
-			{
-				$sequence_name_to_max_top_hit_pident{$sequence_name} = $percent_id;
-			}
-			if($sequence_name ne $previous_sequence_name
-				or $query_coverage < $sequence_name_to_min_top_hit_qcovs{$sequence_name})
-			{
-				$sequence_name_to_min_top_hit_qcovs{$sequence_name} = $query_coverage;
-			}
-			if($sequence_name ne $previous_sequence_name
-				or $query_coverage > $sequence_name_to_max_top_hit_qcovs{$sequence_name})
-			{
-				$sequence_name_to_max_top_hit_qcovs{$sequence_name} = $query_coverage;
-			}
-			$sequence_name_to_number_top_hits{$sequence_name}++;
-			$sequence_name_to_sum_top_hits_pident{$sequence_name} += $percent_id;
-			$sequence_name_to_sum_top_hits_qcovs{$sequence_name} += $query_coverage;
-			$sequence_name_to_top_hits_evalue{$sequence_name} = $evalue;
-			
-			# updates LCA taxon id
-			my $taxon_id_updated = 0;
+			# new sequence, so at least the first match has lowest e-value
 			if($sequence_name ne $previous_sequence_name)
 			{
-				# if this is the first top hit we've seen for this sequence, this hit's
-				# taxon id is the LCA taxon id so far
-				$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = $matched_taxon_id;
-				$taxon_id_updated = 1;
+				if($PRINT_TOP_BLAST_HITS_TO_STDERR)
+				{
+					print STDERR $_;
+					print STDERR $NEWLINE;
+				}
+				$is_top_evalue = 1;
+				%taxon_id_is_in_current_LCA_taxon_path = ();
 			}
+		
+			# not first match for this sequence, but the e-value is the same as the e-value
+			# of the first match for this sequence
+			elsif($is_top_evalue and $evalue == $previous_evalue)
+			{
+				if($PRINT_TOP_BLAST_HITS_TO_STDERR)
+				{
+					print STDERR $_;
+					print STDERR $NEWLINE;
+				}
+			}
+		
+			# not same e-value as first match for this sequence
 			else
 			{
-				# slowly move up new taxon id's path
-				# at each step, check if ancestor taxon id is in current LCA's path
-				# once the answer is yes, that is our new LCA
-				my $LCA_found = 0;
-				my $matched_taxon_id_ancestor = $matched_taxon_id;
-				while(!$LCA_found)
+				$is_top_evalue = 0;
+			}
+		
+			# processes this hit if it is a top hit for this sequence
+			if($is_top_evalue)
+			{
+				# updates percent identity, percent coverage, and e-value stats
+				if($sequence_name ne $previous_sequence_name
+					or $percent_id < $sequence_name_to_min_top_hit_pident{$sequence_name})
 				{
-					if($taxon_id_is_in_current_LCA_taxon_path{$matched_taxon_id_ancestor})
+					$sequence_name_to_min_top_hit_pident{$sequence_name} = $percent_id;
+				}
+				if($sequence_name ne $previous_sequence_name
+					or $percent_id > $sequence_name_to_max_top_hit_pident{$sequence_name})
+				{
+					$sequence_name_to_max_top_hit_pident{$sequence_name} = $percent_id;
+				}
+				if($sequence_name ne $previous_sequence_name
+					or $query_coverage < $sequence_name_to_min_top_hit_qcovs{$sequence_name})
+				{
+					$sequence_name_to_min_top_hit_qcovs{$sequence_name} = $query_coverage;
+				}
+				if($sequence_name ne $previous_sequence_name
+					or $query_coverage > $sequence_name_to_max_top_hit_qcovs{$sequence_name})
+				{
+					$sequence_name_to_max_top_hit_qcovs{$sequence_name} = $query_coverage;
+				}
+				$sequence_name_to_number_top_hits{$sequence_name}++;
+				$sequence_name_to_sum_top_hits_pident{$sequence_name} += $percent_id;
+				$sequence_name_to_sum_top_hits_qcovs{$sequence_name} += $query_coverage;
+				$sequence_name_to_top_hits_evalue{$sequence_name} = $evalue;
+			
+				# updates LCA taxon id
+				my $taxon_id_updated = 0;
+				if($sequence_name ne $previous_sequence_name)
+				{
+					# if this is the first top hit we've seen for this sequence, this hit's
+					# taxon id is the LCA taxon id so far
+					$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = $matched_taxon_id;
+					$taxon_id_updated = 1;
+				}
+				else
+				{
+				
+					# slowly move up new taxon id's path
+					# at each step, check if ancestor taxon id is in current LCA's path
+					# once the answer is yes, that is our new LCA
+					my $LCA_found = 0;
+					my $matched_taxon_id_ancestor = $matched_taxon_id;
+					while(!$LCA_found)
 					{
-						$LCA_found = 1;
-						if($sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} ne $matched_taxon_id_ancestor)
+						if($taxon_id_is_in_current_LCA_taxon_path{$matched_taxon_id_ancestor})
 						{
-							$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = $matched_taxon_id_ancestor;
-							$taxon_id_updated = 1;
+							$LCA_found = 1;
+							if($sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} ne $matched_taxon_id_ancestor)
+							{
+								$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = $matched_taxon_id_ancestor;
+								$taxon_id_updated = 1;
+							}
 						}
-					}
-					if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
-					{
-						$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
-						if($matched_taxon_id_ancestor == $taxonid_to_parent{$matched_taxon_id_ancestor})
+						if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
+						{
+							$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
+							if($matched_taxon_id_ancestor == $taxonid_to_parent{$matched_taxon_id_ancestor})
+							{
+								$LCA_found = 1;
+								$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
+							}
+							else
+							{
+								$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
+							}
+						}
+						else
 						{
 							$LCA_found = 1;
 							$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
 						}
-						else
-						{
-							$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
-						}
-					}
-					else
-					{
-						$LCA_found = 1;
-						$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
 					}
 				}
-			}
-			
-			# updates taxon path of LCA taxon
-			if($taxon_id_updated)
-			{
-				%taxon_id_is_in_current_LCA_taxon_path = ();
-				my $taxon_id = $sequence_name_to_top_hits_LCA_taxon_id{$sequence_name};
-				$taxon_id_is_in_current_LCA_taxon_path{$taxon_id} = 1;
-				while(defined $taxonid_to_parent{$taxon_id}
-					and $taxonid_to_parent{$taxon_id} != $taxon_id)
+		
+				# updates taxon path of LCA taxon
+				if($taxon_id_updated)
 				{
+					%taxon_id_is_in_current_LCA_taxon_path = ();
+					my $taxon_id = $sequence_name_to_top_hits_LCA_taxon_id{$sequence_name};
 					$taxon_id_is_in_current_LCA_taxon_path{$taxon_id} = 1;
-					$taxon_id = $taxonid_to_parent{$taxon_id};
+					while(defined $taxonid_to_parent{$taxon_id}
+						and $taxonid_to_parent{$taxon_id} != $taxon_id)
+					{
+						$taxon_id_is_in_current_LCA_taxon_path{$taxon_id} = 1;
+						$taxon_id = $taxonid_to_parent{$taxon_id};
+					}
 				}
+		
+				# prepares for next sequence
+				$previous_sequence_name = $sequence_name;
+				$previous_evalue = $evalue;
 			}
 		}
-		
-		# prepares for next sequence
-		$previous_sequence_name = $sequence_name;
-		$previous_evalue = $evalue;
 	}
 }
 close BLAST_OUTPUT;
