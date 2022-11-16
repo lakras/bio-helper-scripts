@@ -20,7 +20,7 @@
 # - highest_qcovs_of_top_hits
 # - number_top_hits
 
-# Output table has columns:
+# Output table has one row for each ground truth row, with columns:
 # - sequence name
 # - test LCA match taxon
 # - test LCA match taxon rank
@@ -236,6 +236,7 @@ print "ground_truth_LCA_match_taxon_in_test_LCA_match_taxon".$NEWLINE;
 
 # reads in test file and prints output
 $first_row = 1;
+my %ground_truth_sequence_has_test_match = (); # key: sequence name appearing in ground truth file -> value: 1 if sequence name also appears in test file
 open TEST, "<$LCA_matches_to_test" || die "Could not open $LCA_matches_to_test to read\n";
 while(<TEST>)
 {
@@ -244,6 +245,7 @@ while(<TEST>)
 	{
 		my @items = split($DELIMITER, $_);
 		my $sequence_name = $items[$sequence_name_column];
+		$ground_truth_sequence_has_test_match{$sequence_name} = 1;
 	
 		if($sequence_name_to_true_number_top_hits{$sequence_name}
 			or $PRINT_TEST_SEQUENCES_WITHOUT_GROUND_TRUTH)
@@ -394,6 +396,37 @@ while(<TEST>)
 	$first_row = 0;
 }
 close TEST;
+
+
+# prints ground truth sequences not appearing in test sequence
+foreach my $sequence_name(keys %sequence_name_to_true_number_top_hits)
+{
+	if(!$ground_truth_sequence_has_test_match{$sequence_name})
+	{
+		print $sequence_name.$DELIMITER;
+		
+		# prints 12 empty columns for test LCA info columns
+		my $number_empty_columns_to_print = 12;
+		for(my $column = 0; $column < $number_empty_columns_to_print; $column++)
+		{
+			print $DELIMITER;
+		}
+		
+		# prints ground truth info
+		print $sequence_name_to_true_LCA_taxon_id{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_LCA_taxon_rank{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_LCA_taxon_species{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_LCA_taxon_genus{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_LCA_taxon_family{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_lowest_pident_of_top_hits{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_mean_pident_of_top_hits{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_highest_pident_of_top_hits{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_lowest_qcovs_of_top_hits{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_mean_qcovs_of_top_hits{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_highest_qcovs_of_top_hits{$sequence_name}.$DELIMITER;
+		print $sequence_name_to_true_number_top_hits{$sequence_name}.$NEWLINE;
+	}
+}
 
 
 # November 4, 2022
