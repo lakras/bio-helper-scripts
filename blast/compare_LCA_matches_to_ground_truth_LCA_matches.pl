@@ -55,13 +55,13 @@
 
 
 # Usage:
-# perl compare_truth_and_test_LCA_matches.pl
+# perl compare_LCA_matches_to_ground_truth_LCA_matches.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search, to be treated as ground truth]
 # [output of another retrieve_top_blast_hits_LCA_for_each_sequence.pl for another blast search, to compare to ground truth]
 # [nodes.dmp file from NCBI]
 
 # Prints to console. To print to file, use
-# perl compare_truth_and_test_LCA_matches.pl
+# perl compare_LCA_matches_to_ground_truth_LCA_matches.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search, to be treated as ground truth]
 # [output of another retrieve_top_blast_hits_LCA_for_each_sequence.pl for another blast search, to compare to ground truth]
 # [nodes.dmp file from NCBI] > [output table]
@@ -111,7 +111,7 @@ my $NO = "0";
 # if 1, prints available information for sequences in the test file even if those
 # sequences do not appear in the ground truth file (but prints an error)
 # if 0, only prints sequences that appear in both files
-my $PRINT_TEST_SEQUENCES_WITHOUT_GROUND_TRUTH = 1;
+my $PRINT_TEST_SEQUENCES_WITHOUT_GROUND_TRUTH = 0;
 
 
 # verifies that all input files exist and are non-empty
@@ -169,28 +169,30 @@ my %sequence_name_to_true_lowest_qcovs_of_top_hits = ();
 my %sequence_name_to_true_mean_qcovs_of_top_hits = ();
 my %sequence_name_to_true_highest_qcovs_of_top_hits = ();
 my %sequence_name_to_true_number_top_hits = ();
+my $first_row = 1;
 open GROUND_TRUTH, "<$ground_truth_LCA_matches" || die "Could not open $ground_truth_LCA_matches to read\n";
 while(<GROUND_TRUTH>)
 {
 	chomp;
-	if($_ =~ /\S/)
+	if($_ =~ /\S/ and !$first_row)
 	{
-		my @items = split($TAXONDUMP_DELIMITER, $_);
+		my @items = split($DELIMITER, $_);
 		my $sequence_name = $items[$sequence_name_column];
 		
-		my $sequence_name_to_true_LCA_taxon_id{$sequence_name} = $items[$LCA_taxon_id_column];
-		my $sequence_name_to_true_LCA_taxon_rank{$sequence_name} = $items[$LCA_taxon_rank_column];
-		my $sequence_name_to_true_LCA_taxon_species{$sequence_name} = $items[$LCA_taxon_species_column];
-		my $sequence_name_to_true_LCA_taxon_genus{$sequence_name} = $items[$LCA_taxon_genus_column];
-		my $sequence_name_to_true_LCA_taxon_family{$sequence_name} = $items[$LCA_taxon_family_column];
-		my $sequence_name_to_true_lowest_pident_of_top_hits{$sequence_name} = $items[$lowest_pident_of_top_hits_column];
-		my $sequence_name_to_true_mean_pident_of_top_hits{$sequence_name} = $items[$mean_pident_of_top_hits_column];
-		my $sequence_name_to_true_highest_pident_of_top_hits{$sequence_name} = $items[$highest_pident_of_top_hits_column];
-		my $sequence_name_to_true_lowest_qcovs_of_top_hits{$sequence_name} = $items[$lowest_qcovs_of_top_hits_column];
-		my $sequence_name_to_true_mean_qcovs_of_top_hits{$sequence_name} = $items[$mean_qcovs_of_top_hits_column];
-		my $sequence_name_to_true_highest_qcovs_of_top_hits{$sequence_name} = $items[$highest_qcovs_of_top_hits_column];
-		my $sequence_name_to_true_number_top_hits{$sequence_name} = $items[$number_top_hits_column];
+		$sequence_name_to_true_LCA_taxon_id{$sequence_name} = $items[$LCA_taxon_id_column];
+		$sequence_name_to_true_LCA_taxon_rank{$sequence_name} = $items[$LCA_taxon_rank_column];
+		$sequence_name_to_true_LCA_taxon_species{$sequence_name} = $items[$LCA_taxon_species_column];
+		$sequence_name_to_true_LCA_taxon_genus{$sequence_name} = $items[$LCA_taxon_genus_column];
+		$sequence_name_to_true_LCA_taxon_family{$sequence_name} = $items[$LCA_taxon_family_column];
+		$sequence_name_to_true_lowest_pident_of_top_hits{$sequence_name} = $items[$lowest_pident_of_top_hits_column];
+		$sequence_name_to_true_mean_pident_of_top_hits{$sequence_name} = $items[$mean_pident_of_top_hits_column];
+		$sequence_name_to_true_highest_pident_of_top_hits{$sequence_name} = $items[$highest_pident_of_top_hits_column];
+		$sequence_name_to_true_lowest_qcovs_of_top_hits{$sequence_name} = $items[$lowest_qcovs_of_top_hits_column];
+		$sequence_name_to_true_mean_qcovs_of_top_hits{$sequence_name} = $items[$mean_qcovs_of_top_hits_column];
+		$sequence_name_to_true_highest_qcovs_of_top_hits{$sequence_name} = $items[$highest_qcovs_of_top_hits_column];
+		$sequence_name_to_true_number_top_hits{$sequence_name} = $items[$number_top_hits_column];
 	}
+	$first_row = 0;
 }
 close GROUND_TRUTH;
 
@@ -233,13 +235,14 @@ print "ground_truth_LCA_match_taxon_in_test_LCA_match_taxon".$NEWLINE;
 
 
 # reads in test file and prints output
+$first_row = 1;
 open TEST, "<$LCA_matches_to_test" || die "Could not open $LCA_matches_to_test to read\n";
 while(<TEST>)
 {
 	chomp;
-	if($_ =~ /\S/)
+	if($_ =~ /\S/ and !$first_row)
 	{
-		my @items = split($TAXONDUMP_DELIMITER, $_);
+		my @items = split($DELIMITER, $_);
 		my $sequence_name = $items[$sequence_name_column];
 	
 		if($sequence_name_to_true_number_top_hits{$sequence_name}
@@ -249,18 +252,18 @@ while(<TEST>)
 			print $sequence_name.$DELIMITER;
 		
 			# print details of LCA match to compare to ground truth
-			print $items[$LCA_taxon_id_column];
-			print $items[$LCA_taxon_rank_column];
-			print $items[$LCA_taxon_species_column];
-			print $items[$LCA_taxon_genus_column];
-			print $items[$LCA_taxon_family_column];
-			print $items[$lowest_pident_of_top_hits_column];
-			print $items[$mean_pident_of_top_hits_column];
-			print $items[$highest_pident_of_top_hits_column];
-			print $items[$lowest_qcovs_of_top_hits_column];
-			print $items[$mean_qcovs_of_top_hits_column];
-			print $items[$highest_qcovs_of_top_hits_column];
-			print $items[$number_top_hits_column];
+			print $items[$LCA_taxon_id_column].$DELIMITER;
+			print $items[$LCA_taxon_rank_column].$DELIMITER;
+			print $items[$LCA_taxon_species_column].$DELIMITER;
+			print $items[$LCA_taxon_genus_column].$DELIMITER;
+			print $items[$LCA_taxon_family_column].$DELIMITER;
+			print $items[$lowest_pident_of_top_hits_column].$DELIMITER;
+			print $items[$mean_pident_of_top_hits_column].$DELIMITER;
+			print $items[$highest_pident_of_top_hits_column].$DELIMITER;
+			print $items[$lowest_qcovs_of_top_hits_column].$DELIMITER;
+			print $items[$mean_qcovs_of_top_hits_column].$DELIMITER;
+			print $items[$highest_qcovs_of_top_hits_column].$DELIMITER;
+			print $items[$number_top_hits_column].$DELIMITER;
 		}
 		
 		# print details of ground truth LCA match
@@ -281,8 +284,10 @@ while(<TEST>)
 			
 			# print columns comparing LCA match to ground truth
 			# 1 if test and ground truth taxa are identical
-			if($items[$LCA_taxon_id_column]
-				== $sequence_name_to_true_LCA_taxon_id{$sequence_name})
+			if($items[$LCA_taxon_id_column] ne $NO_DATA
+				and $sequence_name_to_true_LCA_taxon_id{$sequence_name} ne $NO_DATA
+				and $items[$LCA_taxon_id_column]
+					== $sequence_name_to_true_LCA_taxon_id{$sequence_name})
 			{
 				print $YES.$DELIMITER;
 			}
@@ -292,8 +297,10 @@ while(<TEST>)
 			}
 			
 			# 1 if test and ground truth taxa are identical at the species level
-			if($items[$LCA_taxon_species_column]
-				== $sequence_name_to_true_LCA_taxon_species{$sequence_name})
+			if($items[$LCA_taxon_species_column] ne $NO_DATA
+				and $sequence_name_to_true_LCA_taxon_species{$sequence_name} ne $NO_DATA
+				and $items[$LCA_taxon_species_column]
+					== $sequence_name_to_true_LCA_taxon_species{$sequence_name})
 			{
 				print $YES.$DELIMITER;
 			}
@@ -303,8 +310,10 @@ while(<TEST>)
 			}
 			
 			# 1 if test and ground truth taxa are identical at the genus level
-			if($items[$LCA_taxon_genus_column]
-				== $sequence_name_to_true_LCA_taxon_genus{$sequence_name})
+			if($items[$LCA_taxon_genus_column] ne $NO_DATA
+				and $sequence_name_to_true_LCA_taxon_genus{$sequence_name} ne $NO_DATA
+				and $items[$LCA_taxon_genus_column]
+					== $sequence_name_to_true_LCA_taxon_genus{$sequence_name})
 			{
 				print $YES.$DELIMITER;
 			}
@@ -314,8 +323,10 @@ while(<TEST>)
 			}
 			
 			# 1 if test and ground truth taxa are identical at the family level
-			if($items[$LCA_taxon_family_column]
-				== $sequence_name_to_true_LCA_taxon_family{$sequence_name})
+			if($items[$LCA_taxon_family_column] ne $NO_DATA
+				and $sequence_name_to_true_LCA_taxon_family{$sequence_name} ne $NO_DATA
+				and $items[$LCA_taxon_family_column]
+					== $sequence_name_to_true_LCA_taxon_family{$sequence_name})
 			{
 				print $YES.$DELIMITER;
 			}
@@ -329,6 +340,7 @@ while(<TEST>)
 			my %taxon_id_is_in_test_LCA_taxon_path = ();
 			
 			my $test_taxon_id = $items[$LCA_taxon_id_column];
+			my $ground_truth_taxon_id = $sequence_name_to_true_LCA_taxon_id{$sequence_name};
 			$taxon_id_is_in_test_LCA_taxon_path{$test_taxon_id} = 1;
 			while($taxonid_to_parent{$ground_truth_taxon_id} != $ground_truth_taxon_id)
 			{
@@ -336,7 +348,6 @@ while(<TEST>)
 				$ground_truth_taxon_id = $taxonid_to_parent{$ground_truth_taxon_id};
 			}
 			
-			my $ground_truth_taxon_id = $sequence_name_to_true_LCA_taxon_id{$sequence_name};
 			$taxon_id_is_in_ground_truth_LCA_taxon_path{$ground_truth_taxon_id} = 1;
 			while($taxonid_to_parent{$test_taxon_id} != $test_taxon_id)
 			{
@@ -347,29 +358,29 @@ while(<TEST>)
 			# print 1 if test LCA match taxon is in ground truth LCA match taxon, 0 if not
 			if($taxon_id_is_in_ground_truth_LCA_taxon_path{$items[$LCA_taxon_id_column]})
 			{
-				print $YES.$DELIMITER;
+				print $YES;
 			}
 			else
 			{
-				print $NO.$DELIMITER;
+				print $NO;
 			}
 			print $DELIMITER;
 			
 			# print 1 if ground truth LCA match taxon is in test LCA match taxon, 0 if not
 			if($sequence_name_to_true_LCA_taxon_id{$sequence_name})
 			{
-				print $YES.$DELIMITER;
+				print $YES;
 			}
 			else
 			{
-				print $NO.$DELIMITER;
+				print $NO;
 			}
 			print $NEWLINE;
 		}
 		elsif($PRINT_TEST_SEQUENCES_WITHOUT_GROUND_TRUTH)
 		{
 			print STDERR "Error: sequence name ".$sequence_name." does not appear in "
-				."ground truth LCA matches file.\n"
+				."ground truth LCA matches file.\n";
 				
 			# print empty output columns for missing columns
 			my $number_empty_columns_to_print = 18;
@@ -380,6 +391,7 @@ while(<TEST>)
 			print $NEWLINE;
 		}
 	}
+	$first_row = 0;
 }
 close TEST;
 
