@@ -338,20 +338,28 @@ while(<TEST>)
 			}
 			
 			# retrieves taxon paths of test and ground truth LCA matches
-			my %taxon_id_is_in_ground_truth_LCA_taxon_path = ();
-			my %taxon_id_is_in_test_LCA_taxon_path = ();
+			
+			
 			
 			my $test_taxon_id = $items[$LCA_taxon_id_column];
-			my $ground_truth_taxon_id = $sequence_name_to_true_LCA_taxon_id{$sequence_name};
+			my %taxon_id_is_in_test_LCA_taxon_path = ();
 			$taxon_id_is_in_test_LCA_taxon_path{$test_taxon_id} = 1;
-			while($taxonid_to_parent{$ground_truth_taxon_id} != $ground_truth_taxon_id)
+			$taxon_id_is_in_test_LCA_taxon_path{1} = 1;
+			
+			my $ground_truth_taxon_id = $sequence_name_to_true_LCA_taxon_id{$sequence_name};
+			my %taxon_id_is_in_ground_truth_LCA_taxon_path = ();
+			$taxon_id_is_in_ground_truth_LCA_taxon_path{$ground_truth_taxon_id} = 1;
+			$taxon_id_is_in_ground_truth_LCA_taxon_path{1} = 1;
+			
+			while($taxonid_to_parent{$ground_truth_taxon_id}
+				and $taxonid_to_parent{$ground_truth_taxon_id} != $ground_truth_taxon_id)
 			{
 				$taxon_id_is_in_ground_truth_LCA_taxon_path{$ground_truth_taxon_id} = 1;
 				$ground_truth_taxon_id = $taxonid_to_parent{$ground_truth_taxon_id};
 			}
 			
-			$taxon_id_is_in_ground_truth_LCA_taxon_path{$ground_truth_taxon_id} = 1;
-			while($taxonid_to_parent{$test_taxon_id} != $test_taxon_id)
+			while($taxonid_to_parent{$test_taxon_id}
+				and $taxonid_to_parent{$test_taxon_id} != $test_taxon_id)
 			{
 				$taxon_id_is_in_test_LCA_taxon_path{$test_taxon_id} = 1;
 				$test_taxon_id = $taxonid_to_parent{$test_taxon_id};
