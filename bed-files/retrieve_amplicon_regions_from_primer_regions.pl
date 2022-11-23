@@ -4,8 +4,10 @@
 # Uses primer names to match left and right primers. Primer names must include the primer
 # number and _LEFT or _RIGHT, for example nCoV-2019_1_LEFT or nCoV-2019_26_RIGHT.
 
-# If more multiple start primers or multiple end primers are provided for an amplicon,
-# the amplicon is set to be the largest possible with all its provided primers.
+# Only includes one left and one right primer for each amplicon. If _alt versions of
+# primers are included, only includes the last _alt listed for that primer.
+
+# Assumes all amplicons come from only one reference sequence.
 
 # Input primer positions are assumed to be indicated by first position (0-indexed) and
 # non-inclusive end position (0-indexed). Output amplicon positions are also indicated by

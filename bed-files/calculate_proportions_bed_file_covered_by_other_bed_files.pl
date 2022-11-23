@@ -135,15 +135,19 @@ foreach my $other_bed_file(@other_bed_files)
 	{
 		$other_bed_file_filename = $1;
 	}
+	if($other_bed_file_filename =~ /(.*)[.]bed_amplicons.bed_amplicons_within_molecule_only[.]bed_not_covered[.]bed/)
+	{
+		$other_bed_file_filename = $1;
+	}
 	
 	# prints proportion positions covered
 	print $other_bed_file_filename;
 	print $DELIMITER;
 	print $percent_positions_covered;
-	print $DELIMITER;
-	print $proportion_positions_covered;
-	print $DELIMITER;
-	print $fraction_positions_covered;
+# 	print $DELIMITER;
+# 	print $proportion_positions_covered;
+# 	print $DELIMITER;
+# 	print $fraction_positions_covered;
 	print $NEWLINE;
 }
 
