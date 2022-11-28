@@ -290,6 +290,10 @@ Read a description of the BED file format [on Wikipedia](https://en.wikipedia.or
 
    _Usage: `perl retrieve_amplicon_regions_from_primer_regions_and_count_number_amplicons_overlapping_each_position.pl [primers bed file path] > [amplicons bed file path]`_
 
+- [`extend_primers_to_include_amplicon_overlaps.pl`](/bed-files/extend_primers_to_include_amplicon_overlaps.pl): Extends primers to include positions that are in more than one amplicon. Amplicons in the resulting bed file do not overlap. Outputs new primer bed file.
+
+   _Usage: `perl extend_primers_to_include_amplicon_overlaps.pl [primers bed file path] > [new primers bed file path]`_
+
 ## Read depth file processing ([`read-depths`](/read-depths))
 Input read depth tables must be in format produced by [`samtools depth`](http://www.htslib.org/doc/samtools-depth.html): tab-separated reference name, position, read depth; no header line.
 
