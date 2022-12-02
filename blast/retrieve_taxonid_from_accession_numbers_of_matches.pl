@@ -13,11 +13,15 @@
 # perl retrieve_taxonid_from_accession_numbers_of_matches.pl [blast or diamond output]
 # [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search]
 # [column number of new taxon id column to add to output file (0-indexed)]
+# [column number (0-indexed) of column containing match accession numbers (stitle)]
+# [optional column number (0-indexed) of column containing match names (stitle)]
 
 # Prints to console. To print to file, use
 # perl retrieve_taxonid_from_accession_numbers_of_matches.pl [blast or diamond output]
 # [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search]
 # [column number of new taxon id column to add to output file (0-indexed)]
+# [column number (0-indexed) of column containing match accession numbers (stitle)]
+# [optional column number (0-indexed) of column containing match names (stitle)]
 # > [blast or diamond output with taxon id column added]
 
 
@@ -28,13 +32,15 @@ use warnings;
 my $blast_or_diamond_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $nucleotide = $ARGV[1]; # 1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search
 my $output_taxonid_column = $ARGV[2]; # column number of new taxon id column to add to output file (0-indexed)
+my $sacc_column = $ARGV[3]; # column number (0-indexed) of column containing match accession numbers (stitle)
+my $stitle_column = $ARGV[4]; # optional column number (0-indexed) of column containing match names (stitle)
+
 
 my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 
 # blast or diamond file
-my $SACC_COLUMN = 1; # column number of column containing match accession numbers (0-indexed)
 
 
 # verifies that input file exists and is not empty
@@ -46,18 +52,26 @@ if(!$blast_or_diamond_output or !-e $blast_or_diamond_output or -z $blast_or_dia
 }
 
 
-# reads in blast or diamond output and extracts matched sequence accession numbers
+# reads in blast or diamond output and extracts matched sequence accession numbers (sacc column)
+# if available, also extracts matched sequence names (stitle column)
 open BLAST_OR_DIAMOND_OUTPUT, "<$blast_or_diamond_output"
 	|| die "Could not open $blast_or_diamond_output to read\n";
 my %matched_accession_numbers = (); # key: matched accession number -> value: 1
+my %matched_accession_number_to_name = (); # key: matched accession number -> value: sequence name
 while(<BLAST_OR_DIAMOND_OUTPUT>)
 {
 	chomp;
 	if($_ =~ /\S/)
 	{
 		my @items = split($DELIMITER, $_);
-		my $sacc = $items[$SACC_COLUMN];
+		my $sacc = $items[$sacc_column];
 		$matched_accession_numbers{$sacc} = 1;
+		
+		if(defined $stitle_column)
+		{
+			my $stitle = $items[$stitle_column];
+			$matched_accession_number_to_name{$sacc} = $stitle;
+		}
 	}
 }
 close BLAST_OR_DIAMOND_OUTPUT;
@@ -87,6 +101,55 @@ foreach my $line(split($NEWLINE, $sacc_to_taxon_id_string))
 	my $taxonid = $items[1];
 	
 	$sacc_to_taxon_id{$sacc} = $taxonid;
+}
+
+
+# for accession numbers without a taxon id, attempts to retrieve taxon id from taxon name
+if(defined $stitle_column)
+{
+	# retrieves names of matched taxon whose taxon id could not be retrieved from accession numbers
+	my %matched_taxon_names = (); # key: name of matched taxon whose taxon id could not be retrieved from accession number -> value: 1
+	my %matched_accession_number_to_taxon_name = (); # key: matched accession number whose taxon id could not be retrieved -> value: its taxon name
+	foreach my $sacc(keys %matched_accession_numbers)
+	{
+		if(!defined $sacc_to_taxon_id{$sacc}
+			and defined $matched_accession_number_to_name{$sacc})
+		{
+			# retrieves taxon name from sequence name
+			if($matched_accession_number_to_name{$sacc} =~ /\[([^\[\]]+)\]$/)
+			{
+				my $taxon_name = $1;
+				$matched_taxon_names{$taxon_name} = 1;
+				$matched_accession_number_to_taxon_name{$sacc} = $taxon_name;
+			}
+		}
+	}
+	
+	# retrieves taxon ids from taxon name
+	my %matched_taxon_name_to_taxon_id = (); # key: taxon name -> value: taxon id
+	foreach my $matched_taxon_name(keys %matched_taxon_names)
+	{
+		my $taxon_id = `esearch -db taxonomy -query "$matched_taxon_name" | esummary | xtract -pattern DocumentSummary -element TaxId`;
+		chomp $taxon_id;
+		$matched_taxon_name_to_taxon_id{$matched_taxon_name} = $taxon_id;
+	}
+	
+	# maps retrieved taxon ids to accession numbers
+	foreach my $sacc(keys %matched_accession_numbers)
+	{
+		if(!defined $sacc_to_taxon_id{$sacc}
+			and defined $matched_accession_number_to_name{$sacc}
+			and defined $matched_accession_number_to_taxon_name{$sacc})
+		{
+			# retrieves taxon name from sequence name
+			my $matched_taxon_name = $matched_accession_number_to_taxon_name{$sacc};
+			if(defined $matched_taxon_name_to_taxon_id{$matched_taxon_name})
+			{
+				my $matched_taxonid = $matched_taxon_name_to_taxon_id{$matched_taxon_name};
+				$sacc_to_taxon_id{$sacc} = $matched_taxonid;
+			}
+		}
+	}
 }
 
 
@@ -122,7 +185,7 @@ while(<BLAST_OR_DIAMOND_OUTPUT>)
 		my @items = split($DELIMITER, $_);
 		
 		# retrieves match accession number
-		my $sacc = $items[$SACC_COLUMN];
+		my $sacc = $items[$sacc_column];
 		
 		# retrieves taxon id
 		my $taxonid = $NO_DATA;
