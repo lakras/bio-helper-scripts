@@ -121,8 +121,8 @@ if(defined $stitle_column)
 				my $taxon_name = $1;
 				
 				# removes parentheses
-				$taxon_name =~ s/\(//g;
-				$taxon_name =~ s/\)//g;
+				$taxon_name =~ s/\(/ /g;
+				$taxon_name =~ s/\)/ /g;
 				
 				$matched_taxon_names{$taxon_name} = 1;
 				$matched_accession_number_to_taxon_name{$sacc} = $taxon_name;
@@ -135,13 +135,6 @@ if(defined $stitle_column)
 	foreach my $matched_taxon_name(keys %matched_taxon_names)
 	{
 		my $taxon_id = `esearch -db taxonomy -query "$matched_taxon_name" | esummary | xtract -pattern DocumentSummary -element TaxId`;
-		
-		# tries again with anything in parentheses removed
-		if(!$taxon_id)
-		{
-		}
-		
-		# saves retrieved taxon id
 		chomp $taxon_id;
 		$matched_taxon_name_to_taxon_id{$matched_taxon_name} = $taxon_id;
 	}
