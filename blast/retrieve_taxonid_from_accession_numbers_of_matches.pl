@@ -173,11 +173,6 @@ if($accession_numbers_without_taxon_id)
 		."numbers:\n".$accession_numbers_without_taxon_id;
 }
 
-# foreach my $sacc(keys %matched_accession_numbers)
-# {
-# 	print $sacc."\t".$sacc_to_taxon_id{$sacc}."\n";
-# }
-
 
 # reads in blast or diamond output and prints with new taxonid column
 open BLAST_OR_DIAMOND_OUTPUT, "<$blast_or_diamond_output"
