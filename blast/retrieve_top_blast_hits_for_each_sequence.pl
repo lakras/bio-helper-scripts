@@ -27,7 +27,6 @@ my $TAXONID_SEPARATOR = ";"; # in blast file
 # blast file
 my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
 my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
-my $SUPERKINGDOM_COLUMN = 5;	# sskingdoms (Subject Super Kingdom(s), separated by a ';' (in alphabetical order))
 my $PERCENT_ID_COLUMN = 9; 		# pident
 my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
 my $EVALUE_COLUMN = 11;			# evalue
