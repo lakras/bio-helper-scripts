@@ -49,7 +49,6 @@ my $TAXONID_SEPARATOR = ";"; # in blast file
 # blast file
 my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
 my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
-my $SUPERKINGDOM_COLUMN = 5;	# sskingdoms (Subject Super Kingdom(s), separated by a ';' (in alphabetical order))
 my $PERCENT_ID_COLUMN = 9; 		# pident
 my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
 my $EVALUE_COLUMN = 11;			# evalue
@@ -64,6 +63,7 @@ my $NAME_TYPE_COLUMN = 3;	# names.dmp
 my $SPECIES = "species";
 my $GENUS = "genus";
 my $FAMILY = "family";
+my $ROOT_TAXON_ID = 1;
 
 # 1 to print top blast hits to STDERR (for testing)
 my $PRINT_TOP_BLAST_HITS_TO_STDERR = 0;
@@ -128,11 +128,12 @@ my %sequence_name_to_top_hits_evalue = (); # key: sequence name -> value: e-valu
 while(<BLAST_OUTPUT>)
 {
 	chomp;
-	if($_ =~ /\S/)
+	my $line = $_;
+	if($line =~ /\S/)
 	{
 # 		print STDERR $_."\n";
 		
-		my @items = split($DELIMITER, $_);
+		my @items = split($DELIMITER, $line);
 		my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
 		my $matched_taxon_id_as_provided = $items[$MATCHED_TAXONID_COLUMN];
 		my $percent_id = $items[$PERCENT_ID_COLUMN];
@@ -213,7 +214,6 @@ while(<BLAST_OUTPUT>)
 				}
 				else
 				{
-				
 					# slowly move up new taxon id's path
 					# at each step, check if ancestor taxon id is in current LCA's path
 					# once the answer is yes, that is our new LCA
@@ -221,7 +221,24 @@ while(<BLAST_OUTPUT>)
 					my $matched_taxon_id_ancestor = $matched_taxon_id;
 					while(!$LCA_found)
 					{
-						if($taxon_id_is_in_current_LCA_taxon_path{$matched_taxon_id_ancestor})
+						# if taxon id is root (1), then the LCA is root (1)
+						if($matched_taxon_id_ancestor == $ROOT_TAXON_ID)
+						{
+							$LCA_found = 1;
+							$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = $ROOT_TAXON_ID;
+						}
+						
+						# verifies that if taxon id is not root, then it has a non-root parent
+						elsif($matched_taxon_id_ancestor == $taxonid_to_parent{$matched_taxon_id_ancestor})
+						{
+							print STDERR "Error: taxon id is not root but has itself as parent: "
+								.$matched_taxon_id_ancestor.". Exiting.\n";
+							die;
+						}
+					
+						# check if taxon id is in path of current LCA
+						# if so, new LCA is taxon id
+						elsif($taxon_id_is_in_current_LCA_taxon_path{$matched_taxon_id_ancestor})
 						{
 							$LCA_found = 1;
 							if($sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} ne $matched_taxon_id_ancestor)
@@ -230,28 +247,28 @@ while(<BLAST_OUTPUT>)
 								$taxon_id_updated = 1;
 							}
 						}
-						if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
+						
+						# we have not found the LCA but we are done looking at taxon id
+						# in the next loop we will look at its parent
+						elsif(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
 						{
 							$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
-							if($matched_taxon_id_ancestor == $taxonid_to_parent{$matched_taxon_id_ancestor})
-							{
-								$LCA_found = 1;
-								$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
-							}
-							else
-							{
-								$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
-							}
 						}
+						
+						# throws error if taxon id does not have a parent
 						else
 						{
+							print STDERR "Error: could not find parent of taxon id "
+								.$matched_taxon_id_ancestor
+								." in taxon path of matched taxon id in hit:\n".$line
+								."\nAssigning LCA taxon for sequence to 1 (root).\n";
 							$LCA_found = 1;
-							$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = 1;
+							$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name} = $ROOT_TAXON_ID;
 						}
 					}
 				}
 		
-				# updates taxon path of LCA taxon
+				# updates taxon path of LCA taxon if we updated the LCA taxon
 				if($taxon_id_updated)
 				{
 					%taxon_id_is_in_current_LCA_taxon_path = ();
@@ -264,6 +281,10 @@ while(<BLAST_OUTPUT>)
 						$taxon_id = $taxonid_to_parent{$taxon_id};
 					}
 				}
+				
+				# for debugging: prints result so far
+# 				print STDERR "taxon id:   ".$matched_taxon_id_as_provided."\n";
+# 				print STDERR "LCA so far: ".$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name}."\n\n";
 		
 				# prepares for next sequence
 				$previous_sequence_name = $sequence_name;
@@ -350,4 +371,5 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 
 
 # November 4, 2022
+# December 6, 2022
 
