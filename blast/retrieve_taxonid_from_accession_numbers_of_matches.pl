@@ -40,7 +40,8 @@ my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 
-# blast or diamond file
+my $TEMP_FILE_EXTENSION = "_temp.txt";
+my $PRINT_TO_TEMP_FILE = 1; # if 0, prints temp file contents to echo to avoid printing temp file (has high likelihood of error for too-long argument)
 
 
 # verifies that input file exists and is not empty
@@ -76,20 +77,46 @@ while(<BLAST_OR_DIAMOND_OUTPUT>)
 }
 close BLAST_OR_DIAMOND_OUTPUT;
 
-my $matched_accession_numbers_string = "";
-foreach my $sacc(keys %matched_accession_numbers)
-{
-	$matched_accession_numbers_string .= $sacc.$NEWLINE;
-}
 
-
-# retrieves taxon id for each accession number from Entrez, where possible
+# collects accession numbers and retrieves taxon ids for them
 my $database = "protein";
 if($nucleotide)
 {
 	$database = "nuccore";
 }
-my $sacc_to_taxon_id_string = `echo "$matched_accession_numbers_string" | epost -db $database | esummary | xtract -pattern DocumentSummary -element Caption,TaxId`;
+
+my $sacc_to_taxon_id_string = "";
+if($PRINT_TO_TEMP_FILE) # prints list of accession numbers to look up to a temp file
+{
+	# collects accession numbers and prints to temp file
+	my $temp_file = $blast_or_diamond_output.$TEMP_FILE_EXTENSION;
+	open TEMP_FILE, ">$temp_file" || die "Could not open $temp_file to write\n";
+	foreach my $sacc(keys %matched_accession_numbers)
+	{
+		print TEMP_FILE $sacc;
+		print TEMP_FILE $NEWLINE;
+	}
+	close TEMP_FILE;
+
+	# retrieves taxon id for each accession number from Entrez, where possible
+	$sacc_to_taxon_id_string = `cat $temp_file | epost -db $database | esummary | xtract -pattern DocumentSummary -element Caption,TaxId`;
+	
+	# deletes temp file
+	`rm $temp_file`;
+}
+else # uses echo to avoid printing to a temp file (has high likelihood of error for too-long argument)
+{
+	# collects accession numbers
+	my $matched_accession_numbers_string = "";
+	foreach my $sacc(keys %matched_accession_numbers)
+	{
+		$matched_accession_numbers_string .= $sacc.$NEWLINE;
+	}
+
+	# retrieves taxon id for each accession number from Entrez, where possible
+	$sacc_to_taxon_id_string = `echo "$matched_accession_numbers_string" | epost -db $database | esummary | xtract -pattern DocumentSummary -element Caption,TaxId`;
+}
+
 
 
 # reads in taxon id to accession number mapping
