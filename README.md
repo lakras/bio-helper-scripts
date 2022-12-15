@@ -175,6 +175,11 @@ Includes the following scripts—
 
    _Usage: `perl collapse_aligned_sequences_by_name.pl [alignment fasta file path] > [output fasta file path]`_
 
+- [`get_average_sequence_of_aligned_sequences.pl`](/aligned-fasta/get_average_sequence_of_aligned_sequences.pl): Generates "average" sequence of aligned sequence from most common base at each position. If first sequence in alignment is reference, reference is not included in calculation of average sequence.
+
+   _Usage: `perl get_average_sequence_of_aligned_sequences.pl [alignment fasta file path] [1 if alignment includes reference as first sequence, 0 if alignment does not include a reference] > [output fasta file path]`_
+
+
 ## BLAST ([`blast`](/blast))
 All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
 
