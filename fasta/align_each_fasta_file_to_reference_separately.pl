@@ -3,7 +3,7 @@
 # Adds reference sequence to the top of each fasta file and aligns each file separately.
 
 # Usage:
-# perl align_each_fasta_file_with_reference_separately.pl [reference sequence]
+# perl align_each_fasta_file_to_reference_separately.pl [reference sequence]
 # [file path of MAFFT executable file (mafft.bat)] [fasta file path]
 # [another fasta file path] [another fasta file path] [etc.]
 
