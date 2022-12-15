@@ -178,7 +178,9 @@ print "lineage-defining positions (1-indexed relative to reference ".$reference_
 foreach my $position(sort {$a <=> $b} keys %is_lineage_defining_position)
 {
 	print add_comma_separators($position).$NEWLINE;
-	foreach my $lineage_base(sort keys %{$position_to_base_to_matching_lineage{$position}})
+	foreach my $lineage_base(sort {$position_to_base_to_matching_lineage{$position}{$a}
+			cmp $position_to_base_to_matching_lineage{$position}{$b}}
+		keys %{$position_to_base_to_matching_lineage{$position}})
 	{
 		my $matching_lineages = $position_to_base_to_matching_lineage{$position}{$lineage_base};
 		
