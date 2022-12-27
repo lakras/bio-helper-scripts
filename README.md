@@ -241,6 +241,11 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl retrieve_taxon_names_from_taxonids.pl [blast or diamond output] [names.dmp file from NCBI] > [blast or diamond output with taxon name column added]`_
 
+- [`compare_LCA_matches_to_ground_truth_LCA_matches.pl`](/blast/compare_LCA_matches_to_ground_truth_LCA_matches.pl): Retrieve most frequent NN accession numbers matched from most frequent NN matched species, genera, or families.
+
+   _Usage: `perl compare_LCA_matches_to_ground_truth_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to examine] [number accession numbers most frequent matched by descendants of most frequent species, genera, or families] > [output list of accession numbers, one per line]`_
+
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
