@@ -21,6 +21,7 @@
 # - mean qcovs of top hits
 # - highest qcovs of top hits
 # - number top hits
+# - accession numbers matched in top hits, in comma-separated list
 
 # Usage:
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
@@ -48,10 +49,18 @@ my $TAXONID_SEPARATOR = ";"; # in blast file
 
 # blast file
 my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
+my $MATCHED_ACCESSION_NUMBER_COLUMN = 1; # sacc
 my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
 my $PERCENT_ID_COLUMN = 9; 		# pident
 my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
 my $EVALUE_COLUMN = 11;			# evalue
+
+# modified diamond file
+# my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
+# my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
+# my $PERCENT_ID_COLUMN = 7; 		# pident
+# my $QUERY_COVERAGE_COLUMN = 8;	# qcovs
+# my $EVALUE_COLUMN = 9;			# evalue
 
 # nodes.dmp and names.dmp
 my $TAXONID_COLUMN = 0;	# both
@@ -125,6 +134,7 @@ my %sequence_name_to_number_top_hits = (); # key: sequence name -> value: number
 my %sequence_name_to_sum_top_hits_pident = (); # key: sequence name -> value: sum of top hits pident
 my %sequence_name_to_sum_top_hits_qcovs = (); # key: sequence name -> value: sum of top hits qcovs
 my %sequence_name_to_top_hits_evalue = (); # key: sequence name -> value: e-value of top hits
+my %sequence_name_to_accession_numbers_matched = (); # key: sequence name -> key: accession number -> value: 1
 while(<BLAST_OUTPUT>)
 {
 	chomp;
@@ -135,10 +145,18 @@ while(<BLAST_OUTPUT>)
 		
 		my @items = split($DELIMITER, $line);
 		my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
+		my $matched_accession_number = $items[$MATCHED_ACCESSION_NUMBER_COLUMN];
 		my $matched_taxon_id_as_provided = $items[$MATCHED_TAXONID_COLUMN];
 		my $percent_id = $items[$PERCENT_ID_COLUMN];
 		my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
 		my $evalue = $items[$EVALUE_COLUMN];
+		
+		# saves matched taxon id(s)
+		if($sequence_name_to_accession_numbers_matched{$sequence_name})
+		{
+			$sequence_name_to_accession_numbers_matched{$sequence_name} .= ", ";
+		}
+		$sequence_name_to_accession_numbers_matched{$sequence_name} .= $$matched_accession_number;
 		
 		# if multiple matched taxon ids listed, handles each taxon id separately
 		my @matched_taxon_ids = split($TAXONID_SEPARATOR, $matched_taxon_id_as_provided);
@@ -310,7 +328,8 @@ print "highest_pident_of_top_hits".$DELIMITER;
 print "lowest_qcovs_of_top_hits".$DELIMITER;
 print "mean_qcovs_of_top_hits".$DELIMITER;
 print "highest_qcovs_of_top_hits".$DELIMITER;
-print "number_top_hits".$NEWLINE;
+print "number_top_hits".$DELIMITER;
+print "matched_accession_numbers".$NEWLINE;
 
 
 # prints output table
@@ -366,7 +385,8 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $sequence_name_to_min_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
-	print $sequence_name_to_number_top_hits{$sequence_name}.$NEWLINE;
+	print $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
+	print $sequence_name_to_accession_numbers_matched{$sequence_name}.$NEWLINE;
 }
 
 
