@@ -108,7 +108,11 @@ Includes the following scripts—
 - [`split_fasta_one_sequence_per_file.pl`](/fasta/split_fasta_one_sequence_per_file.pl): Splits up fasta file into multiple files with one sequence per file. Each output file is named using its sequence name.
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
-   
+
+- [`download_fasta_sequences_from_accession_numbers.pl`](/fasta/download_fasta_sequences_from_accession_numbers.pl): Given a list of accession numbers, one per line, downloads and prints fasta sequences corresponding to each accession number.
+
+   _Usage: `perl download_fasta_sequences_from_accession_numbers.pl [path of file with list of accession numbers, one per line] [database (nucleotide by default)] > [output fasta file path]`_
+
 - [`merge_fastas_and_remove_redundant_sequences.pl`](/fasta/merge_fastas_and_remove_redundant_sequences.pl): Merges fasta files, removing redundant sequences (so there is only one of each sequence, regardless of name). Can also be used to remove redundant sequences from a single fasta file.
 
    _Usage: `perl merge_fastas_and_remove_redundant_sequences.pl [fasta file path] [another fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
@@ -244,7 +248,6 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 - [`compare_LCA_matches_to_ground_truth_LCA_matches.pl`](/blast/compare_LCA_matches_to_ground_truth_LCA_matches.pl): Retrieve most frequent NN accession numbers matched from most frequent NN matched species, genera, or families.
 
    _Usage: `perl compare_LCA_matches_to_ground_truth_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to examine] [number accession numbers most frequent matched by descendants of most frequent species, genera, or families] > [output list of accession numbers, one per line]`_
-
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
