@@ -154,7 +154,7 @@ while(<BLAST_OUTPUT>)
 		# saves matched taxon id(s)
 		if($sequence_name_to_accession_numbers_matched{$sequence_name})
 		{
-			$sequence_name_to_accession_numbers_matched{$sequence_name} .= ", ";
+			$sequence_name_to_accession_numbers_matched{$sequence_name} .= ",";
 		}
 		$sequence_name_to_accession_numbers_matched{$sequence_name} .= $$matched_accession_number;
 		
