@@ -71,7 +71,7 @@ use strict;
 use warnings;
 
 
-my $ground_truth_LCA_matches = $ARGV[0];
+my $ground_truth_LCA_matches = $ARGV[0]; # output of retrieve_top_blast_hits_LCA_for_each_sequence.pl
 my $LCA_matches_to_test = $ARGV[1];
 my $nodes_file = $ARGV[2]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
 
