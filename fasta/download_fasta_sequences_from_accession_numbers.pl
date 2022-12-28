@@ -8,7 +8,8 @@
 
 # Usage:
 # perl download_fasta_sequences_from_accession_numbers.pl
-# [path of file with list of accession numbers, one per line] [database (nucleotide by default)]
+# [path of file with list of accession numbers, one per line]
+# [database (nucleotide by default)]
 
 # Prints to console. To print to file, use
 # perl download_fasta_sequences_from_accession_numbers.pl
@@ -19,7 +20,7 @@ use strict;
 use warnings;
 
 
-my $accession_numbers_file = $ARGV[0]; # output of retrieve_top_blast_hits_LCA_for_each_sequence.pl
+my $accession_numbers_file = $ARGV[0]; # list of accession numbers, one per line
 my $database = $ARGV[1]; # nucleotide by default
 if(!$database)
 {
@@ -56,7 +57,6 @@ while(<ACCESSION_NUMBERS>)
 			print STDERR "Error: skipping output that is not a fasta sequence (accession"
 				." number ".$accession_number."): \n".$fasta_sequence;
 		}
-		
 	}
 }
 close ACCESSION_NUMBERS;
