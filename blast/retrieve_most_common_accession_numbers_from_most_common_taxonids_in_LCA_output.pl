@@ -48,6 +48,7 @@ my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 my $MATCHED_ACCESSION_NUMBERS_DELIMITER = ",";
+my $OUTPUT_ACCESSION_NUMBER_DELIMITER = $NEWLINE; # " ";
 
 # blast LCA table
 my $sequence_name_column = 0;
@@ -157,7 +158,10 @@ foreach my $matched_taxon_id(
 		# retrieves accession numbers matched by this ancestor taxon id
 		foreach my $matched_accession_number(split($MATCHED_ACCESSION_NUMBERS_DELIMITER, $taxon_id_to_matched_accession_numbers{$matched_taxon_id}))
 		{
-			$accession_number_to_number_matches{$matched_accession_number} = $accession_number_to_number_matches{$matched_accession_number} + 1;
+			if($matched_accession_number and $matched_accession_number ne $NO_DATA)
+			{
+				$accession_number_to_number_matches{$matched_accession_number} = $accession_number_to_number_matches{$matched_accession_number} + 1;
+			}
 		}
 	}
 	$number_matched_taxon_ids_examined++;
@@ -173,7 +177,7 @@ foreach my $matched_accession_number(
 	if($number_accession_numbers_examined < $number_most_frequent_matched_accession_numbers)
 	{
 		# prints accession number
-		print $matched_accession_number.$NEWLINE;
+		print $matched_accession_number.$OUTPUT_ACCESSION_NUMBER_DELIMITER;
 	}
 	$number_accession_numbers_examined++;
 }
