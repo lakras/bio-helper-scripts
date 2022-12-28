@@ -241,6 +241,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl retrieve_taxonids_from_accession_numbers_of_blast_matches.pl [blast or diamond output] [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search] [column number of new taxon id column to add to output file (0-indexed)] [column number (0-indexed) of column containing match accession numbers (stitle)] [optional column number (0-indexed) of column containing match names (stitle)] > [blast or diamond output with taxon id column added]`_
 
+- [`retrieve_taxonids_from_accession_numbers.pl`](/blast/retrieve_taxonids_from_accession_numbers.pl): Given a list of accession numbers, one per line, retrieves corresponding taxon ids. Outputs tab-separating map with sequence name and taxon id.
+
+   _Usage: `perl retrieve_taxonids_from_accession_numbers.pl [path of file with list of accession numbers, one per line] [database (nuccore by default)] > [output mapping table path]`_
+
 - [`retrieve_taxon_names_from_taxonids.pl`](/blast/retrieve_taxon_names_from_taxonids.pl): Retrieves each match's taxon name from its taxon id and adds it to blast or diamond output as a new column.
 
    _Usage: `perl retrieve_taxon_names_from_taxonids.pl [blast or diamond output] [names.dmp file from NCBI] > [blast or diamond output with taxon name column added]`_
