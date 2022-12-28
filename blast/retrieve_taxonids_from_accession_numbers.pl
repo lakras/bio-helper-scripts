@@ -36,8 +36,48 @@ my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 
 
+# generates accession number to taxon id mapping
+# (D90600.1 becomes D90600; rows printed out of order)
 my $sacc_to_taxon_id_string = `cat $accession_numbers_file | epost -db $database | esummary | xtract -pattern DocumentSummary -element Caption,TaxId`;
-print $sacc_to_taxon_id_string;
+
+# reads in accession number to taxon id mapping
+my %accession_number_without_version_to_taxon_id = (); # key: accession number -> value: taxon id
+foreach my $line(split($NEWLINE, $sacc_to_taxon_id_string))
+{
+	if($line =~ /\S/)
+	{
+		my @items = split($DELIMITER, $line);
+		my $accession_number = $items[0];
+		my $taxonid = $items[1];
+		
+		$accession_number_without_version_to_taxon_id{$accession_number} = $taxonid;
+	}
+}
+
+# retrieves original accession numbers in their original order
+open ACCESSION_NUMBERS, "<$accession_numbers_file" || die "Could not open $accession_numbers_file to read\n";
+while(<ACCESSION_NUMBERS>)
+{
+	chomp;
+	if($_ =~ /\S/)
+	{
+		# retrieves accession number without version
+		my $accession_number = $_;
+		my $accession_number_without_version = $accession_number;
+		if($accession_number_without_version =~ /^(.*)[.]\d+/)
+		{
+			$accession_number_without_version = $1;
+		}
+		
+		# retrieves taxon id
+		my $taxonid = $accession_number_without_version_to_taxon_id{$accession_number_without_version};
+		
+		# prints accession number and txaon id
+		print $accession_number.$DELIMITER;
+		print $taxonid.$NEWLINE;
+	}
+}
+close ACCESSION_NUMBERS;
 
 
 # December 1, 2022
