@@ -237,9 +237,9 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl compare_LCA_matches_to_ground_truth_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search, to be treated as ground truth] [output of another retrieve_top_blast_hits_LCA_for_each_sequence.pl for another blast search, to compare to ground truth] [nodes.dmp file from NCBI] > [output table]`_
 
-- [`retrieve_taxonid_from_accession_numbers_of_matches.pl`](/blast/retrieve_taxonid_from_accession_numbers_of_matches.pl): Retrieves each match's taxon id from Entrez using match accession number column and adds taxon ids to blast or diamond output as a new column.
+- [`retrieve_taxonids_from_accession_numbers_of_blast_matches.pl`](/blast/retrieve_taxonids_from_accession_numbers_of_blast_matches.pl): Retrieves each match's taxon id from Entrez using match accession number column and adds taxon ids to blast or diamond output as a new column.
 
-   _Usage: `perl retrieve_taxonid_from_accession_numbers_of_matches.pl [blast or diamond output] [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search] [column number of new taxon id column to add to output file (0-indexed)] [column number (0-indexed) of column containing match accession numbers (stitle)] [optional column number (0-indexed) of column containing match names (stitle)] > [blast or diamond output with taxon id column added]`_
+   _Usage: `perl retrieve_taxonids_from_accession_numbers_of_blast_matches.pl [blast or diamond output] [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search] [column number of new taxon id column to add to output file (0-indexed)] [column number (0-indexed) of column containing match accession numbers (stitle)] [optional column number (0-indexed) of column containing match names (stitle)] > [blast or diamond output with taxon id column added]`_
 
 - [`retrieve_taxon_names_from_taxonids.pl`](/blast/retrieve_taxon_names_from_taxonids.pl): Retrieves each match's taxon name from its taxon id and adds it to blast or diamond output as a new column.
 
