@@ -253,6 +253,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl retrieve_most_common_accession_numbers_from_most_common_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to examine] [number accession numbers most frequent matched by descendants of most frequent species, genera, or families] > [output list of accession numbers, one per line]`_
 
+- [`filter_LCA_matches.pl`](/blast/filter_LCA_matches.pl): Filters LCA matches by rank (at least species, genus, or family), mean percent identity, and/or mean percent query coverage. Uses output of retrieve_top_blast_hits_LCA_for_each_sequence.pl as input.
+
+   _Usage: `perl filter_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [1 to requires output matches to be classified to at least species level] [1 to requires output matches to be classified to at least genus level] [1 to requires output matches to be classified to at least family level] [minimum mean percent identity] [maximum mean percent identity]  [minimum mean percent query coverage] [maximum mean percent query coverage]   > [output filtered LCA matches table]`_
+
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
