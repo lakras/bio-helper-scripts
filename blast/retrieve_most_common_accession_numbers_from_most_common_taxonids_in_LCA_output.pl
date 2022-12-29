@@ -22,13 +22,13 @@
 
 
 # Usage:
-# perl compare_LCA_matches_to_ground_truth_LCA_matches.pl
+# perl retrieve_most_common_accession_numbers_from_most_common_taxonids_in_LCA_output.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search]
 # [species, genus, or family] [number most frequent matched species, genera, or families to examine]
 # [number accession numbers most frequent matched by descendants of most frequent species, genera, or families]
 
 # Prints to console. To print to file, use
-# perl compare_LCA_matches_to_ground_truth_LCA_matches.pl
+# perl retrieve_most_common_accession_numbers_from_most_common_taxonids_in_LCA_output.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search]
 # [species, genus, or family] [number most frequent matched species, genera, or families to examine]
 # [number accession numbers most frequent matched by descendants of most frequent species, genera, or families]
