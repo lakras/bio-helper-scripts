@@ -156,7 +156,7 @@ while(<BLAST_OUTPUT>)
 		{
 			$sequence_name_to_accession_numbers_matched{$sequence_name} .= ",";
 		}
-		$sequence_name_to_accession_numbers_matched{$sequence_name} .= $$matched_accession_number;
+		$sequence_name_to_accession_numbers_matched{$sequence_name} .= $matched_accession_number;
 		
 		# if multiple matched taxon ids listed, handles each taxon id separately
 		my @matched_taxon_ids = split($TAXONID_SEPARATOR, $matched_taxon_id_as_provided);
