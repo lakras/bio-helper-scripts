@@ -132,14 +132,14 @@ while(<LCA_MATCHES>)
 		}
 		
 		# increments number matches for this ancestor taxon id
-		$taxon_id_to_number_matches{$ancestor_taxon_id} = $taxon_id_to_number_matches{$ancestor_taxon_id} + 1;
+		$taxon_id_to_number_matches{$ancestor_taxon_id}++;
 		
 		# saves matched accession numbers
 		if($taxon_id_to_matched_accession_numbers{$ancestor_taxon_id})
 		{
-			$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} = $taxon_id_to_matched_accession_numbers{$ancestor_taxon_id}.$MATCHED_ACCESSION_NUMBERS_DELIMITER;
+			$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} .= $MATCHED_ACCESSION_NUMBERS_DELIMITER;
 		}
-		$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} = $taxon_id_to_matched_accession_numbers{$ancestor_taxon_id}.$matched_accession_numbers;
+		$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} .= $matched_accession_numbers;
 	}
 	$first_row = 0;
 }
@@ -160,7 +160,7 @@ foreach my $matched_taxon_id(
 		{
 			if($matched_accession_number and $matched_accession_number ne $NO_DATA)
 			{
-				$accession_number_to_number_matches{$matched_accession_number} = $accession_number_to_number_matches{$matched_accession_number} + 1;
+				$accession_number_to_number_matches{$matched_accession_number}++;
 			}
 		}
 	}
