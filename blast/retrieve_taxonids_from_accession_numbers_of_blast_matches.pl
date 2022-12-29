@@ -10,14 +10,14 @@
 
 
 # Usage:
-# perl retrieve_taxonid_from_accession_numbers_of_matches.pl [blast or diamond output]
+# perl retrieve_taxonids_from_accession_numbers_of_blast_matches.pl [blast or diamond output]
 # [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search]
 # [column number of new taxon id column to add to output file (0-indexed)]
 # [column number (0-indexed) of column containing match accession numbers (stitle)]
 # [optional column number (0-indexed) of column containing match names (stitle)]
 
 # Prints to console. To print to file, use
-# perl retrieve_taxonid_from_accession_numbers_of_matches.pl [blast or diamond output]
+# perl retrieve_taxonids_from_accession_numbers_of_blast_matches.pl [blast or diamond output]
 # [1 if blast or diamond output is from a nucleotide search; 0 if it is from a protein search]
 # [column number of new taxon id column to add to output file (0-indexed)]
 # [column number (0-indexed) of column containing match accession numbers (stitle)]
