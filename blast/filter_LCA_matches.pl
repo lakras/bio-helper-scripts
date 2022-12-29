@@ -60,7 +60,6 @@ my $max_mean_query_coverage = $ARGV[7]; # requires output matches to have at mos
 my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
-my $TAXONDUMP_DELIMITER = "\t[|]\t"; # nodes.dmp and names.dmp
 
 # blast LCA table
 my $sequence_name_column = 0;
@@ -106,7 +105,7 @@ while(<LCA_MATCHES>)
 		else
 		{
 			# reads in relevant lines in row
-			my @items = split($DELIMITER, $_);
+			my @items = split($DELIMITER, $line);
 			my $species = $items[$LCA_taxon_species_column];
 			my $genus = $items[$LCA_taxon_genus_column];
 			my $family = $items[$LCA_taxon_family_column];
