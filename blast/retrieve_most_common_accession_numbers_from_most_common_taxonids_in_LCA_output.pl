@@ -45,6 +45,9 @@ my $number_most_frequent_matched_taxa = $ARGV[2];
 my $number_most_frequent_matched_accession_numbers = $ARGV[3];
 
 
+my $PRINT_NUMBER_SEQUENCES_MAPPED_TO_EACH_ACCESSION_NUMBER = 0;
+my $PRINT_NUMBER_SEQUENCES_ACCOUNTED_FOR_BY_PRINTED_ACCESSION_NUMBERS = 0;
+
 my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
@@ -190,11 +193,73 @@ foreach my $matched_taxon_id(
 }
 
 
-# retrieves top accession numbers for each taxon id
-foreach my $matched_accession_number(sort keys %print_accession_number)
+# counts number sequences mapped to this accession number
+my %accession_number_to_number_sequences_matched = (); # key: accession number -> value: number of sequences mapped to this accession number
+my $number_sequences_accounted_for_by_accession_numbers_to_print = 0;
+$first_row = 1;
+open LCA_MATCHES, "<$LCA_matches" || die "Could not open $LCA_matches to read\n";
+while(<LCA_MATCHES>)
 {
-	print $matched_accession_number.$OUTPUT_ACCESSION_NUMBER_DELIMITER;
+	chomp;
+	if($_ =~ /\S/ and !$first_row)
+	{
+		my @items = split($DELIMITER, $_);
+		my $matched_accession_numbers = $items[$matched_accession_numbers_column];
+
+		# retrieves accession numbers mapped to this species as a top hit
+		my %matched_accession_numbers_set = (); # key: matched accession number -> value: 1
+		foreach my $matched_accession_number(
+			split(/,/, $matched_accession_numbers))
+		{
+			$matched_accession_numbers_set{$matched_accession_number} = 1;
+		}
+	
+		# increments number sequences mapped to each accession number
+		foreach my $matched_accession_number(keys %matched_accession_numbers_set)
+		{
+			$accession_number_to_number_sequences_matched{$matched_accession_number}++;
+		}
+		
+		# determines if this sequence is accounted for by at least one accession number
+		# to be printed
+		my $sequence_accounted_for_by_accession_number_to_print = 0;
+		foreach my $matched_accession_number(keys %matched_accession_numbers_set)
+		{
+			if($print_accession_number{$matched_accession_number})
+			{
+				$sequence_accounted_for_by_accession_number_to_print = 1;
+			}
+		}
+		if($sequence_accounted_for_by_accession_number_to_print)
+		{
+			$number_sequences_accounted_for_by_accession_numbers_to_print++;
+		}
+	}
+	$first_row = 0;
+}
+close LCA_MATCHES;
+
+
+# retrieves and prints top accession numbers for each taxon id
+foreach my $matched_accession_number(
+	sort {$accession_number_to_number_sequences_matched{$b} <=> $accession_number_to_number_sequences_matched{$a}}
+	keys %print_accession_number)
+{
+	print $matched_accession_number;
+	if($PRINT_NUMBER_SEQUENCES_MAPPED_TO_EACH_ACCESSION_NUMBER)
+	{
+		print " (".$accession_number_to_number_sequences_matched{$matched_accession_number}.")";
+	}
+	print $OUTPUT_ACCESSION_NUMBER_DELIMITER;
 }
 
+# prints number sequences accounted for by printed accession numbers
+if($PRINT_NUMBER_SEQUENCES_ACCOUNTED_FOR_BY_PRINTED_ACCESSION_NUMBERS)
+{
+	print STDERR "\n";
+	print STDERR (scalar keys %print_accession_number)." accession numbers printed.\n";
+	print STDERR $number_sequences_accounted_for_by_accession_numbers_to_print
+		." sequences accounted for by printed accession numbers.\n"
+}
 
 # December 27, 2022
