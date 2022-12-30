@@ -134,7 +134,8 @@ my %sequence_name_to_number_top_hits = (); # key: sequence name -> value: number
 my %sequence_name_to_sum_top_hits_pident = (); # key: sequence name -> value: sum of top hits pident
 my %sequence_name_to_sum_top_hits_qcovs = (); # key: sequence name -> value: sum of top hits qcovs
 my %sequence_name_to_top_hits_evalue = (); # key: sequence name -> value: e-value of top hits
-my %sequence_name_to_accession_numbers_matched = (); # key: sequence name -> key: accession number -> value: 1
+# my %sequence_name_to_accession_numbers_matched = (); # key: sequence name -> key: accession number -> value: 1
+my %sequence_name_to_accession_number_matched = (); # key: sequence name -> key: accession number -> value: 1
 while(<BLAST_OUTPUT>)
 {
 	chomp;
@@ -152,11 +153,7 @@ while(<BLAST_OUTPUT>)
 		my $evalue = $items[$EVALUE_COLUMN];
 		
 		# saves matched taxon id(s)
-		if($sequence_name_to_accession_numbers_matched{$sequence_name})
-		{
-			$sequence_name_to_accession_numbers_matched{$sequence_name} .= ",";
-		}
-		$sequence_name_to_accession_numbers_matched{$sequence_name} .= $matched_accession_number;
+		$sequence_name_to_accession_number_matched{$sequence_name}{$matched_accession_number} = 1;
 		
 		# if multiple matched taxon ids listed, handles each taxon id separately
 		my @matched_taxon_ids = split($TAXONID_SEPARATOR, $matched_taxon_id_as_provided);
@@ -386,7 +383,7 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
-	print $sequence_name_to_accession_numbers_matched{$sequence_name}.$NEWLINE;
+	print join(",", sort keys %{$sequence_name_to_accession_number_matched{$sequence_name}}).$NEWLINE;
 }
 
 
