@@ -4,7 +4,7 @@
 # species, genera, or families.
 
 # Input table is output of retrieve_top_blast_hits_LCA_for_each_sequence.pl with parameter
-# print_matched_taxon_ids set to true (1), with column titles (tab-separated):
+# print_matched_accession_numbers set to true (1), with column titles (tab-separated):
 # - sequence_name
 # - LCA_taxon_id
 # - LCA_taxon_rank

@@ -25,11 +25,11 @@
 
 # Usage:
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
-# [nodes.dmp file from NCBI] [1 to print all matched taxon ids in a final column]
+# [nodes.dmp file from NCBI] [1 to print all matched accession numbers in a final column]
 
 # Prints to console. To print to file, use
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
-# [nodes.dmp file from NCBI]  [1 to print all matched taxon ids in a final column]
+# [nodes.dmp file from NCBI]  [1 to print all matched accession numbers in a final column]
 # > [output table]
 
 
