@@ -40,6 +40,8 @@ my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sski
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
 
 
+my $PRINT_MATCHED_TAXON_IDS = 1;
+
 my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
@@ -134,7 +136,6 @@ my %sequence_name_to_number_top_hits = (); # key: sequence name -> value: number
 my %sequence_name_to_sum_top_hits_pident = (); # key: sequence name -> value: sum of top hits pident
 my %sequence_name_to_sum_top_hits_qcovs = (); # key: sequence name -> value: sum of top hits qcovs
 my %sequence_name_to_top_hits_evalue = (); # key: sequence name -> value: e-value of top hits
-# my %sequence_name_to_accession_numbers_matched = (); # key: sequence name -> key: accession number -> value: 1
 my %sequence_name_to_accession_number_matched = (); # key: sequence name -> key: accession number -> value: 1
 while(<BLAST_OUTPUT>)
 {
@@ -297,10 +298,6 @@ while(<BLAST_OUTPUT>)
 					}
 				}
 				
-				# for debugging: prints result so far
-# 				print STDERR "taxon id:   ".$matched_taxon_id_as_provided."\n";
-# 				print STDERR "LCA so far: ".$sequence_name_to_top_hits_LCA_taxon_id{$sequence_name}."\n\n";
-		
 				# prepares for next sequence
 				$previous_sequence_name = $sequence_name;
 				$previous_evalue = $evalue;
@@ -325,8 +322,12 @@ print "highest_pident_of_top_hits".$DELIMITER;
 print "lowest_qcovs_of_top_hits".$DELIMITER;
 print "mean_qcovs_of_top_hits".$DELIMITER;
 print "highest_qcovs_of_top_hits".$DELIMITER;
-print "number_top_hits".$DELIMITER;
-print "matched_accession_numbers".$NEWLINE;
+print "number_top_hits";
+if($PRINT_MATCHED_TAXON_IDS)
+{
+	print $DELIMITER."matched_accession_numbers".$NEWLINE;
+}
+print $NEWLINE;
 
 
 # prints output table
@@ -382,8 +383,13 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $sequence_name_to_min_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
-	print $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
-	print join(",", sort keys %{$sequence_name_to_accession_number_matched{$sequence_name}}).$NEWLINE;
+	print $sequence_name_to_number_top_hits{$sequence_name};
+	if(if($PRINT_MATCHED_TAXON_IDS))
+	{
+		print $DELIMITER;
+		print join(",", sort keys %{$sequence_name_to_accession_number_matched{$sequence_name}});
+	}
+	print $NEWLINE;
 }
 
 
