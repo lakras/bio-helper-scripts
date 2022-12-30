@@ -131,15 +131,18 @@ while(<LCA_MATCHES>)
 			$ancestor_taxon_id = $family;
 		}
 		
-		# increments number matches for this ancestor taxon id
-		$taxon_id_to_number_matches{$ancestor_taxon_id}++;
-		
-		# saves matched accession numbers
-		if($taxon_id_to_matched_accession_numbers{$ancestor_taxon_id})
+		if($ancestor_taxon_id)
 		{
-			$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} .= $MATCHED_ACCESSION_NUMBERS_DELIMITER;
+			# increments number matches for this ancestor taxon id
+			$taxon_id_to_number_matches{$ancestor_taxon_id}++;
+		
+			# saves matched accession numbers
+			if($taxon_id_to_matched_accession_numbers{$ancestor_taxon_id})
+			{
+				$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} .= $MATCHED_ACCESSION_NUMBERS_DELIMITER;
+			}
+			$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} .= $matched_accession_numbers;
 		}
-		$taxon_id_to_matched_accession_numbers{$ancestor_taxon_id} .= $matched_accession_numbers;
 	}
 	$first_row = 0;
 }
@@ -147,7 +150,7 @@ close LCA_MATCHES;
 
 
 # retrieves accession numbers matched by most frequently matched ancestor taxon ids
-my %accession_number_to_number_matches = (); # key: accession number matched by descendant of a top species, genus, or family -> number times it is matched
+my %print_accession_number = (); # key: accession number -> value: 1 if we are going to print this accession number as output
 my $number_matched_taxon_ids_examined = 0;
 foreach my $matched_taxon_id(
 	sort {$taxon_id_to_number_matches{$b} <=> $taxon_id_to_number_matches{$a}}
@@ -155,31 +158,41 @@ foreach my $matched_taxon_id(
 {
 	if($number_matched_taxon_ids_examined < $number_most_frequent_matched_taxa)
 	{
-		# retrieves accession numbers matched by this ancestor taxon id
-		foreach my $matched_accession_number(split($MATCHED_ACCESSION_NUMBERS_DELIMITER, $taxon_id_to_matched_accession_numbers{$matched_taxon_id}))
+		# retrieves accession numbers matched by this ancestor taxon id, and number of
+		# sequences this accession number is mapped to (number matches)
+		my %accession_number_to_number_matches = (); # key: accession number -> value: number of sequences mapped to this species, genus, or family that are mapped to this accession number
+		foreach my $matched_accession_number(
+			split(/,/, $taxon_id_to_matched_accession_numbers{$matched_taxon_id}))
 		{
 			if($matched_accession_number and $matched_accession_number ne $NO_DATA)
 			{
 				$accession_number_to_number_matches{$matched_accession_number}++;
 			}
 		}
+		
+		# retrieves top N accession numbers mapped to the most sequences from this taxon
+		my $number_accession_numbers_examined = 0;
+		foreach my $matched_accession_number(
+			sort {$accession_number_to_number_matches{$b} <=> $accession_number_to_number_matches{$a}}
+			keys %accession_number_to_number_matches)
+		{
+			if($number_accession_numbers_examined < $number_most_frequent_matched_accession_numbers)
+			{
+				# saves accession number for printing
+				$print_accession_number{$matched_accession_number} = 1;
+				$number_accession_numbers_examined++;
+			}
+		}
+		
+		$number_matched_taxon_ids_examined++;
 	}
-	$number_matched_taxon_ids_examined++;
 }
 
 
-# retrieves top accession numbers
-my $number_accession_numbers_examined = 0;
-foreach my $matched_accession_number(
-	sort {$accession_number_to_number_matches{$b} <=> $accession_number_to_number_matches{$a}}
-	keys %accession_number_to_number_matches)
+# retrieves top accession numbers for each taxon id
+foreach my $matched_accession_number(sort keys %print_accession_number)
 {
-	if($number_accession_numbers_examined < $number_most_frequent_matched_accession_numbers)
-	{
-		# prints accession number
-		print $matched_accession_number.$OUTPUT_ACCESSION_NUMBER_DELIMITER;
-	}
-	$number_accession_numbers_examined++;
+	print $matched_accession_number.$OUTPUT_ACCESSION_NUMBER_DELIMITER;
 }
 
 
