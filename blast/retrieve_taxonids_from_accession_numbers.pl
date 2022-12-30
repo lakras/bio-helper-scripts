@@ -74,7 +74,11 @@ while(<ACCESSION_NUMBERS>)
 		
 		# prints accession number and txaon id
 		print $accession_number.$DELIMITER;
-		print $taxonid.$NEWLINE;
+		if(defined $taxonid)
+		{
+			print $taxonid;
+		}
+		print $NEWLINE;
 	}
 }
 close ACCESSION_NUMBERS;
