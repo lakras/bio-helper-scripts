@@ -25,11 +25,12 @@
 
 # Usage:
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
-# [nodes.dmp file from NCBI]
+# [nodes.dmp file from NCBI] [1 to print all matched taxon ids in a final column]
 
 # Prints to console. To print to file, use
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
-# [nodes.dmp file from NCBI] > [output table]
+# [nodes.dmp file from NCBI]  [1 to print all matched taxon ids in a final column]
+# > [output table]
 
 
 use strict;
@@ -38,9 +39,8 @@ use warnings;
 
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
+my $print_matched_taxon_ids = $ARGV[2]; # if 1, prints all matched taxon ids in a final column
 
-
-my $PRINT_MATCHED_TAXON_IDS = 1;
 
 my $NO_DATA = "NA";
 my $NEWLINE = "\n";
@@ -323,7 +323,7 @@ print "lowest_qcovs_of_top_hits".$DELIMITER;
 print "mean_qcovs_of_top_hits".$DELIMITER;
 print "highest_qcovs_of_top_hits".$DELIMITER;
 print "number_top_hits";
-if($PRINT_MATCHED_TAXON_IDS)
+if($print_matched_taxon_ids)
 {
 	print $DELIMITER."matched_accession_numbers".$NEWLINE;
 }
@@ -384,7 +384,7 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_number_top_hits{$sequence_name};
-	if($PRINT_MATCHED_TAXON_IDS)
+	if($print_matched_taxon_ids)
 	{
 		print $DELIMITER;
 		print join(",", sort keys %{$sequence_name_to_accession_number_matched{$sequence_name}});
