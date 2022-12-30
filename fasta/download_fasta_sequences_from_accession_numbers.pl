@@ -30,6 +30,7 @@ if(!$database)
 
 my $NEWLINE = "\n";
 my $MAXIMUM_NUMBER_ACCESSION_NUMBERS_IN_ONE_URL = 400;
+my $TEMP_FILE_EXTENSION = "_temp.txt";
 
 
 # reads in accession numbers and retrieves corresponding fasta sequences
@@ -64,23 +65,25 @@ push(@accession_numbers_lists, $current_accession_numbers_command_list);
 
 # builds and runs command to download fasta file
 # example URL: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&retmode=text&id=D90600.1
+my $temp_file = $accession_numbers_file.$TEMP_FILE_EXTENSION;
 foreach my $accession_numbers_list(@accession_numbers_lists)
 {
 	my $command = "curl https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db="
 		.$database."\\&rettype=fasta\\&retmode=text\\&id=".$accession_numbers_list; # ." > ".$output_fasta;
-# 	print $command."\n";
-	my $fasta_sequences = `$command`;
-
-	if($fasta_sequences =~ /^>/)
+	`$command > $temp_file`;
+	
+	open FASTA_SEQUENCES, "<$temp_file" || die "Could not open $temp_file to read\n";
+	while(<FASTA_SEQUENCES>)
 	{
-		print $fasta_sequences;
+		chomp;
+		if($_ =~ /\S/)
+		{
+			print $_.$NEWLINE;
+		}
 	}
-	else
-	{
-		print STDERR "Error: skipping output that is not a fasta sequence:\n"
-			.$fasta_sequences."\n"."from accesion number(s)\n".$accession_numbers_list."\n";
-	}
+	close FASTA_SEQUENCES;
 }
+`rm $temp_file`;
 
 
 # December 27, 2022
