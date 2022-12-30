@@ -384,7 +384,7 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_number_top_hits{$sequence_name};
-	if(if($PRINT_MATCHED_TAXON_IDS))
+	if($PRINT_MATCHED_TAXON_IDS)
 	{
 		print $DELIMITER;
 		print join(",", sort keys %{$sequence_name_to_accession_number_matched{$sequence_name}});
