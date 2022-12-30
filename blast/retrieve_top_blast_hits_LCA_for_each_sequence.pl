@@ -39,7 +39,7 @@ use warnings;
 
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
-my $print_matched_taxon_ids = $ARGV[2]; # if 1, prints all matched taxon ids in a final column
+my $print_matched_taxon_ids = $ARGV[2]; # if 1, prints all accession numbers matched by top hits in a final column
 
 
 my $NO_DATA = "NA";
