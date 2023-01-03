@@ -257,6 +257,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl retrieve_most_common_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to output] > [output list of taxon ids, one per line]`_
 
+- [`retrieve_all_taxonids_in_LCA_output.pl`](/blast/retrieve_all_taxonids_in_LCA_output.pl): Retrieve all matched species, genera, or families.
+
+   _Usage: `perl retrieve_all_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] > [output list of taxon ids, one per line]`_
+
 - [`retrieve_refseq_genome_accession_numbers_from_taxon_ids.pl`](/blast/retrieve_refseq_genome_accession_numbers_from_taxon_ids.pl): Given a list of taxon ids, one per line, retrieves accession numbers of refseq genomes. Outputs list of refseq genome accession numbers, one per line.
 
    _Usage: `perl retrieve_refseq_genome_accession_numbers_from_taxon_ids.pl [path of file with list of accession numbers, one per line] > [output list file path]`_
