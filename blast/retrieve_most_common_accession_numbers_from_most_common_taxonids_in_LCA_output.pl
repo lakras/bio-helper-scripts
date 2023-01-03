@@ -40,7 +40,7 @@ use warnings;
 
 
 my $LCA_matches = $ARGV[0]; # output of retrieve_top_blast_hits_LCA_for_each_sequence.pl
-my $minimum_rank_of_taxa_to_examine = $ARGV[1]; # species, genus, or family
+my $rank_of_taxa_to_examine = $ARGV[1]; # species, genus, or family
 my $number_most_frequent_matched_taxa = $ARGV[2];
 my $number_most_frequent_matched_accession_numbers = $ARGV[3];
 
@@ -71,7 +71,7 @@ my $highest_qcovs_of_top_hits_column = 12;
 my $number_top_hits_column = 13;
 my $matched_accession_numbers_column = 14;
 
-# in input parameter minimum_rank_of_taxa_to_examine
+# in input parameter rank_of_taxa_to_examine
 my $SPECIES = "species";
 my $GENUS = "genus";
 my $FAMILY = "family";
@@ -84,15 +84,15 @@ if(!$LCA_matches or !-e $LCA_matches or -z $LCA_matches)
 		.$LCA_matches."\nExiting.\n";
 	die;
 }
-if(!$minimum_rank_of_taxa_to_examine)
+if(!$rank_of_taxa_to_examine)
 {
 	print STDERR "Error: No minimum rank to examine provided. Must be species, genus, or "
 		."family.\nExiting.\n";
 	die;
 }
-if($minimum_rank_of_taxa_to_examine ne $SPECIES
-	and $minimum_rank_of_taxa_to_examine ne $GENUS
-	and $minimum_rank_of_taxa_to_examine ne $FAMILY)
+if($rank_of_taxa_to_examine ne $SPECIES
+	and $rank_of_taxa_to_examine ne $GENUS
+	and $rank_of_taxa_to_examine ne $FAMILY)
 {
 	print STDERR "Error: Non-valid minimum rank to examine provided. Must be species, ".
 		"genus, or family.\nExiting.\n";
@@ -119,17 +119,17 @@ while(<LCA_MATCHES>)
 		
 		# determines ancestor taxon id
 		my $ancestor_taxon_id = "";
-		if($minimum_rank_of_taxa_to_examine eq $SPECIES
+		if($rank_of_taxa_to_examine eq $SPECIES
 			and $species and $species ne $NO_DATA)
 		{
 			$ancestor_taxon_id = $species;
 		}
-		if($minimum_rank_of_taxa_to_examine eq $GENUS
+		if($rank_of_taxa_to_examine eq $GENUS
 			and $genus and $genus ne $NO_DATA)
 		{
 			$ancestor_taxon_id = $genus;
 		}
-		if($minimum_rank_of_taxa_to_examine eq $FAMILY
+		if($rank_of_taxa_to_examine eq $FAMILY
 			and $family and $family ne $NO_DATA)
 		{
 			$ancestor_taxon_id = $family;
