@@ -253,6 +253,14 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl retrieve_taxon_names_from_taxonids.pl [blast or diamond output] [names.dmp file from NCBI] > [blast or diamond output with taxon name column added]`_
 
+- [`retrieve_most_common_taxonids_in_LCA_output.pl`](/blast/retrieve_most_common_taxonids_in_LCA_output.pl): Retrieve NN most frequently matched species, genera, or families.
+
+   _Usage: `perl retrieve_most_common_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to output] > [output list of taxon ids, one per line]`_
+
+- [`retrieve_refseq_genome_accession_numbers_from_taxon_ids.pl`](/blast/retrieve_refseq_genome_accession_numbers_from_taxon_ids.pl): Given a list of taxon ids, one per line, retrieves accession numbers of refseq genomes. Outputs list of refseq genome accession numbers, one per line.
+
+   _Usage: `perl retrieve_refseq_genome_accession_numbers_from_taxon_ids.pl [path of file with list of accession numbers, one per line] > [output list file path]`_
+
 - [`retrieve_most_common_accession_numbers_from_most_common_taxonids_in_LCA_output.pl`](/blast/retrieve_most_common_accession_numbers_from_most_common_taxonids_in_LCA_output.pl): Retrieve most frequent NN accession numbers matched from most frequent NN matched species, genera, or families.
 
    _Usage: `perl retrieve_most_common_accession_numbers_from_most_common_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to examine] [number accession numbers most frequent matched by descendants of most frequent species, genera, or families] > [output list of accession numbers, one per line]`_
@@ -260,7 +268,6 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 - [`filter_LCA_matches.pl`](/blast/filter_LCA_matches.pl): Filters LCA matches by rank (at least species, genus, or family), mean percent identity, and/or mean percent query coverage. Uses output of retrieve_top_blast_hits_LCA_for_each_sequence.pl as input.
 
    _Usage: `perl filter_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [1 to requires output matches to be classified to at least species level] [1 to requires output matches to be classified to at least genus level] [1 to requires output matches to be classified to at least family level] [minimum mean percent identity] [maximum mean percent identity]  [minimum mean percent query coverage] [maximum mean percent query coverage]   > [output filtered LCA matches table]`_
-
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
