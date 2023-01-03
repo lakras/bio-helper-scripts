@@ -111,7 +111,6 @@ while(<LCA_MATCHES>)
 	if($_ =~ /\S/ and !$first_row)
 	{
 		my @items = split($DELIMITER, $_);
-		my $sequence_name = $items[$sequence_name_column];
 		my $species = $items[$LCA_taxon_species_column];;
 		my $genus = $items[$LCA_taxon_genus_column];
 		my $family = $items[$LCA_taxon_family_column];
