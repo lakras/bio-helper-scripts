@@ -269,6 +269,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl filter_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [1 to requires output matches to be classified to at least species level] [1 to requires output matches to be classified to at least genus level] [1 to requires output matches to be classified to at least family level] [minimum mean percent identity] [maximum mean percent identity]  [minimum mean percent query coverage] [maximum mean percent query coverage]   > [output filtered LCA matches table]`_
 
+- [`filter_taxonids_to_descendants_of_target_taxon.pl`](/blast/filter_taxonids_to_descendants_of_target_taxon.pl): Given a list of txaon ids, one per line, filters down to only descendants of parameter taxon id (for example, 10239 for Viruses).
+
+   _Usage: `perl filter_taxonids_to_descendants_of_target_taxon.pl [path of file with list of taxon ids, one per line] [nodes.dmp file from NCBI] [taxon id to filter to] > [output list of taxon ids]`_
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
