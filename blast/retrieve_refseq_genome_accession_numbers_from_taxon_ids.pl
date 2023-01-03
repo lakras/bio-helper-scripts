@@ -28,7 +28,7 @@ my $taxon_ids_file = $ARGV[0]; # list of taxon ids, one per line
 my $MAXIMUM_NUMBER_TAXONIDS_IN_ONE_QUERY = 400;
 
 
-# retrieves taxonids and generates query lists with at most 400 queries per list
+# retrieves taxonids from input file and generates query lists with at most 400 queries per list
 my @taxon_ids_queries = ();
 my $current_taxonid_query = "";
 my $current_number_taxonids = 0;
