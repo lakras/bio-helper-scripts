@@ -80,12 +80,13 @@ open MAPPING, "<$mapping_file" || die "Could not open $mapping_file to read\n";
 my %sacc_to_taxon_id = (); # key: match accession number -> value: match taxon id
 while(<MAPPING>)
 {
-	if($_ =~ /^(\S*)\s*(\S*)$/)
+	my @items = split($DELIMITER, $_);
+	my $accession_number = $items[0];
+	my $taxon_id = $items[1];
+	
+	if($matched_accession_numbers{$accession_number})
 	{
-		if($matched_accession_numbers{$1})
-		{
-			$sacc_to_taxon_id{$1} = $2;
-		}
+		$sacc_to_taxon_id{$accession_number} = $taxon_id;
 	}
 }
 close MAPPING;
