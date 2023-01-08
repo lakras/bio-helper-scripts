@@ -37,7 +37,7 @@ my $EVALUE_COLUMN_BLAST = 11;			# evalue
 # modified DIAMOND output file columns
 # format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) qlen slen length pident qcovhsp evalue
 # Note: sstitle column must first be separated out into two columns, accession number and sequence name
-# perl split_column_after_query.pl results/sample.fasta_DIAMOND_nr.out 1 " " > results/sample.fasta_DIAMOND_nr.out_match_column_split.txt
+# perl split_column_after_query.pl [DIAMOND output file] 1 " " > [DIAMOND output file with accession number and sequence name in separate columns]
 my $SEQUENCE_NAME_COLUMN_DIAMOND = 0; 	# qseqid
 my $PERCENT_ID_COLUMN_DIAMOND = 6; 		# pident
 my $QUERY_COVERAGE_COLUMN_DIAMOND = 7;	# qcovs
