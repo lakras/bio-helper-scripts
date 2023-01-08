@@ -26,11 +26,12 @@
 # Usage:
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
 # [nodes.dmp file from NCBI] [1 to print all matched accession numbers in a final column]
+# [1 to treat blast output as modified DIAMOND output]
 
 # Prints to console. To print to file, use
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
 # [nodes.dmp file from NCBI]  [1 to print all matched accession numbers in a final column]
-# > [output table]
+# [1 to treat blast output as modified DIAMOND output] > [output table]
 
 
 use strict;
@@ -40,6 +41,7 @@ use warnings;
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
 my $print_matched_taxon_ids = $ARGV[2]; # if 1, prints all accession numbers matched by top hits in a final column
+my $is_diamond_output = $ARGV[3]; # if 1, treats input file with blast output as modified DIAMOND output; format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) taxonid qlen slen length pident qcovhsp evalue
 
 
 my $NO_DATA = "NA";
@@ -50,19 +52,25 @@ my $TAXONID_SEPARATOR = ";"; # in blast file
 
 
 # blast file
-my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
-my $MATCHED_ACCESSION_NUMBER_COLUMN = 1; # sacc
-my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
-my $PERCENT_ID_COLUMN = 9; 		# pident
-my $QUERY_COVERAGE_COLUMN = 10;	# qcovs
-my $EVALUE_COLUMN = 11;			# evalue
+my $SEQUENCE_NAME_COLUMN_BLAST = 0; 	# qseqid
+my $MATCHED_ACCESSION_NUMBER_COLUMN_BLAST = 1; # sacc
+my $MATCHED_TAXONID_COLUMN_BLAST = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
+my $PERCENT_ID_COLUMN_BLAST = 9; 		# pident
+my $QUERY_COVERAGE_COLUMN_BLAST = 10;	# qcovs
+my $EVALUE_COLUMN_BLAST = 11;			# evalue
 
-# modified diamond file
-# my $SEQUENCE_NAME_COLUMN = 0; 	# qseqid
-# my $MATCHED_TAXONID_COLUMN = 3;	# staxids (Subject Taxonomy ID(s), separated by a ';')
-# my $PERCENT_ID_COLUMN = 7; 		# pident
-# my $QUERY_COVERAGE_COLUMN = 8;	# qcovs
-# my $EVALUE_COLUMN = 9;			# evalue
+# modified DIAMOND output file columns
+# format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) taxonid qlen slen length pident qcovhsp evalue
+# Note: sstitle column must first be separated out into two columns, accession number and
+# sequence name, and taxon id column must be added
+# perl split_column_after_query.pl [DIAMOND output file] 1 " " > [DIAMOND output file with accession number and sequence name in separate columns]
+# perl retrieve_taxonids_from_accession_numbers_of_blast_matches_bulk.pl [DIAMOND output file with accession number and sequence name in separate columns] 3 1 prot.accession2taxid.FULL.* > [DIAMOND output file with accession number and sequence name in separate columns, and with taxon id column added]
+my $SEQUENCE_NAME_COLUMN_DIAMOND = 0; 			# qseqid
+my $MATCHED_ACCESSION_NUMBER_COLUMN_DIAMOND = 1; # sacc
+my $MATCHED_TAXONID_COLUMN_DIAMOND = 3;			# staxids (Subject Taxonomy ID(s), separated by a ';')
+my $PERCENT_ID_COLUMN_DIAMOND = 7; 				# pident
+my $QUERY_COVERAGE_COLUMN_DIAMOND = 8;			# qcovs
+my $EVALUE_COLUMN_DIAMOND = 9;					# evalue
 
 # nodes.dmp and names.dmp
 my $TAXONID_COLUMN = 0;	# both
@@ -79,6 +87,24 @@ my $ROOT_TAXON_ID = 1;
 # 1 to print top blast hits to STDERR (for testing)
 my $PRINT_TOP_BLAST_HITS_TO_STDERR = 0;
 my $LOUD = 0;
+
+
+# determines whether columns should be blast format or modified diamond format
+my $sequence_name_column = $SEQUENCE_NAME_COLUMN_BLAST; 	# qseqid
+my $matched_accession_number_column = $MATCHED_ACCESSION_NUMBER_COLUMN_BLAST; # sacc
+my $matched_taxonid_column = $MATCHED_TAXONID_COLUMN_BLAST;	# staxids (Subject Taxonomy ID(s), separated by a ';')
+my $percent_id_column = $PERCENT_ID_COLUMN_BLAST; 			# pident
+my $query_coverage_column = $QUERY_COVERAGE_COLUMN_BLAST;	# qcovs
+my $evalue_column = $EVALUE_COLUMN_BLAST;					# evalue
+if($is_diamond_output)
+{
+	$sequence_name_column = $SEQUENCE_NAME_COLUMN_DIAMOND; 	# qseqid
+	$matched_accession_number_column = $MATCHED_ACCESSION_NUMBER_COLUMN_DIAMOND; # sacc
+	$matched_taxonid_column = $MATCHED_TAXONID_COLUMN_DIAMOND;	# staxids (Subject Taxonomy ID(s), separated by a ';')
+	$percent_id_column = $PERCENT_ID_COLUMN_DIAMOND; 			# pident
+	$query_coverage_column = $QUERY_COVERAGE_COLUMN_DIAMOND;	# qcovs
+	$evalue_column = $EVALUE_COLUMN_DIAMOND;					# evalue
+}
 
 
 # verifies that all input files exist and are non-empty
@@ -137,6 +163,8 @@ my %sequence_name_to_sum_top_hits_pident = (); # key: sequence name -> value: su
 my %sequence_name_to_sum_top_hits_qcovs = (); # key: sequence name -> value: sum of top hits qcovs
 my %sequence_name_to_top_hits_evalue = (); # key: sequence name -> value: e-value of top hits
 my %sequence_name_to_accession_number_matched = (); # key: sequence name -> key: accession number -> value: 1
+
+my %printed_error_for_taxon_id = (); # key: taxon id -> value: 1 if we've already printed an error for this taxon id
 while(<BLAST_OUTPUT>)
 {
 	chomp;
@@ -146,21 +174,33 @@ while(<BLAST_OUTPUT>)
 # 		print STDERR $_."\n";
 		
 		my @items = split($DELIMITER, $line);
-		my $sequence_name = $items[$SEQUENCE_NAME_COLUMN];
-		my $matched_accession_number = $items[$MATCHED_ACCESSION_NUMBER_COLUMN];
-		my $matched_taxon_id_as_provided = $items[$MATCHED_TAXONID_COLUMN];
-		my $percent_id = $items[$PERCENT_ID_COLUMN];
-		my $query_coverage = $items[$QUERY_COVERAGE_COLUMN];
-		my $evalue = $items[$EVALUE_COLUMN];
+		my $sequence_name = $items[$sequence_name_column];
+		my $matched_accession_number = $items[$matched_accession_number_column];
+		my $matched_taxon_id_as_provided = $items[$matched_taxonid_column];
+		my $percent_id = $items[$percent_id_column];
+		my $query_coverage = $items[$query_coverage_column];
+		my $evalue = $items[$evalue_column];
 		
 		# saves matched taxon id(s)
 		$sequence_name_to_accession_number_matched{$sequence_name}{$matched_accession_number} = 1;
 		
 		# if multiple matched taxon ids listed, handles each taxon id separately
 		my @matched_taxon_ids = split($TAXONID_SEPARATOR, $matched_taxon_id_as_provided);
+		
+		# collects matched taxon ids and removes NA matched taxon ids
+		my %matched_taxon_ids_set = ();
 		foreach my $matched_taxon_id(@matched_taxon_ids)
 		{
+			if($matched_taxon_id ne $NO_DATA)
+			{
+				$matched_taxon_ids_set{$matched_taxon_id} = 1;
+			}
+		}
+		@matched_taxon_ids = keys %matched_taxon_ids_set;
 		
+		# processes matched taxon ids
+		foreach my $matched_taxon_id(@matched_taxon_ids)
+		{
 			# new sequence, so at least the first match has lowest e-value
 			if($sequence_name ne $previous_sequence_name)
 			{
@@ -189,9 +229,36 @@ while(<BLAST_OUTPUT>)
 			{
 				$is_top_evalue = 0;
 			}
-		
-			# processes this hit if it is a top hit for this sequence
+			
+			# verifies that we can trace full ancestry of this taxon id
+			my $can_trace_taxon_id_ancestry = 1;
 			if($is_top_evalue)
+			{
+				my $matched_taxon_id_ancestor = $matched_taxon_id;
+				while($can_trace_taxon_id_ancestry
+					and $matched_taxon_id_ancestor ne $ROOT_TAXON_ID)
+				{
+					if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
+					{
+						$matched_taxon_id_ancestor = $taxonid_to_parent{$matched_taxon_id_ancestor};
+					}
+					else
+					{
+						$can_trace_taxon_id_ancestry = 0;
+					}
+				}
+			}
+			if(!$can_trace_taxon_id_ancestry and !$printed_error_for_taxon_id{$matched_taxon_id})
+			{
+				print STDERR "Error: could not trace ancestry of taxon id "
+					.$matched_taxon_id." in taxon path of matched taxon id in hit:\n"
+						.$line."\n";
+				$printed_error_for_taxon_id{$matched_taxon_id} = 1;
+			}
+		
+			# processes this hit if it is a top hit for this sequence and we can track its
+			# ancestry
+			if($is_top_evalue and $can_trace_taxon_id_ancestry)
 			{
 				# updates percent identity, percent coverage, and e-value stats
 				if($sequence_name ne $previous_sequence_name

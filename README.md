@@ -235,7 +235,7 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
 - [`retrieve_top_blast_hits_LCA_for_each_sequence.pl`](/blast/retrieve_top_blast_hits_LCA_for_each_sequence.pl): For each sequence, extracts all top hits with same e-values (assumes they are in order in blast output). Prints lowest common ancestor (LCA) of top hits for each sequence.
 
-   _Usage: `perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output] [nodes.dmp file from NCBI] [1 to print all matched accession numbers in a final column] > [output table]`_
+   _Usage: `perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output] [nodes.dmp file from NCBI] [1 to print all matched accession numbers in a final column] [1 to treat blast output as modified DIAMOND output] > [output table]`_
    
 - [`compare_LCA_matches_to_ground_truth_LCA_matches.pl`](/blast/compare_LCA_matches_to_ground_truth_LCA_matches.pl): Compares LCA match taxon from two blast outputs for each match. Uses output of retrieve_top_blast_hits_LCA_for_each_sequence.pl as input.
 
