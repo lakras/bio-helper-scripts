@@ -21,7 +21,7 @@ use warnings;
 
 my $taxon_ids_file = $ARGV[0]; # list of taxon ids, one per line
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
-my $taxon_id_to_filter_to = $ARGV[0]; # filters down to only descendants of this taxon id (inclusive)
+my $taxon_id_to_filter_to = $ARGV[2]; # filters down to only descendants of this taxon id (inclusive)
 
 
 my $NO_DATA = "NA";
