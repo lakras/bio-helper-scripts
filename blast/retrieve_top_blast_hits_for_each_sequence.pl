@@ -18,7 +18,7 @@ use warnings;
 
 
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
-my $is_diamond_output = $ARGV[1]; # if 1, treats blast output as DIAMOND output; format: qseqid stitle part 1: accession number stitle part 2: sequence name qlen slen length pident qcovhsp evalue
+my $is_diamond_output = $ARGV[1]; # if 1, treats input file with blast output as DIAMOND output; format: qseqid stitle part 1: accession number stitle part 2: sequence name qlen slen length pident qcovhsp evalue
 
 
 my $NO_DATA = "NA";
@@ -55,7 +55,6 @@ if($is_diamond_output)
 	$percent_id_column = $PERCENT_ID_COLUMN_DIAMOND; 			# pident
 	$query_coverage_column = $QUERY_COVERAGE_COLUMN_DIAMOND;	# qcovs
 	$evalue_column = $EVALUE_COLUMN_DIAMOND;					# evalue
-
 }
 
 # verifies that input file exists and is not empty
