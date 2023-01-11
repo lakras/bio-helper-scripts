@@ -129,6 +129,10 @@ Includes the following scripts—
 
    _Usage: `perl slice_fasta_file_before_or_after_sequence_name_query.pl [fasta file] [sequence name to slice before or after] [1 to print all sequences BEFORE sequence name, 0 to print all sequences AFTER sequence name] [1 to print sequences including sequence name, 0 not to] > [output fasta file]`_
 
+- [`remove_duplicate_name_sequences.pl`](/fasta/remove_duplicate_name_sequences.pl): Removes any sequence whose full name has already appeared in the fasta file.
+
+   _Usage: `perl remove_duplicate_name_sequences.pl [fasta file path] > [output fasta file path]`_
+
 - [`retrieve_sequences_appearing_or_not_appearing_in_table.pl`](/fasta/retrieve_sequences_appearing_or_not_appearing_in_table.pl): Retrieves sequences whose names do or do not appear in input table.
 
    _Usage: `perl retrieve_sequences_appearing_or_not_appearing_in_table.pl [fasta file] [input table] [column number of sequence names (0-indexed)] [1 to retrieve sequences that DO appear in input table, 0 to retrieve sequences that DON'T] > [output fasta file path]`_
