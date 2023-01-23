@@ -546,9 +546,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl add_earliest_or_latest_date_column.pl [table] [0 to select earliest date, 1 to select latest date] "[title of column with dates]" "[title of another column with dates]" "[title of another column with dates]" [etc.] > [output table path]`_
 
-- [`add_column_with_latest_date_before_other_date.pl`](/tables/add_column_with_latest_date_before_other_date.pl): Adds column listing the date that is the latest of the specified columns but earlier than the cut-off date from the cut-off date column. Dates must be in YYYY-MM-DD format.
+- [`add_column_with_earliest_or_latest_date_before_cutoff.pl`](/tables/add_column_with_earliest_or_latest_date_before_cutoff.pl): Adds column listing the date that is the latest or earliest of the specified columns but earlier than the cut-off date from the cut-off date column. Dates must be in YYYY-MM-DD format.
 
-   _Usage: `perl add_column_with_latest_date_before_other_date.pl [table] "[title of column with cut-off date]" "[title of column with dates to select from]" "[title of another column with dates to select from]" "[title of another column with dates to select from]" [etc.] > [output table path]`_
+   _Usage: `perl add_column_with_earliest_or_latest_date_before_cutoff.pl [table] [0 to select earliest date, 1 to select latest date] "[title of column with cut-off date]" "[title of column with dates to select from]" "[title of another column with dates to select from]" "[title of another column with dates to select from]" [etc.] > [output table path]`_
 
 - [`sort_date_columns.pl`](/tables/sort_date_columns.pl): Sorts the dates in the specified columns. For each row, of the dates in the specified columns, the earliest date will go in the first specified column, the second-earliest in the second specified column, etc. Empty values go last. Dates provided must be in YYYY-MM-DD format.
 

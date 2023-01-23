@@ -1,16 +1,19 @@
 #!/usr/bin/env perl
 
-# Adds column listing the date that is the latest of the specified columns but earlier
-# than the cut-off date from the cut-off date column. Dates must be in YYYY-MM-DD format.
+# Adds column listing the date that is the latest or earliest of the specified columns but
+# earlier than the cut-off date from the cut-off date column. Dates must be in YYYY-MM-DD
+# format.
 
 # Usage:
-# perl add_column_with_latest_date_before_other_date.pl [table]
+# perl add_column_with_earliest_or_latest_date_before_cutoff.pl [table]
+# [0 to select earliest date, 1 to select latest date]
 # "[title of column with cut-off date]" "[title of column with dates to select from]"
 # "[title of another column with dates to select from]"
 # "[title of another column with dates to select from]" [etc.]
 
 # Prints to console. To print to file, use
-# perl add_column_with_latest_date_before_other_date.pl [table]
+# perl add_column_with_earliest_or_latest_date_before_cutoff.pl [table]
+# [0 to select earliest date, 1 to select latest date]
 # "[title of column with cut-off date]" "[title of column with dates to select from]"
 # "[title of another column with dates to select from]"
 # "[title of another column with dates to select from]" [etc.] > [output table path]
@@ -21,8 +24,9 @@ use warnings;
 
 
 my $table = $ARGV[0];
-my $title_of_cutoff_date_column = $ARGV[1];
-my @titles_of_columns_with_dates = @ARGV[2..$#ARGV];
+my $selecting_latest_date = $ARGV[1];
+my $title_of_cutoff_date_column = $ARGV[2];
+my @titles_of_columns_with_dates = @ARGV[3..$#ARGV];
 
 
 my $NEWLINE = "\n";
@@ -51,7 +55,16 @@ if(scalar @titles_of_columns_with_dates < 2)
 
 
 # names new date column
-$new_date_column_title .= "latest_of_".join("_", @titles_of_columns_with_dates);
+my $new_date_column_title = "";
+if($selecting_latest_date)
+{
+	$new_date_column_title .= "latest";
+}
+else
+{
+	$new_date_column_title .= "earliest";
+}
+$new_date_column_title .= "_of_".join("_", @titles_of_columns_with_dates);
 
 
 # converts array of column titles to a hash
@@ -147,8 +160,16 @@ while(<TABLE>) # for each row in the file
 			}
 			@date_values = @updated_date_values;
 		
-			# retrieves latest date
-			my $result_date_value = get_latest_date(@date_values);
+			# retrieves latest or earliest date
+			my $result_date_value = "";
+			if($selecting_latest_date)
+			{
+				$result_date_value = get_latest_date(@date_values);
+			}
+			else
+			{
+				$result_date_value = get_earliest_date(@date_values);
+			}
 			
 			# print line with new column
 			print $line.$DELIMITER.$result_date_value.$NEWLINE;
@@ -317,6 +338,48 @@ sub value_present
 	
 	# value not empty!
 	return 1;
+}
+
+# given a list of dates, returns the earliest one
+# input format example: 2021-07-24
+sub get_earliest_date
+{
+	my @input_dates = @_;
+	
+	# removes empty dates
+	my @dates = ();
+	foreach my $input_date(@input_dates)
+	{
+		if(defined $input_date and length $input_date)
+		{
+			push(@dates, $input_date);
+		}
+	}
+	
+	# verifies that we are comparing at least two dates
+	if(scalar @dates == 0) # no dates
+	{
+		return "";
+	}
+	if(scalar @dates == 1) # only one date
+	{
+		return $dates[0];
+	}
+	
+	# finds earliest date
+	my $base_date = "2021-01-01";
+	my $earliest_date = $dates[0];
+	my $earliest_date_distance_from_base_date = date_difference($earliest_date, $base_date);
+	foreach my $date(@dates)
+	{
+		my $distance_from_base_date = date_difference($date, $base_date);
+		if($distance_from_base_date > $earliest_date_distance_from_base_date)
+		{
+			$earliest_date = $date;
+			$earliest_date_distance_from_base_date = $distance_from_base_date;
+		}
+	}
+	return $earliest_date;
 }
 
 # given a list of dates, returns the latest one
