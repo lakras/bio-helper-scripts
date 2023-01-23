@@ -95,7 +95,9 @@ while(<TABLE>) # for each row in the file
 			my $column = 0;
 			foreach my $column_title(@items_in_line)
 			{
-				if(defined $column_title and $title_is_of_column_with_date{$column_title})
+				if(defined $column_title
+					and ($title_is_of_column_with_date{$column_title}
+						or $column_title eq $title_of_cutoff_date_column))
 				{
 					$column_is_column_with_dates{$column} = 1;
 					$column_title_to_column{$column_title} = $column;
