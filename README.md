@@ -484,6 +484,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl fill_in_empty_column_values.pl [table] "[title of column to fill in]" "[value to replace empty values with]" > [output table path]`_
 
+- [`fill_in_empty_column_values_with_increasing_numerical_index.pl`](/tables/fill_in_empty_column_values_with_increasing_numerical_index.pl): Fills in empty values in column of interest with an increasing numerical index value, so that every empty cell contains a unique numerical value.
+
+   _Usage: `perl fill_in_empty_column_values_with_increasing_numerical_index.pl [table] "[title of column to fill in]" > [output table path]`_
+
 - [`fill_in_empty_column_values_from_other_column.pl`](/tables/fill_in_empty_column_values_from_other_column.pl): Fills in empty values in column of interest with values from other column.
 
    _Usage: `perl fill_in_empty_column_values_from_other_column.pl [table] "[title of column to fill in]" "[title of column with potential replacement values]" > [output table path]`_
