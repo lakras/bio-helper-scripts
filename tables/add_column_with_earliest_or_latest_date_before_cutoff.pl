@@ -159,7 +159,7 @@ while(<TABLE>) # for each row in the file
 			{
 				if(date_difference($date, $cutoff_date) > 0)
 				{
-					push(@updated_date_values, @date_values);
+					push(@updated_date_values, $date);
 				}
 			}
 			@date_values = @updated_date_values;
