@@ -572,6 +572,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl filter_table_rows_by_numerical_column_value.pl [tab-separated table] [0 to match cells equal to query, 1: less than, 2: less than or equal to, 3: greater than, 4: greater than or equal to] "[title of column to filter by]" "[column value to select]" > [output table path]`_
 
+- [`retrieve_subset_of_rows.pl`](/tables/retrieve_subset_of_rows.pl): Subsets table to only rows of interest (those containing one of the specified values in the specified column).
+
+   _Usage: `perl retrieve_subset_of_rows.pl [file path of table] "[title of column to filter by]" [file path of list of values to filter that column to] > [output table path]`_
+
 - [`delete_table_rows_with_column_value.pl`](/tables/delete_table_rows_with_column_value.pl): Deletes rows in table by column values. Only includes rows without column value containing text to filter out in column to filter by. Case-sensitive.
 
    _Usage: `perl delete_table_rows_with_column_value.pl [tab-separated table] "[query to select rows to delete]" [0 to match cells containing query, 1: beginning with, 2: ending with, 3: equal to] "[title of column to filter by]" > [output table path]`_
