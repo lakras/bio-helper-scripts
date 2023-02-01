@@ -508,6 +508,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl retrieve_subset_of_columns.pl [table] "[title of first column to include in output]" "[title of second column to include]" "[title of third column to include]" [etc.] > [output table path]`_
 
+- [`retrieve_subset_of_columns_by_column_number.pl`](/tables/retrieve_subset_of_columns_by_column_number.pl): Subsets table to only columns of interest.
+
+   _Usage: `perl retrieve_subset_of_columns_by_column_number.pl [table] [column number of first column to include in output] [column number of second column to include] [etc.] > [output table path]`_
+
 - [`compile_values_and_titles_in_selected_columns.pl`](/tables/compile_values_and_titles_in_selected_columns.pl): Generates a new column with the values in selected columns and their column titles, where values are present.
 
    _Usage: `perl compile_values_and_titles_in_selected_columns.pl [tab-separated table] "[column title]" "[another column title]" [etc.] > [output table path]`_
