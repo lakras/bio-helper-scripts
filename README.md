@@ -602,6 +602,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl add_header_line_to_tables.pl "[header line]" [table] [optional additional table] [etc.]`_
 
+- [`split_table_by_column_value.pl`](/tables/split_table_by_column_value.pl): Splits table into multiple tables, one for each column value in specified column.
+
+   _Usage: `perl split_table_by_column_value.pl [input table file path] "[title of column to split by]"`_
 
 ### Replicates
 
