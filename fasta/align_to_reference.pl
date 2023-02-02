@@ -8,14 +8,14 @@
 
 # Usage:
 # perl align_to_reference.pl [reference sequence]
-# [file path of MAFFT executable file (mafft.bat)]
+# [file path of MAFFT executable file (mafft.bat) or mafft command]
 # [file with list of fasta file paths, one per line]
 # [filepaths of at least fasta files OR path of file containing file with list of fasta
 # file paths, one per line]
 
 # Prints to console. To print to file, use
 # perl align_to_reference.pl [reference sequence]
-# [file path of MAFFT executable file (mafft.bat)]
+# [file path of MAFFT executable file (mafft.bat) or mafft command]
 # [filepaths of at least fasta files OR path of file containing file with list of fasta
 # file paths, one per line] > [output fasta file path]
 
@@ -34,7 +34,7 @@ use warnings;
 
 
 my $reference_sequence = $ARGV[0];
-my $mafft_file_path = $ARGV[1];
+my $mafft_file_path_or_command = $ARGV[1];
 my $input_fastas_list;
 my @input_fastas;
 if(scalar @ARGV > 3)
@@ -104,11 +104,11 @@ if(!$reference_sequence or !-e $reference_sequence or -z $reference_sequence)
 	die;
 }
 
-# verifies that mafft executable exists
-if(!$mafft_file_path or !-e $mafft_file_path or -z $mafft_file_path)
+# verifies that mafft executable exists or mafft command provided
+if(!$mafft_file_path_or_command)
 {
-	print STDERR "Error: mafft executable not provided, does not exist, or empty:\n\t"
-		.$mafft_file_path."\n";
+	print STDERR "Error: mafft executable not provided:\n\t"
+		.$mafft_file_path_or_command."\n";
 	die;
 }
 
@@ -250,7 +250,7 @@ foreach my $input_fasta(@input_fastas_one_sequence_per_file)
 			`cat $reference_sequence $input_fasta > $temp_file`;
 
 			# aligns
-			`$mafft_file_path $temp_file > $aligned_fasta`;
+			`$mafft_file_path_or_command $temp_file > $aligned_fasta`;
 
 			# removes temp file
 			`rm $temp_file`;
