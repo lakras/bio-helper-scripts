@@ -4,7 +4,7 @@
 
 # Usage:
 # perl align_each_fasta_file_to_reference_separately.pl [reference sequence]
-# [file path of MAFFT executable file (mafft.bat)] [fasta file path]
+# [file path of MAFFT executable file (mafft.bat) or mafft command] [fasta file path]
 # [another fasta file path] [another fasta file path] [etc.]
 
 # New files are created at filepath of old file with "_aligned_to_ref.fasta" appended to
@@ -17,7 +17,7 @@ use warnings;
 
 
 my $reference_sequence = $ARGV[0];
-my $mafft_file_path = $ARGV[1];
+my $mafft_file_path_or_command = $ARGV[1];
 my @input_fastas = @ARGV[2..$#ARGV];
 
 
@@ -34,11 +34,11 @@ if(!$reference_sequence or !-e $reference_sequence or -z $reference_sequence)
 	next;
 }
 
-# verifies that mafft executable exists
-if(!$mafft_file_path or !-e $mafft_file_path or -z $mafft_file_path)
+# verifies that mafft executable exists or mafft command provided
+if(!$mafft_file_path_or_command)
 {
-	print STDERR "Error: mafft executable not provided, does not exist, or empty:\n\t"
-		.$mafft_file_path."\n";
+	print STDERR "Error: mafft executable or command not provided:\n\t"
+		.$mafft_file_path_or_command."\n";
 	next;
 }
 
@@ -70,7 +70,7 @@ foreach my $input_fasta(@input_fastas)
 		`cat $reference_sequence $input_fasta > $temp_file`;
 
 		# aligns
-		`$mafft_file_path $temp_file > $aligned_fasta`;
+		`$mafft_file_path_or_command $temp_file > $aligned_fasta`;
 
 		# removes temp file
 		`rm $temp_file`;
