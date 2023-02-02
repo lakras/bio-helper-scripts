@@ -35,7 +35,7 @@
 # [optional file containing list of read depth tables]
 # [optional tab-separated table mapping sample names to collection dates (YYYY-MM-DD)]
 # [0 to print one line per sample pair, 1 to print one line per iSNV]
-# > [output fasta file path]
+# > [output table file path]
 
 
 use strict;
