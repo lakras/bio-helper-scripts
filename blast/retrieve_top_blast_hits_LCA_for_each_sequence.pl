@@ -3,7 +3,7 @@
 # For each sequence, extracts all top hits with same e-values (assumes they are in order
 # in blast output). Prints lowest common ancestor (LCA) of top hits for each sequence.
 
-# Input nodes.dpm file must be from same date as database used for input blast search
+# Input nodes.dmp file must be from same date as database used for input blast search
 # results.
 
 # Output table has columns (tab-separated):
@@ -25,12 +25,16 @@
 
 # Usage:
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
-# [nodes.dmp file from NCBI] [1 to print all matched accession numbers in a final column]
+# [nodes.dmp file from NCBI]
+# [number by which to multiply sequence's top evalue, to use as threshold for inclusion in LCA]
+# [1 to print all matched accession numbers in a final column]
 # [1 to treat blast output as modified DIAMOND output]
 
 # Prints to console. To print to file, use
 # perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output]
-# [nodes.dmp file from NCBI]  [1 to print all matched accession numbers in a final column]
+# [nodes.dmp file from NCBI] 
+# [number by which to multiply sequence's top evalue, to use as threshold for inclusion in LCA]
+# [1 to print all matched accession numbers in a final column]
 # [1 to treat blast output as modified DIAMOND output] > [output table]
 
 
@@ -40,8 +44,9 @@ use warnings;
 
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
-my $print_matched_taxon_ids = $ARGV[2]; # if 1, prints all accession numbers matched by top hits in a final column
-my $is_diamond_output = $ARGV[3]; # if 1, treats input file with blast output as modified DIAMOND output; format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) taxonid qlen slen length pident qcovhsp evalue
+my $top_evalue_multiplier_for_inclusion_threshold = $ARGV[2]; # LCA is performed on all hits with e-value less than or equal to this value * top e-value; set to 1 by default, to include only top e-value
+my $print_matched_taxon_ids = $ARGV[3]; # if 1, prints all accession numbers matched by top hits in a final column
+my $is_diamond_output = $ARGV[4]; # if 1, treats input file with blast output as modified DIAMOND output; format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) taxonid qlen slen length pident qcovhsp evalue
 
 
 my $NO_DATA = "NA";
@@ -50,6 +55,9 @@ my $DELIMITER = "\t";
 my $TAXONDUMP_DELIMITER = "\t[|]\t"; # nodes.dmp and names.dmp
 my $TAXONID_SEPARATOR = ";"; # in blast file
 
+
+# default value of top_evalue_multiplier_for_inclusion_threshold
+my $DEFAULT_TOP_EVALUE_MULTIPLIER = 1;
 
 # blast file
 my $SEQUENCE_NAME_COLUMN_BLAST = 0; 	# qseqid
@@ -87,6 +95,13 @@ my $ROOT_TAXON_ID = 1;
 # 1 to print top blast hits to STDERR (for testing)
 my $PRINT_TOP_BLAST_HITS_TO_STDERR = 0;
 my $LOUD = 0;
+
+
+# sets e-value multiplier for inclusion threshold
+if(!$top_evalue_multiplier_for_inclusion_threshold)
+{
+	$top_evalue_multiplier_for_inclusion_threshold = $DEFAULT_TOP_EVALUE_MULTIPLIER;
+}
 
 
 # determines whether columns should be blast format or modified diamond format
@@ -150,7 +165,7 @@ open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read
 
 my $previous_sequence_name = "";
 my $is_top_evalue = 1;
-my $previous_evalue = -1;
+my $sequence_top_evalue = -1;
 my %taxon_id_is_in_current_LCA_taxon_path = (); # key: taxon id -> value: 1 if taxon is in taxon path of current LCA
 
 my %sequence_name_to_top_hits_LCA_taxon_id = (); # key: sequence name -> value: current taxon id of LCA of top hits' taxa
@@ -201,7 +216,7 @@ while(<BLAST_OUTPUT>)
 		# processes matched taxon ids
 		foreach my $matched_taxon_id(@matched_taxon_ids)
 		{
-			# new sequence, so at least the first match has lowest e-value
+			# new sequence, so the first match has lowest e-value
 			if($sequence_name ne $previous_sequence_name)
 			{
 				if($PRINT_TOP_BLAST_HITS_TO_STDERR)
@@ -210,12 +225,14 @@ while(<BLAST_OUTPUT>)
 					print STDERR $NEWLINE;
 				}
 				$is_top_evalue = 1;
+				$sequence_top_evalue = $evalue;
 				%taxon_id_is_in_current_LCA_taxon_path = ();
 			}
 		
 			# not first match for this sequence, but the e-value is the same as the e-value
 			# of the first match for this sequence
-			elsif($is_top_evalue and $evalue == $previous_evalue)
+			elsif($is_top_evalue and $evalue <= $sequence_top_evalue
+				* $top_evalue_multiplier_for_inclusion_threshold)
 			{
 				if($PRINT_TOP_BLAST_HITS_TO_STDERR)
 				{
@@ -367,7 +384,6 @@ while(<BLAST_OUTPUT>)
 				
 				# prepares for next sequence
 				$previous_sequence_name = $sequence_name;
-				$previous_evalue = $evalue;
 			}
 		}
 	}
@@ -392,7 +408,7 @@ print "highest_qcovs_of_top_hits".$DELIMITER;
 print "number_top_hits";
 if($print_matched_taxon_ids)
 {
-	print $DELIMITER."matched_accession_numbers".$NEWLINE;
+	print $DELIMITER."matched_accession_numbers";
 }
 print $NEWLINE;
 
