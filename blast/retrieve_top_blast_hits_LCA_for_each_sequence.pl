@@ -45,7 +45,7 @@ use warnings;
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
 my $nodes_file = $ARGV[1]; # nodes.dmp file from NCBI: ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz
 my $top_evalue_multiplier_for_inclusion_threshold = $ARGV[2]; # LCA is performed on all hits with e-value less than or equal to this value * top e-value; set to 1 by default, to include only top e-value
-my $print_matched_taxon_ids = $ARGV[3]; # if 1, prints all accession numbers matched by top hits in a final column
+my $print_matched_accession_numbers = $ARGV[3]; # if 1, prints all accession numbers matched by top hits in a final column
 my $is_diamond_output = $ARGV[4]; # if 1, treats input file with blast output as modified DIAMOND output; format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) taxonid qlen slen length pident qcovhsp evalue
 
 
@@ -196,7 +196,7 @@ while(<BLAST_OUTPUT>)
 		my $query_coverage = $items[$query_coverage_column];
 		my $evalue = $items[$evalue_column];
 		
-		# saves matched taxon id(s)
+		# saves matched accession number
 		$sequence_name_to_accession_number_matched{$sequence_name}{$matched_accession_number} = 1;
 		
 		# if multiple matched taxon ids listed, handles each taxon id separately
@@ -406,7 +406,7 @@ print "lowest_qcovs_of_top_hits".$DELIMITER;
 print "mean_qcovs_of_top_hits".$DELIMITER;
 print "highest_qcovs_of_top_hits".$DELIMITER;
 print "number_top_hits";
-if($print_matched_taxon_ids)
+if($print_matched_accession_numbers)
 {
 	print $DELIMITER."matched_accession_numbers";
 }
@@ -467,7 +467,7 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $sequence_name_to_sum_top_hits_qcovs{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_max_top_hit_qcovs{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_number_top_hits{$sequence_name};
-	if($print_matched_taxon_ids)
+	if($print_matched_accession_numbers)
 	{
 		print $DELIMITER;
 		print join(",", sort keys %{$sequence_name_to_accession_number_matched{$sequence_name}});
