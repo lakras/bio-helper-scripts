@@ -584,6 +584,11 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl merge_rows_by_column_value.pl [table to merge] "[title of column to merge by]" "[optional title of column not to merge]" "[optional title of another column not to merge]" [etc.] > [output table path]`_
 
+- [`verify_all_rows_in_one_table_appear_in_second_table.pl`](/tables/verify_all_rows_in_one_table_appear_in_second_table.pl): Verifies that all rows/lines in table 1 also appear in table 2 (that table 2 is a superset of table 1). Prints all rows from table 1 that are missing from table 2. If column numbers is specified, only compares values from that column.
+
+   _Usage: `perl verify_all_rows_in_one_table_appear_in_second_table.pl [subset table] [superset table] [column number to compare--set to -1 to compare full row] > [output list of missing rows]`_
+
+
 ### Table manipulation
 
 - [`concatenate_tables.pl`](/tables/concatenate_tables.pl): Concatenates tables with potentially different columns, adding empty space for missing column values.
