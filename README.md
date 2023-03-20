@@ -137,6 +137,14 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_appearing_or_not_appearing_in_table.pl [fasta file] [input table] [column number of sequence names (0-indexed)] [1 to retrieve sequences that DO appear in input table, 0 to retrieve sequences that DON'T] > [output fasta file path]`_
 
+- [`search_for_query_sequences.pl`](/fasta/search_for_query_sequences.pl): Searches provided sequences for provided query sequences. Outputs table with columns: name of sequence containing at least one query sequence, number of query sequences matched.
+
+   _Usage: `perl search_for_query_sequences.pl [fasta file path containing sequences to search] [fasta file path containing queries] > [output table file path]`_
+   
+- [`retrieve_sequences_matching_at_least_N_query_sequences.pl`](/fasta/retrieve_sequences_matching_at_least_N_query_sequences.pl): Searches provided sequences for provided query sequences. Outputs sequences matching at least N query sequences.
+
+   _Usage: `perl retrieve_sequences_matching_at_least_N_query_sequences.pl [fasta file path containing sequences to search] [fasta file path containing queries] [minimum number queries to match] > [output fasta file path]`_
+
 - [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
 
    _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
