@@ -95,7 +95,7 @@ while(<SEQUENCES>) # for each line in the file
 			my $number_queries_matched = 0; # number queries matched by current sequence
 			foreach my $query_sequence(keys %query_sequences)
 			{
-				if($current_sequence =~ /$query_sequence/)
+				if(uc($current_sequence) =~ /$query_sequence/)
 				{
 					$number_queries_matched++;
 				}
@@ -112,7 +112,7 @@ while(<SEQUENCES>) # for each line in the file
 	}
 	else
 	{
-		$current_sequence .= uc($_);
+		$current_sequence .= $_;
 	}
 }
 close SEQUENCES;
@@ -123,7 +123,7 @@ if($current_sequence)
 	my $number_queries_matched = 0; # number queries matched by current sequence
 	foreach my $query_sequence(keys %query_sequences)
 	{
-		if($current_sequence =~ /$query_sequence/)
+		if(uc($current_sequence) =~ /$query_sequence/)
 		{
 			$number_queries_matched++;
 		}
