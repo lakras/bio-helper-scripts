@@ -70,7 +70,7 @@ while(<QUERIES>) # for each line in the file
 	}
 	else
 	{
-		$current_sequence .= $_;
+		$current_sequence .= uc($_);
 	}
 }
 close QUERIES;
@@ -113,7 +113,7 @@ while(<SEQUENCES>) # for each line in the file
 	}
 	else
 	{
-		$current_sequence .= $_;
+		$current_sequence .= uc($_);
 	}
 }
 close SEQUENCES;
