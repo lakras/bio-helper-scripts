@@ -45,6 +45,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.] > [output table file path]`_
 
+- [`calculate_genome_size.pl`](/fasta/calculate_genome_size.pl): Counts number bases (including Ns and other ambiguous non-gap letters) in fasta file(s).
+
+   _Usage: `perl calculate_genome_size.pl [fasta file path] [another fasta file path] [etc.]`_
+
 - [`align_to_reference.pl`](/fasta/align_to_reference.pl): Aligns each input sequence with reference independently, then combines all into one fasta alignment. Bases aligned to a gap in the reference are removed. Sequences in input fastas must have unique names. Paths of fasta sequences to align can be provided directly as arguments or as one file with a list of filepaths, one per line.
 
    _Usage: `perl align_to_reference.pl [reference sequence] [file path of MAFFT executable file (mafft.bat) or mafft command] [filepaths of at least fasta files OR path of file containing file with list of fasta file paths, one per line] > [output fasta file path]`_
