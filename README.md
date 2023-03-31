@@ -600,6 +600,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl verify_all_rows_in_one_table_appear_in_second_table.pl [subset table] [superset table] [column number to compare--set to -1 to compare full row] > [output list of missing rows]`_
 
+- [`fill_in_missing_rows.pl`](/tables/fill_in_missing_rows.pl): Catalogues all values in parameter columns. In any combination of values is missing, adds it as a row with NAs in all other columns.
+
+   _Usage: `perl fill_in_missing_rows.pl [table] "[title of column of interest 1]"" "[title of column of interest 2]" etc. > [output table path]`_
 
 ### Table manipulation
 
