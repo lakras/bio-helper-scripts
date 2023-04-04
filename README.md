@@ -297,6 +297,11 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl filter_taxonids_to_descendants_of_target_taxon.pl [path of file with list of taxon ids, one per line] [nodes.dmp file from NCBI] [taxon id to filter to] > [output list of taxon ids]`_
 
+- [`add_column_with_superkingdom_of_taxon_id.pl`](/blast/add_column_with_superkingdom_of_taxon_id.pl): Reads in column containing taxon id and adds column containing the superkingdom of that taxon id.
+
+   _Usage: `perl add_column_with_superkingdom_of_taxon_id.pl [table] [title of column containing taxon ids] [nodes.dmp file from NCBI] > [output table path]`_
+
+
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
 
