@@ -110,10 +110,7 @@ foreach my $input_table(@input_tables)
 				}
 				
 				# saves this row
-				if($first_column_value_to_row{$first_column_value})
-				{
-					$first_column_value_to_row{$first_column_value} .= $DELIMITER;
-				}
+				$first_column_value_to_row{$first_column_value} .= $DELIMITER;
 				$first_column_value_to_row{$first_column_value} .= $row_without_first_column;
 			}
 		}
@@ -126,11 +123,7 @@ foreach my $input_table(@input_tables)
 	{
 		if(!$first_column_value_found_in_table{$first_column_value}) # if this first column value did not appear in this table
 		{
-			if($first_column_value_to_row{$first_column_value})
-			{
-				$first_column_value_to_row{$first_column_value} .= $DELIMITER;
-			}
-			for(my $count = 0; $count < $number_columns_in_table; $count++)
+			for(my $count = 0; $count < $number_columns_in_table-1; $count++)
 			{
 				$first_column_value_to_row{$first_column_value} .= $DELIMITER;
 			}
@@ -141,10 +134,9 @@ foreach my $input_table(@input_tables)
 # prints output table
 print $header_line;
 print $NEWLINE;
-foreach my $first_column_value(keys %first_column_values)
+foreach my $first_column_value(sort keys %first_column_values)
 {
 	print $first_column_value;
-	print $DELIMITER;
 	print $first_column_value_to_row{$first_column_value};
 	print $NEWLINE;
 }
