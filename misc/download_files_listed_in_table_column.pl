@@ -5,7 +5,7 @@
 # If no output directory provided, output directory set to input file path sans extension
 # followed by column name.
 
-# If multiple files to download have the same name, adds "_dup" to the end of the
+# If multiple files to download have the same name, adds an integer to the end of the
 # downloaded file path to prevent overwriting.
 
 # Usage:
@@ -81,6 +81,7 @@ open OUT_SCRIPT, ">$output_script" || die "Could not open $output_script to writ
 
 my $first_line = 1;
 my $column_with_filepaths = -1;
+my $duplicate_file_count = 1;
 open INPUT_TABLE, "<$table_with_files_to_download" || die "Could not open $table_with_files_to_download to read; terminating =(\n";
 while(<INPUT_TABLE>) # for each row in the file
 {
@@ -141,7 +142,8 @@ while(<INPUT_TABLE>) # for each row in the file
 			my $file_renamed = 0;
 			while($used_output_file_paths{$output_file_path})
 			{
-				$output_file_path .= "_dup";
+				$output_file_path .= "_".$duplicate_file_count;
+				$duplicate_file_count++;
 				$file_renamed = 1;
 			}
 			if($file_renamed)
