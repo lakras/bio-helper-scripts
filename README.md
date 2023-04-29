@@ -627,6 +627,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl merge_tables_by_column_value.pl [file describing input] > [merged output table path]`_
 
+- [`merge_tables_by_first_column_values.pl`](/tables/merge_tables_by_first_column_values.pl): Merges (takes union of) multiple tables by the values in the first column.
+
+   _Usage: `perl merge_tables_by_first_column_values.pl [table] [another table] [another table] [etc.] > [merged output table path]`_
+
 - [`add_newline_between_lines_with_nonconsecutive_values.pl`](/tables/add_newline_between_lines_with_nonconsecutive_values.pl): Adds newline between lines containing non-consecutive values in first column.
 
    _Usage: `perl add_newline_between_lines_with_nonconsecutive_values.pl [table] [column with integer values] > [output table path]`_
