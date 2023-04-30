@@ -99,8 +99,15 @@ while(<TABLE>) # for each row in the file
 				else # column is numerical
 				{
 					# column is numerical--print proportion
-					my $proportion = $value / $column_sum{$column};
-					print $proportion;
+					if($column_sum{$column})
+					{
+						my $proportion = $value / $column_sum{$column};
+						print $proportion;
+					}
+					else
+					{
+						print "0";
+					}
 				}
 				$column++;
 			}
