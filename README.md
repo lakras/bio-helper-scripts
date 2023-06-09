@@ -297,6 +297,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl filter_taxonids_to_descendants_of_target_taxon.pl [path of file with list of taxon ids, one per line] [nodes.dmp file from NCBI] [taxon id to filter to] > [output list of taxon ids]`_
 
+- [`filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl`](/blast/filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl): Given a table with a column of taxon ids, filters down to only descendants of parameter taxon id (for example, 10239 for Viruses).
+
+   _Usage: `perl filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl [path of table with taxon id] [number (0-indexed) of column with taxon ids] [nodes.dmp file from NCBI] [taxon id to filter to] > [output table]`_
+
 - [`add_column_with_superkingdom_of_taxon_id.pl`](/blast/add_column_with_superkingdom_of_taxon_id.pl): Reads in column containing taxon id and adds column containing the superkingdom of that taxon id.
 
    _Usage: `perl add_column_with_superkingdom_of_taxon_id.pl [table] [title of column containing taxon ids] [nodes.dmp file from NCBI] > [output table path]`_
