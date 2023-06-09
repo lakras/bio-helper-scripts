@@ -301,6 +301,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl add_column_with_superkingdom_of_taxon_id.pl [table] [title of column containing taxon ids] [nodes.dmp file from NCBI] > [output table path]`_
 
+- [`kraken_summary_report_to_species_table.pl`](/blast/kraken_summary_report_to_species_table.pl): Converts Kraken summary report to table of species found in sample.
+
+   _Usage: `perl kraken_summary_report_to_species_table.pl [kraken summary report] > [output table file path]`_
+
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
 Input VCF files must be in format produced by [`LoFreq call`](https://csb5.github.io/lofreq/commands/#call).
@@ -540,7 +544,6 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`replace_values_with_column_proportions.pl`](/tables/replace_values_with_column_proportions.pl): Calculates sum of each column containing numerical values. Replaces values in column with the proportion of its sum.
 
    _Usage: `perl replace_values_with_column_proportions.pl [tab-separated table] > [output table path]`_
-
 
 - [`add_filename_column_from_filepath_column.pl`](/tables/add_filename_column_from_filepath_column.pl): Retrieves filepaths from specified column (or first column by default). Adds new column with filenames retrieved from these filepaths.
 
