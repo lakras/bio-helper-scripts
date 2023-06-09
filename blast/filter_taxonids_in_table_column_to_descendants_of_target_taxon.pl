@@ -11,7 +11,7 @@
 
 # Prints to console. To print to file, use
 # perl filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl
-# [path of table with taxon id] "[title of column with taxon ids]"
+# [path of table with taxon id] [number (0-indexed) of column with taxon ids]
 # [nodes.dmp file from NCBI] [taxon id to filter to] > [output table]
 
 
