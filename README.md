@@ -561,6 +561,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl split_column_after_query.pl [table] "[column name]" "[query]" > [output table path]`_
 
+- [`add_column_with_filename.pl`](/tables/add_column_with_filename.pl): Adds column with table filename in all values.
+
+   _Usage: `perl add_column_with_filename.pl [table to add column to] > [output table path]`_
+
 ### Column manipulation with dates
 
 - [`dates_in_columns_to_YYYY_MM_DD.pl`](/tables/dates_in_columns_to_YYYY_MM_DD.pl): Converts dates in specified columns to YYYY-MM-DD format. Multiple dates may be separated by a ", ". Column titles must not have spaces.
