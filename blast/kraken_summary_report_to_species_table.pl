@@ -73,7 +73,7 @@ while(<KRAKEN_SUMMARY_REPORT>) # for each line in the file
 		my $taxon_id = $items[$TAXON_ID_COLUMN];
 		my $taxon_name = $items[$TAXON_NAME_COLUMN];
 		
-		if($rank eq $SPECIES_RANK)
+		if(defined $rank and $rank eq $SPECIES_RANK)
 		{
 			if($taxon_name =~ /^\s*(\S.*\S)\s*$/)
 			{
