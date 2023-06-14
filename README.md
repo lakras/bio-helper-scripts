@@ -333,6 +333,10 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
    _Usage: `perl filter_heterozygosity_table.pl [heterozygosity table] [minimum minor allele readcount] [minimum minor allele frequency] [minimum read depth] > [output filtered heterozygosity table path]`_
 
+- [`convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl`](/vcf-files/convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl): Uses alignment of consensus genome to reference to update heterozygosity table positions with respect to self to positions with respect to the reference genome in the alignment.
+
+   _Usage: `perl convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl [consensus sequence aligned to reference fasta file] [list of heterozygosity tables, one per line]# > [output heterozygosity table]`_
+
 - [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
    _Usage: `perl annotate_heterozygosity_tables_with_estimated_lineages.pl [lineage genomes aligned to reference] [list of heterozygosity tables] [1 to print each heterozygosity table separately, 0 to print all tables to console] > [output table path]`_
