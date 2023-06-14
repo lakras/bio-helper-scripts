@@ -333,7 +333,7 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 
    _Usage: `perl filter_heterozygosity_table.pl [heterozygosity table] [minimum minor allele readcount] [minimum minor allele frequency] [minimum read depth] > [output filtered heterozygosity table path]`_
 
-- [`convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl`](/vcf-files/convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl): Uses alignment of consensus genome to reference to update heterozygosity table positions with respect to self to positions with respect to the reference genome in the alignment.
+- [`rereference_positions_in_heterozygosity_table.pl`](/vcf-files/rereference_positions_in_heterozygosity_table.pl): Uses alignment of consensus genome to reference to update heterozygosity table positions with respect to self to positions with respect to the reference genome in the alignment.
 
    _Usage: `perl convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl [consensus sequence aligned to reference fasta file] [list of heterozygosity tables, one per line]# > [output heterozygosity table]`_
 
