@@ -8,8 +8,8 @@
 # [directory to print output fasta files to]
 
 # Provided directory must be empty. New files are created in the provided directory,
-# named "[category].fasta". Spaces, commas, periods, and /s in category name will be
-# replaced with underscores in filenames.
+# named "[category].fasta". The following are replaced with underscores in filenames:
+# , . space ' ( ) /
 
 
 use strict;
@@ -132,6 +132,9 @@ while(<FASTA_FILE>) # for each line in the file
 			$category =~ tr/ /_/;
 			$category =~ tr/\//_/;
 			$category =~ tr/,/_/;
+			$category =~ tr/'/_/;
+			$category =~ tr/\(/_/;
+			$category =~ tr/\)/_/;
 			$category =~ tr/[.]/_/;
 			my $output_filepath = $directory.$category.".fasta";
 		
