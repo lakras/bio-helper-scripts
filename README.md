@@ -149,6 +149,14 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_matching_at_least_N_query_sequences.pl [fasta file path containing sequences to search] [fasta file path containing queries] [minimum number queries to match] > [output fasta file path]`_
 
+- [`filter_by_number_unambiguous_bases_with_minimum_read_depth.pl`](/fasta/filter_by_number_unambiguous_bases_with_minimum_read_depth.pl): Filters sequences in fasta file by number positions with an unambiguous base (A, T, C, or G) and read depth at least the minimum read depth.
+
+   _Usage: `perl filter_by_number_unambiguous_bases_with_minimum_read_depth.pl [fasta file path] [list of read depth tables] [minimum read depth] [minimum number unabiguous bases with at least minimum read depth] > [output fasta file path]`_
+
+- [`split_fasta_into_files_by_category_map.pl`](/fasta/split_fasta_into_files_by_category_map.pl): Splits fasta file into multiple files using map of sequence name to category.
+
+   _Usage: `perl split_fasta_into_files_by_category_map.pl [fasta file path] [tab-separated map of sequence names to category, one sequence name per line] [directory to print output fasta files to]`_
+
 - [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
 
    _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
