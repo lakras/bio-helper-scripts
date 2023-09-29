@@ -5,10 +5,12 @@
 
 # Usage:
 # perl retrieve_top_blast_hits_for_each_sequence.pl [blast output]
+# [number by which to multiply sequence's top evalue, to use as threshold for inclusion in top hits]
 # [1 to treat blast output as modified DIAMOND output]
 
 # Prints to console. To print to file, use
 # perl retrieve_top_blast_hits_for_each_sequence.pl [blast output]
+# [number by which to multiply sequence's top evalue, to use as threshold for inclusion in top hits]
 # [1 to treat blast output as modified DIAMOND output]
 # > [output subset of blast output table]
 
@@ -18,7 +20,8 @@ use warnings;
 
 
 my $blast_output = $ARGV[0]; # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
-my $is_diamond_output = $ARGV[1]; # if 1, treats input file with blast output as modified DIAMOND output; format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) qlen slen length pident qcovhsp evalue
+my $top_evalue_multiplier_for_inclusion_threshold = $ARGV[1]; # LCA is performed on all hits with e-value less than or equal to this value * top e-value; set to 1 by default, to include only top e-value
+my $is_diamond_output = $ARGV[2]; # if 1, treats input file with blast output as modified DIAMOND output; format: qseqid stitle (part 1: accession number) stitle (part 2: sequence name) qlen slen length pident qcovhsp evalue
 
 
 my $NO_DATA = "NA";
@@ -26,6 +29,9 @@ my $NEWLINE = "\n";
 my $DELIMITER = "\t";
 my $TAXONID_SEPARATOR = ";"; # in blast file
 
+
+# default value of top_evalue_multiplier_for_inclusion_threshold
+my $DEFAULT_TOP_EVALUE_MULTIPLIER = 1;
 
 # blast file columns
 # format: qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue
@@ -42,6 +48,13 @@ my $SEQUENCE_NAME_COLUMN_DIAMOND = 0; 	# qseqid
 my $PERCENT_ID_COLUMN_DIAMOND = 6; 		# pident
 my $QUERY_COVERAGE_COLUMN_DIAMOND = 7;	# qcovs
 my $EVALUE_COLUMN_DIAMOND = 8;			# evalue
+
+
+# sets e-value multiplier for inclusion threshold
+if(!$top_evalue_multiplier_for_inclusion_threshold)
+{
+	$top_evalue_multiplier_for_inclusion_threshold = $DEFAULT_TOP_EVALUE_MULTIPLIER;
+}
 
 
 # determines whether columns should be blast format or modified diamond format
@@ -70,7 +83,7 @@ if(!$blast_output or !-e $blast_output or -z $blast_output)
 open BLAST_OUTPUT, "<$blast_output" || die "Could not open $blast_output to read\n";
 my $previous_sequence_name = "";
 my $is_top_evalue = 1;
-my $previous_evalue = -1;
+my $sequence_top_evalue = -1;
 while(<BLAST_OUTPUT>)
 {
 	chomp;
@@ -89,17 +102,19 @@ while(<BLAST_OUTPUT>)
 			print $NEWLINE;
 			
 			$is_top_evalue = 1;
+			$sequence_top_evalue = $evalue;
 		}
 		
-		# not first match for this sequence, but the e-value is the same as the e-value
+		# not first match for this sequence, but the e-value is within range of the e-value
 		# of the first match for this sequence
-		elsif($is_top_evalue and $evalue == $previous_evalue)
+		elsif($is_top_evalue and $evalue <= $sequence_top_evalue
+				* $top_evalue_multiplier_for_inclusion_threshold)
 		{
 			print $_;
 			print $NEWLINE;
 		}
 		
-		# not same e-value as first match for this sequence
+		# e-value not within range of first match for this sequence
 		else
 		{
 			$is_top_evalue = 0;
@@ -107,7 +122,6 @@ while(<BLAST_OUTPUT>)
 		
 		# prepares for next sequence
 		$previous_sequence_name = $sequence_name;
-		$previous_evalue = $evalue;
 	}
 }
 close BLAST_OUTPUT;
@@ -115,3 +129,4 @@ close BLAST_OUTPUT;
 
 # August 30, 2020
 # January 18, 2022
+# March 17, 2023

@@ -227,7 +227,7 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
 - [`retrieve_top_blast_hits_for_each_sequence.pl`](/blast/retrieve_top_blast_hits_for_each_sequence.pl): Retrieves top hit for each sequence (assumes they are in order in blast output). Prints all top hits with same e-values.
 
-   _Usage: `perl retrieve_top_blast_hits_for_each_sequence.pl [blast output] [1 to treat blast output as modified DIAMOND output] > [output subset of blast output table]`_
+   _Usage: `perl retrieve_top_blast_hits_for_each_sequence.pl [blast output] [number by which to multiply sequence's top evalue, to use as threshold for inclusion in top hits] [1 to treat blast output as modified DIAMOND output] > [output subset of blast output table]`_
 
 - [`filter_blast_hits.pl`](/blast/filter_blast_hits.pl): Filters blast hits: prints blast hits with at least minimum percent identity and at least minimum percent query coverage. Can also further filter with optional maximum percent identity, maximum percent query coverage provided, or minimum length of matched sequence.
 
