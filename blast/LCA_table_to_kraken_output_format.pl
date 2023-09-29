@@ -66,7 +66,6 @@ my $highest_qcovs_of_top_hits_column = 12;
 my $number_top_hits_column = 13;
 
 
-
 # reads in sequence names and lengths from fasta file
 my %sequence_name_to_length = (); # key: sequence name -> value: length of sequence
 my %sequence_name_appears_in_LCA_table = (); # key: sequence name from fasta file -> value: 1 if sequence appears in LCA table, 0 if not
@@ -86,12 +85,18 @@ while(<FASTA_FILE>) # for each line in the file
 		$sequence_name = $1;
 		$sequence = "";
 	}
-	else
+	elsif($_ =~ /\S/)
 	{
 		$sequence .= $_;
 	}
 }
 close FASTA_FILE;
+if($sequence and $sequence_name)
+{
+	# processes last sequence
+	$sequence_name_to_length{$sequence_name} = sequence_length($sequence);
+	$sequence_name_appears_in_LCA_table{$sequence_name} = 0;
+}
 
 
 # reads LCA table and prints rows for reads with hits
@@ -105,15 +110,18 @@ while(<LCA_MATCHES>)
 	{
 		if($first_row)
 		{
-			# prints header line as is
-			print $line.$NEWLINE;
+			# ignore header line
 			$first_row = 0;
 		}
 		else
 		{
 			# reads in relevant lines in row
 			my @items = split($DELIMITER, $line);
+			my $sequence_name = $items[$sequence_name_column];
 			my $assigned_taxon_id = $items[$LCA_taxon_id_column];
+			
+			# records that we have seen this sequence
+			$sequence_name_appears_in_LCA_table{$sequence_name} = 1;
 			
 			# prints kraken format row for unclassified sequence
 			# "C"/"U": a one letter code indicating that the sequence was either classified
@@ -143,7 +151,7 @@ close LCA_MATCHES;
 # prints rows for reads without hits
 foreach my $sequence_name(sort keys %sequence_name_appears_in_LCA_table)
 {
-	if(!$sequence_name_appears_in_LCA_table{$sequence_name})
+	if($sequence_name and !$sequence_name_appears_in_LCA_table{$sequence_name})
 	{
 		# prints kraken format row for unclassified sequence
 		# "C"/"U": a one letter code indicating that the sequence was either classified
@@ -166,7 +174,6 @@ foreach my $sequence_name(sort keys %sequence_name_appears_in_LCA_table)
 		print $NO_DATA.$NEWLINE;
 	}
 }
-
 
 
 # returns sequence length
@@ -231,6 +238,5 @@ sub is_base
 	# base
 	return 1;
 }
-
 
 # September 29, 2023
