@@ -25,7 +25,7 @@ use warnings;
 my $taxon_ids_file = $ARGV[0]; # list of taxon ids, one per line
 
 
-my $MAXIMUM_NUMBER_TAXONIDS_IN_ONE_QUERY = 400;
+my $MAXIMUM_NUMBER_TAXONIDS_IN_ONE_QUERY = 20;
 
 
 # retrieves taxonids from input file and generates query lists with at most 400 queries per list
@@ -66,6 +66,7 @@ push(@taxon_ids_queries, $current_taxonid_query);
 foreach my $query_string(@taxon_ids_queries)
 {
 	my $command = "esearch -db nuccore -query \"(".$query_string.") AND refseq[filter]\"|efetch -format acc";
+# 	print $command."\n";
 	print `$command`;
 }
 
