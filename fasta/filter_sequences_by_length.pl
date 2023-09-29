@@ -70,7 +70,7 @@ if($sequence_name and $sequence
 }
 
 
-# prints number of times each character appearing in sequence
+# returns sequence length
 sub sequence_length
 {
 	my $sequence = $_[0];
