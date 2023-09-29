@@ -202,17 +202,17 @@ if($collection_date_table)
 		$collection_date_has_samples{$collection_date} = 1;
 		push(@{$collection_date_to_samples{$collection_date}}, $sample_name);
 	}
-}
-
-my %sample_names_with_neighbors = (); # key: name of sample -> value: 1
-foreach my $sample_name(keys %sample_name_to_collection_date)
-{
-	if(sample_has_potential_neighbors_by_collection_date($sample_name))
+	
+	my %sample_names_with_neighbors = (); # key: name of sample -> value: 1
+	foreach my $sample_name(keys %sample_name_to_collection_date)
 	{
-		$sample_names_with_neighbors{$sample_name} = 1;
+		if(sample_has_potential_neighbors_by_collection_date($sample_name))
+		{
+			$sample_names_with_neighbors{$sample_name} = 1;
+		}
 	}
+	%sample_names = %sample_names_with_neighbors;
 }
-%sample_names = %sample_names_with_neighbors;
 
 
 # reads in read depth tables if provided
