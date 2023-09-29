@@ -283,7 +283,7 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
 - [`retrieve_most_common_taxonids_in_LCA_output.pl`](/blast/retrieve_most_common_taxonids_in_LCA_output.pl): Retrieve NN most frequently matched species, genera, or families.
 
-   _Usage: `perl retrieve_most_common_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to output] > [output list of taxon ids, one per line]`_
+   _Usage: `perl retrieve_most_common_taxonids_in_LCA_output.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [species, genus, or family] [number most frequent matched species, genera, or families to output] [minimum number reads matched by a taxon to report it] > [output list of taxon ids, one per line]`_
 
 - [`retrieve_all_taxonids_in_LCA_output.pl`](/blast/retrieve_all_taxonids_in_LCA_output.pl): Retrieve all matched species, genera, or families.
 
