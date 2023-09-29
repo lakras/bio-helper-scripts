@@ -84,25 +84,28 @@ while(<FILE>) # for each line in the file
 	# retrieves date from file
 	my @items_in_line = split($DELIMITER, $_, -1);
 	my $date = date_to_YYYY_MM_DD($items_in_line[$date_column]);
-	if(!$start_date)
+	if($date)
 	{
-		$start_date = $date;
-	}
-	$distance_from_start_date = date_difference($start_date, $date);
+		if(!$start_date)
+		{
+			$start_date = $date;
+		}
+		$distance_from_start_date = date_difference($start_date, $date);
 	
-	# opens new output file if necessary
-	if($distance_from_start_date >= $half_date_distance_in_each_file)
-	{
-		close OUT_FILE;
-		$file_number++;
-		$start_date = "";
-		$output_file = $file."_".$file_number.".txt";
-		verify_output_file_ok_to_write($output_file);
-		open OUT_FILE, ">$output_file" || die "Could not open $output_file to write; terminating =(\n";
-	}
+		# opens new output file if necessary
+		if($distance_from_start_date >= $half_date_distance_in_each_file)
+		{
+			close OUT_FILE;
+			$file_number++;
+			$start_date = "";
+			$output_file = $file."_".$file_number.".txt";
+			verify_output_file_ok_to_write($output_file);
+			open OUT_FILE, ">$output_file" || die "Could not open $output_file to write; terminating =(\n";
+		}
 
-	# prints this line
-	print OUT_FILE $_."\n";
+		# prints this line
+		print OUT_FILE $_."\n";
+	}
 }
 close FILE;
 close OUT_FILE;
