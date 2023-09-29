@@ -149,6 +149,14 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequences_matching_at_least_N_query_sequences.pl [fasta file path containing sequences to search] [fasta file path containing queries] [minimum number queries to match] > [output fasta file path]`_
 
+- [`filter_by_number_unambiguous_bases_with_minimum_read_depth.pl`](/fasta/filter_by_number_unambiguous_bases_with_minimum_read_depth.pl): Filters sequences in fasta file by number positions with an unambiguous base (A, T, C, or G) and read depth at least the minimum read depth.
+
+   _Usage: `perl filter_by_number_unambiguous_bases_with_minimum_read_depth.pl [fasta file path] [list of read depth tables] [minimum read depth] [minimum number unabiguous bases with at least minimum read depth] > [output fasta file path]`_
+
+- [`split_fasta_into_files_by_category_map.pl`](/fasta/split_fasta_into_files_by_category_map.pl): Splits fasta file into multiple files using map of sequence name to category.
+
+   _Usage: `perl split_fasta_into_files_by_category_map.pl [fasta file path] [tab-separated map of sequence names to category, one sequence name per line] [directory to print output fasta files to]`_
+
 - [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
 
    _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
@@ -297,9 +305,17 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl filter_taxonids_to_descendants_of_target_taxon.pl [path of file with list of taxon ids, one per line] [nodes.dmp file from NCBI] [taxon id to filter to] > [output list of taxon ids]`_
 
+- [`filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl`](/blast/filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl): Given a table with a column of taxon ids, filters down to only descendants of parameter taxon id (for example, 10239 for Viruses).
+
+   _Usage: `perl filter_taxonids_in_table_column_to_descendants_of_target_taxon.pl [path of table with taxon id] [number (0-indexed) of column with taxon ids] [nodes.dmp file from NCBI] [taxon id to filter to] > [output table]`_
+
 - [`add_column_with_superkingdom_of_taxon_id.pl`](/blast/add_column_with_superkingdom_of_taxon_id.pl): Reads in column containing taxon id and adds column containing the superkingdom of that taxon id.
 
    _Usage: `perl add_column_with_superkingdom_of_taxon_id.pl [table] [title of column containing taxon ids] [nodes.dmp file from NCBI] > [output table path]`_
+
+- [`kraken_summary_report_to_species_table.pl`](/blast/kraken_summary_report_to_species_table.pl): Converts Kraken summary report to table of species found in sample.
+
+   _Usage: `perl kraken_summary_report_to_species_table.pl [kraken summary report] > [output table file path]`_
 
 
 ## VCF file processing ([`vcf-files`](/vcf-files))
@@ -324,6 +340,10 @@ Input VCF files must be in format produced by [`LoFreq call`](https://csb5.githu
 - [`filter_heterozygosity_table.pl`](/vcf-files/filter_heterozygosity_table.pl): Filters input heterozygosity table. See script for input file format.
 
    _Usage: `perl filter_heterozygosity_table.pl [heterozygosity table] [minimum minor allele readcount] [minimum minor allele frequency] [minimum read depth] > [output filtered heterozygosity table path]`_
+
+- [`rereference_positions_in_heterozygosity_table.pl`](/vcf-files/rereference_positions_in_heterozygosity_table.pl): Uses alignment of consensus genome to reference to update heterozygosity table positions with respect to self to positions with respect to the reference genome in the alignment.
+
+   _Usage: `perl convert_positions_in_heterozygosity_table_from_relative_to_self_to_relative_to_reference_in_alignment.pl [consensus sequence aligned to reference fasta file] [list of heterozygosity tables, one per line]# > [output heterozygosity table]`_
 
 - [`lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl`](/lineages/annotate_heterozygosity_tables_with_estimated_lineages.pl): Annotates heterozygosity tables with lineage consistent with minor and consensus-level alleles at lineage-defining positions. Output is printed to one file per heterozygosity table or as one table.
 
@@ -541,7 +561,6 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl replace_values_with_column_proportions.pl [tab-separated table] > [output table path]`_
 
-
 - [`add_filename_column_from_filepath_column.pl`](/tables/add_filename_column_from_filepath_column.pl): Retrieves filepaths from specified column (or first column by default). Adds new column with filenames retrieved from these filepaths.
 
    _Usage: `perl add_filename_column_from_filepath_column.pl [table to add new column to] [optional title of column containing filepaths (if not provided, uses first column)] [optional 1 to remove all file extensions in output filenames (such that filename contains no .s)] > [output table path]`_
@@ -557,6 +576,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 - [`split_column_after_query.pl`](/tables/split_column_after_query.pl): Splits column into two columns following appearance of query in each column value. If a cell does not contain the query, duplicates the column value.
 
    _Usage: `perl split_column_after_query.pl [table] "[column name]" "[query]" > [output table path]`_
+
+- [`add_column_with_filename.pl`](/tables/add_column_with_filename.pl): Adds column with table filename in all values.
+
+   _Usage: `perl add_column_with_filename.pl [table to add column to] > [output table path]`_
 
 ### Column manipulation with dates
 
