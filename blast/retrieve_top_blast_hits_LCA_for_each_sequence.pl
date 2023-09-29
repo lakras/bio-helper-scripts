@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# For each sequence, extracts all top hits with same e-values (assumes they are in order
+# For each sequence, extracts all top hits with top e-values (assumes they are in order
 # in blast output). Prints lowest common ancestor (LCA) of top hits for each sequence.
 
 # Input nodes.dmp file must be from same date as database used for input blast search
@@ -229,8 +229,8 @@ while(<BLAST_OUTPUT>)
 				%taxon_id_is_in_current_LCA_taxon_path = ();
 			}
 		
-			# not first match for this sequence, but the e-value is the same as the e-value
-			# of the first match for this sequence
+			# not first match for this sequence, but the e-value is within range of the
+			# e-value of the first match for this sequence
 			elsif($is_top_evalue and $evalue <= $sequence_top_evalue
 				* $top_evalue_multiplier_for_inclusion_threshold)
 			{
@@ -241,7 +241,7 @@ while(<BLAST_OUTPUT>)
 				}
 			}
 		
-			# not same e-value as first match for this sequence
+			# e-value not within range of first match for this sequence
 			else
 			{
 				$is_top_evalue = 0;
