@@ -24,13 +24,13 @@
 # Usage:
 # perl retrieve_most_common_taxonids_in_LCA_output.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search]
-# [species, genus, or family] [number most frequent matched species, genera, or families to output]
+# [species, genus, or family] [number most frequent matched species, genera, or families to output, or 0 to output all]
 # [minimum number reads matched by a taxon to report it]
 
 # Prints to console. To print to file, use
 # perl retrieve_most_common_taxonids_in_LCA_output.pl
 # [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search]
-# [species, genus, or family] [number most frequent matched species, genera, or families to output]
+# [species, genus, or family] [number most frequent matched species, genera, or families to output, or 0 to output all]
 # [minimum number reads matched by a taxon to report it] > [output list of taxon ids, one per line]
 
 use strict;
@@ -145,7 +145,7 @@ foreach my $matched_taxon_id(
 	sort {$taxon_id_to_number_matches{$b} <=> $taxon_id_to_number_matches{$a}}
 	keys %taxon_id_to_number_matches)
 {
-	if($number_matched_taxon_ids_examined < $number_most_frequent_matched_taxa
+	if(($number_matched_taxon_ids_examined < $number_most_frequent_matched_taxa | !$number_most_frequent_matched_taxa)
 		and $taxon_id_to_number_matches{$matched_taxon_id} >= $minimum_number_reads_matched_per_taxon)
 	{
 		print $matched_taxon_id;
