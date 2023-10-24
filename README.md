@@ -812,4 +812,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl combine_files_and_delete_duplicate_lines.pl [input file] [another input file] [another input file] [etc.] > [output table path]`_
 
+- [`select_random_lines.pl`](/misc/select_random_lines.pl): Selects a certain number of lines at random from input table or list.
+
+   _Usage: `perl select_random_lines.pl [table or list] [number rows or lines to select at random] > [output table or list]`_
+
+
 More coming soon :)
