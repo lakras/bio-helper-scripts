@@ -80,6 +80,7 @@ while($number_lines_selected < $number_lines_to_select)
 				and $number_lines_selected < $number_lines_to_select
 				and !$line_printed{$line})
 			{
+				print $line.$NEWLINE;
 				$line_printed{$line} = 1;
 				$number_lines_selected++;
 			}
