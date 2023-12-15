@@ -13,6 +13,7 @@
 # - LCA taxon species
 # - LCA taxon genus
 # - LCA taxon family
+# - LCA taxon superkingdom
 # - evalue of top hits
 # - lowest pident of top hits
 # - mean pident of top hits
@@ -90,6 +91,7 @@ my $NAME_TYPE_COLUMN = 3;	# names.dmp
 my $SPECIES = "species";
 my $GENUS = "genus";
 my $FAMILY = "family";
+my $SUPERKINGDOM = "superkingdom";
 my $ROOT_TAXON_ID = 1;
 
 # 1 to print top blast hits to STDERR (for testing)
@@ -398,6 +400,7 @@ print "LCA_taxon_rank".$DELIMITER;
 print "LCA_taxon_species".$DELIMITER;
 print "LCA_taxon_genus".$DELIMITER;
 print "LCA_taxon_family".$DELIMITER;
+print "LCA_taxon_superkingdom".$DELIMITER;
 print "evalue_of_top_hits".$DELIMITER;
 print "lowest_pident_of_top_hits".$DELIMITER;
 print "mean_pident_of_top_hits".$DELIMITER;
@@ -421,6 +424,7 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	my $LCA_taxon_species = $NO_DATA;
 	my $LCA_taxon_genus = $NO_DATA;
 	my $LCA_taxon_family = $NO_DATA;
+	my $LCA_taxon_superkingdom = $NO_DATA;
 	
 	my $matched_taxon_id_ancestor = $LCA_match_taxon_id;
 	do
@@ -438,6 +442,10 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 			elsif($taxonid_to_rank{$matched_taxon_id_ancestor} eq $FAMILY)
 			{
 				$LCA_taxon_family = $matched_taxon_id_ancestor;
+			}
+			elsif($taxonid_to_rank{$matched_taxon_id_ancestor} eq $SUPERKINGDOM)
+			{
+				$LCA_taxon_superkingdom = $matched_taxon_id_ancestor;
 			}
 		}
 		if(defined $taxonid_to_parent{$matched_taxon_id_ancestor})
@@ -459,6 +467,7 @@ foreach my $sequence_name(sort keys %sequence_name_to_top_hits_LCA_taxon_id)
 	print $LCA_taxon_species.$DELIMITER;
 	print $LCA_taxon_genus.$DELIMITER;
 	print $LCA_taxon_family.$DELIMITER;
+	print $LCA_taxon_superkingdom.$DELIMITER;
 	print $sequence_name_to_top_hits_evalue{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_min_top_hit_pident{$sequence_name}.$DELIMITER;
 	print $sequence_name_to_sum_top_hits_pident{$sequence_name} / $sequence_name_to_number_top_hits{$sequence_name}.$DELIMITER;
