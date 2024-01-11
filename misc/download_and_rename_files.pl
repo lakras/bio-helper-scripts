@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 
 # Downloads files listed in input file from online or from google storage bucket to
-# new directory. If output directory is not provided, directory set to input file path
-# sans extension.
+# new directory and renames to specified filename. If output directory is not provided,
+# directory set to input file path sans extension.
 
 # Input file must contain two tab-separated columns: the new name of the file and the
 # filepath to download from.
