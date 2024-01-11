@@ -748,6 +748,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl download_files_listed_in_table_column.pl [table with list of files to download in one of the columns] "[title of column containing filepaths to download]" [optional output directory]`_
 
+- [`download_and_rename_files.pl`](/misc/download_and_rename_files.pl): Downloads files listed in input file from online or from google storage bucket to new directory and renames to specified filename.
+
+   _Usage: `perl download_and_rename_files.pl [file with list of files to download] [optional output directory]`_
+
 - [`retrieve_all_filepaths_in_directories.pl`](/misc/retrieve_all_filepaths_in_directories.pl): Retrieves filepaths of all files in provided directories.
 
    _Usage: `perl retrieve_all_filepaths_in_directories.pl [directory path] [another directory path] [another directory path] [etc.] > [output file path]`_
