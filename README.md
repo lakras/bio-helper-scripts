@@ -261,6 +261,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl retrieve_top_blast_hits_LCA_for_each_sequence.pl [blast output] [nodes.dmp file from NCBI] [number by which to multiply sequence's top evalue, to use as threshold for inclusion in LCA] [1 to print all matched accession numbers in a final column] [1 to treat blast output as modified DIAMOND output] > [output table]`_
    
+- [`generate_LCA_table_for_sequences_with_no_matches.pl`](/blast/generate_LCA_table_for_sequences_with_no_matches.pl): Generates an LCA matches table (matching output of retrieve_top_blast_hits_LCA_for_each_sequence.pl) for sequences with no blast hits.
+
+   _Usage: `perl generate_LCA_table_for_sequences_with_no_matches.pl [fasta file of unmapped sequences] > [output table]`_
+   
 - [`compare_LCA_matches_to_ground_truth_LCA_matches.pl`](/blast/compare_LCA_matches_to_ground_truth_LCA_matches.pl): Compares LCA match taxon from two blast outputs for each match. Uses output of retrieve_top_blast_hits_LCA_for_each_sequence.pl as input.
 
    _Usage: `perl compare_LCA_matches_to_ground_truth_LCA_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search, to be treated as ground truth] [output of another retrieve_top_blast_hits_LCA_for_each_sequence.pl for another blast search, to compare to ground truth] [nodes.dmp file from NCBI] > [output table]`_
