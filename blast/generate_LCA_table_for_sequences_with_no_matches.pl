@@ -60,11 +60,17 @@ my $highest_qcovs_of_top_hits_column = 13;
 my $number_top_hits_column = 14;
 
 
-# verifies that input file exists and is non-empty
-if(!$unmapped_sequences_fasta or !-e $unmapped_sequences_fasta or -z $unmapped_sequences_fasta)
+# verifies that input files exist and are non-empty
+if(!$fasta_file or !-e $fasta_file or -z $fasta_file)
 {
-	print STDERR "Error: unmapped sequences fasta file not provided, does not exist, or empty:\n\t"
-		.$unmapped_sequences_fasta."\nExiting.\n";
+	print STDERR "Error: fasta file not provided, does not exist, or empty:\n\t"
+		.$fasta_file."\nExiting.\n";
+	die;
+}
+if(!$LCA_matches or !-e $LCA_matches or -z $LCA_matches)
+{
+	print STDERR "Error: LCA matches file not provided, does not exist, or empty:\n\t"
+		.$LCA_matches."\nExiting.\n";
 	die;
 }
 
