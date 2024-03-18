@@ -127,7 +127,14 @@ while(<LCA_MATCHES>)
 			# prints kraken format row for unclassified sequence
 			# "C"/"U": a one letter code indicating that the sequence was either classified
 			# or unclassified.
-			print "C".$DELIMITER;
+			if($assigned_taxon_id == 0)
+			{
+				print "U".$DELIMITER;
+			}
+			else
+			{
+				print "C".$DELIMITER;
+			}
 		
 			# The sequence ID, obtained from the FASTA/FASTQ header.
 			print $sequence_name.$DELIMITER;
