@@ -22,23 +22,42 @@
 
 # Usage:
 # perl generate_LCA_table_for_sequences_with_no_matches.pl
-# [fasta file of unmapped sequences]
+# [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search]
+# [fasta file that was input to blast search]
 
 # Prints to console. To print to file, use
 # perl generate_LCA_table_for_sequences_with_no_matches.pl
-# [fasta file of unmapped sequences] > [output table]
+# [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search]
+# [fasta file that was input to blast search]  > [output table]
 
 
 use strict;
 use warnings;
 
 
-my $unmapped_sequences_fasta = $ARGV[0]; # fasta file of unmapped sequences
-
+my $LCA_matches = $ARGV[0]; # output of retrieve_top_blast_hits_LCA_for_each_sequence.pl
+my $fasta_file = $ARGV[1]; # fasta file that was input to blast search (to retrieve sequence lengths and names of unclassified sequences)
 
 my $NO_DATA = "NA";
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
+
+# blast LCA table columns:
+my $sequence_name_column = 0;
+my $LCA_taxon_id_column = 1;
+my $LCA_taxon_rank_column = 2;
+my $LCA_taxon_species_column = 3;
+my $LCA_taxon_genus_column = 4;
+my $LCA_taxon_family_column = 5;
+my $LCA_taxon_superkingdom_column = 6;
+my $evalue_of_top_hits_column = 7;
+my $lowest_pident_of_top_hits_column = 8;
+my $mean_pident_of_top_hits_column = 9;
+my $highest_pident_of_top_hits_column = 10;
+my $lowest_qcovs_of_top_hits_column = 11;
+my $mean_qcovs_of_top_hits_column = 12;
+my $highest_qcovs_of_top_hits_column = 13;
+my $number_top_hits_column = 14;
 
 
 # verifies that input file exists and is non-empty
@@ -50,15 +69,49 @@ if(!$unmapped_sequences_fasta or !-e $unmapped_sequences_fasta or -z $unmapped_s
 }
 
 
+# reads in sequence names from LCA table
+my $first_row = 1;
+my %sequence_names_with_matches = (); # key: sequence name appearing in LCA table -> value: 1
+open LCA_MATCHES, "<$LCA_matches" || die "Could not open $LCA_matches to read\n";
+while(<LCA_MATCHES>)
+{
+	chomp;
+	my $line = $_;
+	if($line =~ /\S/)
+	{
+		if($first_row)
+		{
+			# ignore header line
+			$first_row = 0;
+		}
+		else
+		{
+			# reads in relevant lines in row
+			my @items = split($DELIMITER, $line);
+			my $sequence_name = $items[$sequence_name_column];
+			
+			# saves sequence name
+			$sequence_names_with_matches{$sequence_name} = 1;
+		}
+	}
+}
+close LCA_MATCHES;
+
+
 # reads in sequence names from fasta file
-my %sequence_names = (); # key: sequence name -> value: 1
+my %sequence_names_without_matches = (); # key: sequence name not appearing in LCA table -> value: 1
 open FASTA_FILE, "<$unmapped_sequences_fasta" || die "Could not open $unmapped_sequences_fasta to read; terminating =(\n";
 while(<FASTA_FILE>) # for each line in the file
 {
 	chomp;
 	if($_ =~ /^>(.*)$/) # header line
 	{
-		$sequence_names{$1} = 1;
+		my $sequence_name = $1;
+		
+		if(!$sequence_names_with_matches{$sequence_name})
+		{
+			$sequence_names_without_matches{$sequence_name} = 1;
+		}
 	}
 }
 close FASTA_FILE;
@@ -84,7 +137,7 @@ print $NEWLINE;
 
 
 # prints output table
-foreach my $sequence_name(sort keys %sequence_names)
+foreach my $sequence_name(sort keys %sequence_names_without_matches)
 {
 	# prints output line for LCA match for this sequence
 	print $sequence_name.$DELIMITER;

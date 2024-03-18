@@ -263,7 +263,7 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
    
 - [`generate_LCA_table_for_sequences_with_no_matches.pl`](/blast/generate_LCA_table_for_sequences_with_no_matches.pl): Generates an LCA matches table (matching output of retrieve_top_blast_hits_LCA_for_each_sequence.pl) for sequences with no blast hits.
 
-   _Usage: `perl generate_LCA_table_for_sequences_with_no_matches.pl [fasta file of unmapped sequences] > [output table]`_
+   _Usage: `perl generate_LCA_table_for_sequences_with_no_matches.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [fasta file that was input to blast search] > [output table]`_
    
 - [`compare_LCA_matches_to_ground_truth_LCA_matches.pl`](/blast/compare_LCA_matches_to_ground_truth_LCA_matches.pl): Compares LCA match taxon from two blast outputs for each match. Uses output of retrieve_top_blast_hits_LCA_for_each_sequence.pl as input.
 
