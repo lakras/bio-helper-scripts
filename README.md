@@ -157,6 +157,10 @@ Includes the following scripts—
 
    _Usage: `perl split_fasta_into_files_by_category_map.pl [fasta file path] [tab-separated map of sequence names to category, one sequence name per line] [directory to print output fasta files to]`_
 
+- [`count_unambiguous_bases_in_each_sequence.pl`](/fasta/count_unambiguous_bases_in_each_sequence.pl): Counts number unambiguous bases (A, T, C, G) in each sequence. Outputs tab-separated table of sequence names and number unambiguous bases, one sequence per line.
+
+   _Usage: `perl count_unambiguous_bases_in_each_sequence.pl [fasta file path] > [output table file path]`_
+
 - [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
 
    _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
