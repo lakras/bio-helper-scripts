@@ -40,6 +40,11 @@ Includes the following scripts—
 
    _Usage: `perl determine_distances_to_lineages_from_alignment.pl [alignment fasta file path] [1 to ignore first sequence in alignment, 0 to include it] "[name of lineage sequence]" "[name of another lineage sequence]" [etc.] > [output fasta file path]`_
 
+- [`assign_lineage_to_each_sequence.pl`](/lineages/assign_lineage_to_each_sequence.pl): Assigns to each sequence the lineage that is genetically closest to it.
+
+   _Usage: `perl assign_lineage_to_each_sequence.pl [fasta file path] [lineage sequences fasta file path] [mafft command or file path] > [output table file path]`_
+
+
 ## FASTA file processing ([`fasta`](/fasta))
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
 
@@ -176,6 +181,11 @@ Includes the following scripts—
 - [`bed-files/pull_out_sequences_described_in_bed_file.pl`](/bed-files/pull_out_sequences_described_in_bed_file.pl): Pulls out subsets of sequences by name and position within that sequence from bed file.
 
    _Usage: `perl pull_out_sequences_described_in_bed_file.pl [fasta file path] [bed file path] [0 to output fasta sequence, 1 to add sequence as new column in bed file] > [output file path]`_
+
+- [`lineages/assign_lineage_to_each_sequence.pl`](/lineages/assign_lineage_to_each_sequence.pl): Assigns to each sequence the lineage that is genetically closest to it.
+
+   _Usage: `perl assign_lineage_to_each_sequence.pl [fasta file path] [lineage sequences fasta file path] [mafft command or file path] > [output table file path]`_
+
 
 ## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 
