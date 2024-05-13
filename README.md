@@ -215,6 +215,10 @@ Includes the following scripts—
 
    _Usage: `perl get_average_sequence_of_aligned_sequences.pl [alignment fasta file path] [1 if alignment includes reference as first sequence, 0 if alignment does not include a reference] > [output fasta file path]`_
 
+- [`compare_pairs_of_sequences_from_list.pl`](/aligned-fasta/compare_pairs_of_sequences_from_list.pl): Counts number unambiguous differences between each pair of sequences listed in input file.
+
+   _Usage: `perl compare_pairs_of_sequences_from_list.pl [pairs of sequence names, space-separated, one per line] [alignment fasta file path] > [output table path]`_
+
 
 ## BLAST ([`blast`](/blast))
 All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
