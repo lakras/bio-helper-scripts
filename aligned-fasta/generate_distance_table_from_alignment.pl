@@ -4,11 +4,12 @@
 
 # Usage:
 # perl generate_distance_table_from_alignment.pl [alignment fasta file path]
-# [1 to ignore first sequence in alignment, 0 to include it]
+# [1 to ignore first sequence in alignment, 0 to include it] [1 to generate R-friendly table]
 
 # Prints to console. To print to file, use
 # perl generate_distance_table_from_alignment.pl [alignment fasta file path]
-# [1 to ignore first sequence in alignment, 0 to include it] > [output fasta file path]
+# [1 to ignore first sequence in alignment, 0 to include it] [1 to generate R-friendly table]
+# > [output table path]
 
 
 use strict;
@@ -17,6 +18,7 @@ use warnings;
 
 my $alignment_file = $ARGV[0]; # fasta alignment; reference sequence must appear first
 my $ignore_reference = $ARGV[1]; # if 0, includes first sequence in alignment; if 1, ignores it
+my $generate_R_friendly_table = $ARGV[2];
 
 
 my $NEWLINE = "\n";
@@ -84,15 +86,28 @@ if($current_sequence and (!$ignore_reference or $reference_sequence_read_in))
 }
 
 
-# prints all sequence names
-foreach my $sequence_names_index(0..$#sequence_names)
+# prints header line
+if(!$generate_R_friendly_table)
 {
-	# prints sequence name
-	my $sequence_name = $sequence_names[$sequence_names_index];
-	print $DELIMITER;
-	print $sequence_name;
+	# prints all sequence names
+	foreach my $sequence_names_index(0..$#sequence_names)
+	{
+		# prints sequence name
+		my $sequence_name = $sequence_names[$sequence_names_index];
+		print $DELIMITER;
+		print $sequence_name;
+	}
+	print $NEWLINE;
 }
-print $NEWLINE;
+else
+{
+	print "sequence_1";
+	print $DELIMITER;
+	print "sequence_2";
+	print $DELIMITER;
+	print "distance";
+	print $NEWLINE;
+}
 
 
 # compares all pairs of sequences and prints distances
@@ -102,25 +117,28 @@ foreach my $sequence_names_index_1(0..$#sequence_names)
 	my $sequence_name_1 = $sequence_names[$sequence_names_index_1];
 	my $sequence_1 = $sequence_name_to_sequence{$sequence_name_1};
 	
-	# prints sequence name
-	print $sequence_name_1;
-	
-	# prints pairs we have already printed
-	foreach my $sequence_names_index_2(0..$sequence_names_index_1-1)
+	if(!$generate_R_friendly_table)
 	{
+		# prints sequence name
+		print $sequence_name_1;
+
+		# prints pairs we have already printed
+		foreach my $sequence_names_index_2(0..$sequence_names_index_1-1)
+		{
+			print $DELIMITER;
+			if($PRINT_EACH_DISTANCE_TWICE)
+			{
+				my $sequence_name_2 = $sequence_names[$sequence_names_index_2];
+				print prepare_integer_for_printing($sequence_sequence_distance{$sequence_name_1}{$sequence_name_2});
+			}
+		}
+		
+		# prints comparison of same sequence
 		print $DELIMITER;
 		if($PRINT_EACH_DISTANCE_TWICE)
 		{
-			my $sequence_name_2 = $sequence_names[$sequence_names_index_2];
-			print prepare_integer_for_printing($sequence_sequence_distance{$sequence_name_1}{$sequence_name_2});
+			print prepare_integer_for_printing(0);
 		}
-	}
-	
-	# prints comparison of same sequence
-	print $DELIMITER;
-	if($PRINT_EACH_DISTANCE_TWICE)
-	{
-		print prepare_integer_for_printing(0);
 	}
 	
 	# makes and prints new comparisons
@@ -147,11 +165,52 @@ foreach my $sequence_names_index_1(0..$#sequence_names)
 		$sequence_sequence_distance{$sequence_name_1}{$sequence_name_2} = $distance;
 		$sequence_sequence_distance{$sequence_name_2}{$sequence_name_1} = $distance;
 		
-		# prints distance
-		print $DELIMITER;
-		print prepare_integer_for_printing($distance);
+		# prints distance if non-R-friendly table
+		if(!$generate_R_friendly_table)
+		{
+			print $DELIMITER;
+			print prepare_integer_for_printing($distance);
+		}
 	}
 	print $NEWLINE;
+}
+
+# prints distances if R friendly table
+if($generate_R_friendly_table)
+{
+	if($PRINT_EACH_DISTANCE_TWICE)
+	{
+		foreach my $sequence_name_1(@sequence_names)
+		{
+			foreach my $sequence_name_2(@sequence_names)
+			{
+				print $sequence_name_1;
+				print $DELIMITER;
+				print $sequence_name_2;
+				print $DELIMITER;
+				print $sequence_sequence_distance{$sequence_name_1}{$sequence_name_2};
+				print $NEWLINE;
+			}
+		}
+	}
+	else
+	{
+		foreach my $sequence_names_index_1(0..$#sequence_names)
+		{
+			my $sequence_name_1 = $sequence_names[$sequence_names_index_1];
+			foreach my $sequence_names_index_2(0..$sequence_names_index_1-1)
+			{
+				my $sequence_name_2 = $sequence_names[$sequence_names_index_2];
+				
+				print $sequence_name_1;
+				print $DELIMITER;
+				print $sequence_name_2;
+				print $DELIMITER;
+				print $sequence_sequence_distance{$sequence_name_1}{$sequence_name_2};
+				print $NEWLINE;
+			}
+		}
+	}
 }
 
 
