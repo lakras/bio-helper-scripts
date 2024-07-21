@@ -50,6 +50,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.] > [output table file path]`_
 
+- [`cluster_sequences.pl`](/fasta/cluster_sequences.pl): Clusters sequences by similarity.
+
+   _Usage: `perl cluster_sequences.pl [sequences fasta file] [percent identity, for example 80] [file path of MAFFT executable file (mafft.bat) or mafft command] > [output table]`_
+
 - [`calculate_genome_size.pl`](/fasta/calculate_genome_size.pl): Counts number bases (including Ns and other ambiguous non-gap letters) in fasta file(s).
 
    _Usage: `perl calculate_genome_size.pl [fasta file path] [another fasta file path] [etc.]`_
