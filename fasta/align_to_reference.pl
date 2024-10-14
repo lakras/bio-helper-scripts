@@ -474,34 +474,13 @@ sub make_safe_for_filename
 {
 	my $string = $_[0];
 	
-	# replaces all whitespace with _s
-	$string =~ s/\s/_/g;
-	
-	# replaces all |s with _s
-	$string =~ s/\|/_/g;
-	
-	# replaces all /s with _s
-	$string =~ s/\//_/g;
-	
-	# replaces all \s with _s
-	$string =~ s/\\/_/g;
-	
-	# replaces all ; with _s
-	$string =~ s/;/_/g;
-	
-	# replaces all : with _s
-	$string =~ s/:/_/g;
-	
-	# replaces all , with _s
-	$string =~ s/,/_/g;
-	
-	# replaces all ! with _s
-	$string =~ s/[!]/_/g;
+	# replaces all characters that aren't letters, numbers, or _ with _
+	$string =~ s/[^\w]/_/g;
 	
 	return $string;
 }
 
-
+  
 # March 11, 2022
 # March 15, 2022
 # March 16, 2022
