@@ -486,6 +486,18 @@ sub make_safe_for_filename
 	# replaces all \s with _s
 	$string =~ s/\\/_/g;
 	
+	# replaces all ; with _s
+	$string =~ s/;/_/g;
+	
+	# replaces all : with _s
+	$string =~ s/:/_/g;
+	
+	# replaces all , with _s
+	$string =~ s/,/_/g;
+	
+	# replaces all ! with _s
+	$string =~ s/[!]/_/g;
+	
 	return $string;
 }
 
