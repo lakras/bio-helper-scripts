@@ -233,6 +233,10 @@ Includes the following scripts—
 
    _Usage: `perl compare_pairs_of_sequences_from_list.pl [pairs of sequence names, space-separated, one per line] [alignment fasta file path] > [output table path]`_
 
+- [`remove_empty_sequences.pl`](/aligned-fasta/remove_empty_sequences.pl): Removes sequences that are only -s or Ns or are length 0.
+
+   _Usage: `perl remove_empty_sequences.pl [fasta file path] > [output fasta file path]`_
+
 
 ## BLAST ([`blast`](/blast))
 All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
