@@ -237,6 +237,10 @@ Includes the following scripts—
 
    _Usage: `perl remove_empty_sequences.pl [fasta file path] > [output fasta file path]`_
 
+- [`remove_sequences_with_gaps_or_ambiguous_bases.pl`](/aligned-fasta/remove_sequences_with_gaps_or_ambiguous_bases.pl): Removes sequences with -s or bases that are not A, T, C, or G.
+
+   _Usage: `perl remove_sequences_with_gaps_or_ambiguous_bases.pl [fasta file path] > [output fasta file path]`_
+   
 
 ## BLAST ([`blast`](/blast))
 All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
