@@ -126,6 +126,10 @@ Includes the following scripts—
 
    _Usage: `perl split_fasta_one_sequence_per_file.pl [fasta file path]`_
 
+- [`extract_diverse_reference_genomes.pl`](/fasta/extract_diverse_reference_genomes.pl): Extracts a set of diverse reference sequences from the provided fasta file. Selects sequences without ambiguous bases that are at least N% different from already included sequences, considering sequences in order from longest to shortest sequence.
+
+   _Usage: `perl extract_diverse_reference_genomes.pl [fasta file path] [proportion bases different between sequences in output set] [mafft command or file path] > [output fasta file]`_
+
 - [`download_fasta_sequences_from_accession_numbers.pl`](/fasta/download_fasta_sequences_from_accession_numbers.pl): Given a list of accession numbers, one per line, downloads and prints fasta sequences corresponding to each accession number.
 
    _Usage: `perl download_fasta_sequences_from_accession_numbers.pl [path of file with list of accession numbers, one per line] [database (nucleotide by default)] > [output fasta file path]`_
