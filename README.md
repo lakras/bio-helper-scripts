@@ -201,6 +201,10 @@ Includes the following scripts—
 
 ## FASTA alignment file processing ([`aligned-fasta`](/aligned-fasta))
 
+- [`catalogue_differences_between_two_sequences.pl`](/aligned-fasta/catalogue_differences_between_two_sequences.pl): Catalogues differences between two aligned sequences.
+
+   _Usage: `perl catalogue_differences_between_two_sequences.pl [alignment fasta file path] > [output file path]`_
+
 - [`generate_distance_table_from_alignment.pl`](/aligned-fasta/generate_distance_table_from_alignment.pl): Generates 2d table of distances between all sequences in alignment.
 
    _Usage: `perl generate_distance_table_from_alignment.pl [alignment fasta file path] [1 to ignore first sequence in alignment, 0 to include it] > [output fasta file path]`_
