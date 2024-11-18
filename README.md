@@ -774,6 +774,10 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
    _Usage: `perl calculate_date_range_in_column.pl [column number of column with dates (0-indexed)] [table] [another table] [another table] [etc.]`_
 
 ## Miscellaneous ([`misc`](/misc))
+- [`retrieve_metadata_from_GenBank_file.pl`](/misc/retrieve_metadata_from_GenBank_file.pl): Retrieves metadata from GenBank .gb file and outputs as a table, one row per sequence.
+
+   _Usage: `perl retrieve_metadata_from_GenBank_file.pl [GenBank .gb file] > [output table path]`_
+
 - [`add_commas_to_all_numbers_in_file.pl`](/misc/add_commas_to_all_numbers_in_file.pl): Detects all numbers in contents of file and adds thousands-separator commas where needed.
 
    _Usage: `perl add_commas_to_all_numbers_in_file.pl [input file to add commas to] > [output file path]`_
