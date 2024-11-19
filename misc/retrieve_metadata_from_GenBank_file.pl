@@ -173,8 +173,7 @@ while(<GENBANK_FILE>) # for each row in the file
 	}
 	elsif($note_continuing)
 	{
-		if($line =~ /                     ([^"\/].*?[^"])"$/
-			or $line =~ /                     ([^"\/].*?[^"])$/)
+		if($line =~ /                     ([^"\/].*?)"?$/)
 		{
 			$note .= " ".$1;
 		}
