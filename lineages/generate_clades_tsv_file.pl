@@ -57,7 +57,7 @@ my $copy_pasted_defining_mutations = $ARGV[0];
 
 
 my $NUCLEOTIDE_MUTATIONS_ONLY = 1;
-my $GAPS_MUTATIONS_INCLUDED = 0;
+my $GAPS_MUTATIONS_INCLUDED = 1;
 
 my $NEWLINE = "\n";
 my $DELIMITER = "\t";
