@@ -166,15 +166,15 @@ while(<GENBANK_FILE>) # for each row in the file
 	}
 	
 	# note
-	if($line =~ /                     \/note="(.*)"?/)
+	if($line =~ /                     \/note="(.*?)"?$/)
 	{
 		$note = $1;
 		$note_continuing = 1;
 	}
 	elsif($note_continuing)
 	{
-		if($line =~ /                     ([^"\/].+)"$/
-			or $line =~ /                     ([^"\/].+)$/)
+		if($line =~ /                     ([^"\/].*?[^"])"$/
+			or $line =~ /                     ([^"\/].*?[^"])$/)
 		{
 			$note .= " ".$1;
 		}
@@ -209,12 +209,15 @@ while(<GENBANK_FILE>) # for each row in the file
 	# title
 	if($line =~ /  TITLE     (.*)/)
 	{
-		if($title)
+		if($1 ne "Direct Submission")
 		{
-			$title .= "; ";
+			if($title)
+			{
+				$title .= "; ";
+			}
+			$title .= $1;
+			$title_continuing = 1;
 		}
-		$title .= $1;
-		$title_continuing = 1;
 	}
 	elsif($title_continuing)
 	{
