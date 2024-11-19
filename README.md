@@ -44,6 +44,10 @@ Includes the following scripts—
 
    _Usage: `perl assign_lineage_to_each_sequence.pl [fasta file path] [lineage sequences fasta file path] [mafft command or file path] > [output table file path]`_
 
+- [`generate_clades_tsv_file.pl`](/lineages/generate_clades_tsv_file.pl): Generates clades.tsv file from defining mutations copy/pasted from an augur tree. Each clade should have the word CLADE followed by the name of the clade on one line, followed by the defining mutations copy/pasted from the augur tree on the next lines. Include all clades. Only includes nucleotide mutations in output clades.tsv file, and includes all nucleotide mutations in output clades.tsv file.
+
+   _Usage: `perl generate_clades_tsv_file.pl [file with copy/pasted defining mutations for each clade] > [output clades.tsv file path]`_
+
 
 ## FASTA file processing ([`fasta`](/fasta))
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
