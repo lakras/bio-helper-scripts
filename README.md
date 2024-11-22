@@ -182,6 +182,10 @@ Includes the following scripts—
 
    _Usage: `perl count_unambiguous_bases_in_each_sequence.pl [fasta file path] > [output table file path]`_
 
+- [`count_unambiguous_bases_in_each_sequence.pl`](/fasta/count_unambiguous_bases_in_each_sequence.pl): Counts number unambiguous bases (A, T, C, G) in each sequence. Outputs tab-separated table of sequence names and number unambiguous bases, one sequence per line.
+
+   _Usage: `perl count_unambiguous_bases_in_each_sequence.pl [fasta file path] > [output table file path]`_
+
 - [`shorten_headers_cut_at_first_space.pl`](/fasta/shorten_headers_cut_at_first_space.pl): Shortens headers of fasta file by cutting them off including and after the first space.
 
    _Usage: `perl shorten_headers_cut_at_first_space.pl [fasta file path] > [output fasta file path]`_
