@@ -265,6 +265,10 @@ Includes the following scripts—
 
    _Usage: `perl remove_sequences_with_gaps_or_ambiguous_bases.pl [fasta file path] > [output fasta file path]`_
    
+- [`select_closest_outgroup.pl`](/aligned-fasta/select_closest_outgroup.pl): Selects outgroup (non-human host, for example) closest to example ingroup sequence (human host, for example). Input is an aligned fasta while where the first sequence is an example ingroup sequence and the rest of the sequences are potential outgroup sequences to select from. Prints sequence name of selected outgroup and its distance to example ingroup sequence.
+
+   _Usage: `perl select_closest_outgroup.pl [aligned fasta file path] > [output text file]`_
+   
 
 ## BLAST ([`blast`](/blast))
 All blast runs must use output format `-outfmt "6 qseqid sacc stitle staxids sscinames sskingdoms qlen slen length pident qcovs evalue"`. (Otherwise, hardcoded column numbers can be modified within each script.)
