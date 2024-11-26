@@ -48,6 +48,10 @@ Includes the following scripts—
 
    _Usage: `perl generate_clades_tsv_file.pl [file with copy/pasted defining mutations for each clade] > [output clades.tsv file path]`_
 
+- [`add_mutations_from_reference_to_root_to_tree_json_file.pl`](/lineages/add_mutations_from_reference_to_root_to_tree_json_file.pl): Adds mutations from reference to root to tree.json file for use in Nextclade.
+
+   _Usage: `perl add_mutations_from_reference_to_root_to_tree_json_file.pl [tree.json file] [reference sequence fasta file] [ancestral sequences fasta file] [mafft command or filepath] > [updated tree.json file]`_
+
 
 ## FASTA file processing ([`fasta`](/fasta))
 - [`summarize_fasta_sequences.pl`](/fasta/summarize_fasta_sequences.pl): Summarizes sequences in fasta file. Produces table with, for each sequence: number bases, number unambiguous bases, A+T count, C+G count, number Ns, number gaps, number As, number Ts, number Cs, number Gs, and counts for any other [bases](https://en.wikipedia.org/wiki/Nucleic_acid_notation) that appear.
