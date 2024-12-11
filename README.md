@@ -383,6 +383,10 @@ Instructions for running blast in a Google Cloud Virtual Machine are in [`/blast
 
    _Usage: `perl kraken_summary_report_to_species_table.pl [kraken summary report] > [output table file path]`_
 
+- [`kraken_summary_reports_to_species_table.pl`](/blast/kraken_summary_reports_to_species_table.pl): Converts Kraken summary reports to table of species found in samples.
+
+   _Usage: `perl kraken_summary_reports_to_species_table.pl [list of kraken summary reports] > [output table file path]`_
+
 - [`LCA_table_to_kraken_output_format.pl`](/blast/LCA_table_to_kraken_output_format.pl): Converts LCA output table to kraken output format. Treats paired reads as separate reads.
 
    _Usage: `perl LCA_table_to_kraken_output_format.pl [output of retrieve_top_blast_hits_LCA_for_each_sequence.pl for one blast search] [fasta file that was input to blast search (to retrieve sequence lengths and names of unclassified sequences)] > [output kraken format table]`_
