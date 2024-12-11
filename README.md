@@ -894,5 +894,21 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl select_random_lines.pl [table or list] [number rows or lines to select at random] > [output table or list]`_
 
+- [`select_random_lines.pl`](/misc/select_random_lines.pl): Selects a certain number of lines at random from input table or list.
+
+   _Usage: `perl select_random_lines.pl [table or list] [number rows or lines to select at random] > [output table or list]`_
+
+- [`print_file_starting_with_query_line.pl`](/misc/print_file_starting_with_query_line.pl): Prints contents of input file starting with input query line.
+
+   _Usage: `perl print_file_starting_with_query_line.pl [file] [query line] > [output file]`_
+   
+- [`print_file_starting_with_query.pl`](/misc/print_file_starting_with_query.pl): Prints contents of input file starting with line containing input query.
+
+   _Usage: `perl print_file_starting_with_query.pl [file] [query] > [output file]`_
+   
+- [`print_file_before_query.pl`](/misc/print_file_before_query.pl): Prints contents of input file before line containing input query.
+
+   _Usage: `perl print_file_before_query.pl [file] [query] > [output file]`_
+
 
 More coming soon :)
