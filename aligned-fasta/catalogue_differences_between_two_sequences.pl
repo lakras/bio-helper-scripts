@@ -52,11 +52,11 @@ while(<FASTA_FILE>) # for each line in the file
 	}
 	else
 	{
-		if($reading_sequence_number == 1)
+		if($reading_sequence_number == 2)
 		{
 			$sequence_1 .= $_;
 		}
-		elsif($reading_sequence_number == 2)
+		elsif($reading_sequence_number == 3)
 		{
 			$sequence_2 .= $_;
 		}
