@@ -60,7 +60,7 @@ while(<FASTA_FILE>) # for each line in the file
 		{
 			$sequence_2 .= $_;
 		}
-		else
+		elsif($reading_sequence_number > 3)
 		{
 			print STDERR "Warning: more than two aligned sequences provided; ignoring"
 				." additional sequences.\n";
