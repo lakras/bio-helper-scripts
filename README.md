@@ -914,5 +914,13 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl print_file_before_query.pl [file] [query] > [output file]`_
 
+- [`compare_two_lists.pl`](/misc/compare_two_lists.pl): Compares two lists. Prints values appearing in both lists, first list only, and second list only.
+
+   _Usage: `perl compare_two_lists.pl [file with first list, one item per line] [file with second list, one item per line] > [output file]`_
+
+- [`intersection_of_two_lists.pl`](/misc/intersection_of_two_lists.pl): Prints intersection of two lists.
+
+   _Usage: `perl intersection_of_two_lists.pl [file with first list, one item per line] [file with second list, one item per line] > [file with intersection]`_
+
 
 More coming soon :)
