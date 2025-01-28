@@ -190,6 +190,10 @@ Includes the following scripts—
 
    _Usage: `perl add_number_unambiguous_bases_to_table.pl [fasta file path] [table path] > [output table path]`_
 
+- [`replace_ambiguous_bases_with_Ns.pl`](/fasta/replace_ambiguous_bases_with_Ns.pl): Replaces ambiguous bases (anything except A, T, C, G, or -) in each sequence with Ns.
+
+   _Usage: `perl replace_ambiguous_bases_with_Ns.pl [fasta file path] > [output fasta file path]`_
+
 - [`shorten_headers_cut_at_first_space.pl`](/fasta/shorten_headers_cut_at_first_space.pl): Shortens headers of fasta file by cutting them off including and after the first space.
 
    _Usage: `perl shorten_headers_cut_at_first_space.pl [fasta file path] > [output fasta file path]`_
