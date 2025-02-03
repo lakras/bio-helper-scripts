@@ -172,7 +172,10 @@ foreach my $sequence_names_index_1(0..$#sequence_names)
 			print prepare_integer_for_printing($distance);
 		}
 	}
-	print $NEWLINE;
+	if(!$generate_R_friendly_table)
+	{
+		print $NEWLINE;
+	}
 }
 
 # prints distances if R friendly table
