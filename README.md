@@ -276,6 +276,10 @@ Includes the following scripts—
 - [`remove_sequences_with_gaps_or_ambiguous_bases.pl`](/aligned-fasta/remove_sequences_with_gaps_or_ambiguous_bases.pl): Removes sequences with -s or bases that are not A, T, C, or G.
 
    _Usage: `perl remove_sequences_with_gaps_or_ambiguous_bases.pl [fasta file path] > [output fasta file path]`_
+ 
+ - [`remove_sequences_with_gap.pl`](/aligned-fasta/remove_sequences_with_gaps.pl): Removes sequences with -s.
+
+   _Usage: `perl remove_sequences_with_gaps.pl [fasta file path] > [output fasta file path]`_
    
 - [`select_closest_outgroup.pl`](/aligned-fasta/select_closest_outgroup.pl): Selects outgroup (non-human host, for example) closest to example ingroup sequence (human host, for example). Input is an aligned fasta while where the first sequence is an example ingroup sequence and the rest of the sequences are potential outgroup sequences to select from. Prints sequence name of selected outgroup and its distance to example ingroup sequence.
 
