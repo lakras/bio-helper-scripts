@@ -106,6 +106,10 @@ Includes the following scripts—
 
    _Usage: `perl filter_sequences_by_length.pl [fasta file path] [minimum length] [1 to filter by number of unambiguous bases, 0 to filter on number of bases (including Ns)] > [output fasta file path]`_
 
+- [`reheader_fasta_sequences.pl`](/fasta/reheader_fasta_sequences.pl): Reheaders each sequence in fasta file according to reheadering map. Reheadering map must be tab-separated: old name, new name, one pair per line.
+
+   _Usage: `perl reheader_fasta_sequences.pl [fasta file path] [reheadering map] > [output fasta file path]`_
+
 - [`reheader_fasta_sequences_from_filename.pl`](/fasta/reheader_fasta_sequences_from_filename.pl): Sets file name as header line in each fasta file(s). Each fasta file should have only one sequence.
 
    _Usage: `perl reheader_fasta_sequences_from_filename.pl [fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
