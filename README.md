@@ -284,8 +284,12 @@ Includes the following scripts—
  - [`remove_sequences_with_gap.pl`](/aligned-fasta/remove_sequences_with_gaps.pl): Removes sequences with -s.
 
    _Usage: `perl remove_sequences_with_gaps.pl [fasta file path] > [output fasta file path]`_
-   
-- [`select_closest_outgroup.pl`](/aligned-fasta/select_closest_outgroup.pl): Selects outgroup (non-human host, for example) closest to example ingroup sequence (human host, for example). Input is an aligned fasta while where the first sequence is an example ingroup sequence and the rest of the sequences are potential outgroup sequences to select from. Prints sequence name of selected outgroup and its distance to example ingroup sequence.
+ 
+ - [`convert_aligned_fasta_to_unaligned_fasta.pl`](/aligned-fasta/convert_aligned_fasta_to_unaligned_fasta.pl): Removes -s, converting aligned fasta to unaligned fasta.
+
+   _Usage: `perl convert_aligned_fasta_to_unaligned_fasta.pl [fasta file path] > [output fasta file path]`_
+  
+ - [`select_closest_outgroup.pl`](/aligned-fasta/select_closest_outgroup.pl): Selects outgroup (non-human host, for example) closest to example ingroup sequence (human host, for example). Input is an aligned fasta while where the first sequence is an example ingroup sequence and the rest of the sequences are potential outgroup sequences to select from. Prints sequence name of selected outgroup and its distance to example ingroup sequence.
 
    _Usage: `perl select_closest_outgroup.pl [aligned fasta file path] > [output text file]`_
    
