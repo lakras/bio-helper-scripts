@@ -206,6 +206,10 @@ Includes the following scripts—
 
    _Usage: `perl retrieve_sequence_names.pl [fasta file path] > [output file path]`_
 
+- [`replace_spaces_with_underscores_in_sequence_names.pl`](/fasta/replace_spaces_with_underscores_in_sequence_names.pl): Replaces spaces with underscores in sequence names. Optionally, also removes non-alphanumeric characters.
+
+   _Usage: `perl replace_spaces_with_underscores_in_sequence_names.pl [fasta file path] > [output fasta file path]`_
+
 - [`blast/retrieve_sequences_with_no_blast_hits.pl`](/blast/retrieve_sequences_with_no_blast_hits.pl): Retrieves sequences that do not have blast results.
 
    _Usage: `perl retrieve_sequences_with_no_blast_hits.pl [blast output file] [fasta file that was input to blast] [minimum percent identity for a blast hit to be counted] [minimum query coverage for a blast hit to be counted] > [output fasta file path]`_
