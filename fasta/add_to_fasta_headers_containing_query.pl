@@ -49,8 +49,6 @@ while(<FASTA_FILE>) # for each line in the file
 			my $query = $queries[$index];
 			my $this_text_to_add = $text_to_add[$index];
 			
-			print STDERR $query." = ".$this_text_to_add."\n";
-			
 			if($1 =~ /$query/)
 			{
 				$_ .= $this_text_to_add;
