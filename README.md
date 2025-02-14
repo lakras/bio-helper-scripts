@@ -257,6 +257,10 @@ Includes the following scripts—
 
    _Usage: `perl mask_low_read_depth_alleles.pl [alignment fasta file path] [list of read depth tables] [minimum read depth] > [output fasta file path]`_
 
+- [`collapse_duplicates.pl`](/aligned-fasta/collapse_duplicates.pl): Collapse duplicate sequences into one representative sequence per group of identical sequences. Optionally requires sequence name to be identical after first word.
+
+   _Usage: `perl collapse_duplicates.pl [alignment fasta file path] [1 to require identical sequence name after the first word] > [output fasta]`_
+
 - [`remove_reference_gaps_in_alignment.pl`](/aligned-fasta/remove_reference_gaps_in_alignment.pl): Removes gaps in reference (first sequence) in alignment and bases or gaps at the corresponding positions in all other sequences in the alignment.
 
    _Usage: `perl remove_reference_gaps_in_alignment.pl [alignment fasta file path] > [output fasta file path]`_
