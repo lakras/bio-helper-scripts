@@ -44,12 +44,13 @@ while(<FASTA_FILE>) # for each line in the file
 	chomp;
 	if($_ =~ /^>(.*)/) # header line
 	{
+		my $sequence_name = $1;
 		for my $index(0..$#queries)
 		{
 			my $query = $queries[$index];
 			my $this_text_to_add = $text_to_add[$index];
 			
-			if($1 =~ /$query/)
+			if($sequence_name =~ /$query/)
 			{
 				$_ .= $this_text_to_add;
 			}
