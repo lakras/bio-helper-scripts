@@ -118,6 +118,10 @@ Includes the following scripts—
 
    _Usage: `perl add_prefix_to_fasta_headers.pl [prefix to add to fasta file headers] [fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
 
+- [`add_to_fasta_headers_containing_query.pl`](/fasta/add_to_fasta_headers_containing_query.pl): Adds text to sequence names containing query.
+
+   _Usage: `perl add_to_fasta_headers_containing_query.pl "[query 1]" "[text to add to sequence names containing query 1]" "[query 2]" "[text to add to sequence names containing query 2]" [etc.] > [output fasta file path]`_
+
 - [`add_filename_as_prefix_to_fasta_headers.pl`](/fasta/add_filename_as_prefix_to_fasta_headers.pl): Adds file name as prefix to each header line in fasta file(s).
 
    _Usage: `perl add_filename_as_prefix_to_fasta_headers.pl [fasta file path] [another fasta file path] [etc.] > [output fasta file path]`_
