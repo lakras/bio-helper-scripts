@@ -954,5 +954,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `perl intersection_of_two_lists.pl [file with first list, one item per line] [file with second list, one item per line] > [file with intersection]`_
 
+- [`reroot_tree_and_remove_outgroup.R`](/misc/reroot_tree_and_remove_outgroup.R): Reroots the input tree using the input outgroup, then removes the outgroup node from the tree.
+
+   _Usage: `Rscript reroot_tree_and_remove_outgroup.R [newick tree] [outgroup name] > [output tree]`_
+
 
 More coming soon :)
