@@ -958,5 +958,9 @@ Tables are assumed to be tab-separated (usually denoted `.tsv` or `.txt`. To use
 
    _Usage: `Rscript reroot_tree_and_remove_outgroup.R [newick tree] [outgroup name] > [output tree]`_
 
+- [`midpoint_root_tree.R`](/misc/midpoint_root_tree.R): Midpoint roots the input tree.
+
+   _Usage: `Rscript midpoint_root_tree.R [newick tree] > [output tree]`_
+
 
 More coming soon :)
