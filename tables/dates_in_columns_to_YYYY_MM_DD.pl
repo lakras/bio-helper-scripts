@@ -235,10 +235,21 @@ sub date_to_YYYY_MM_DD
 		$day = "0".$day;
 	}
 	
-	# pads year with 20 if necessary
+	# pads year with 19 or 20 if necessary
 	if(length($year) == 2)
 	{
-		$year = "20".$year;
+		if($year =~ "X")
+		{
+			$year = "XX".$year;
+		}
+		elsif($year <= 25)
+		{
+			$year = "20".$year;
+		}
+		else
+		{
+			$year = "19".$year;
+		}
 	}
 	elsif(length($year) != 4)
 	{
