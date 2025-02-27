@@ -157,7 +157,7 @@ sub date_to_YYYY_MM_DD
 	}
 	
 	# if date is already in output format, returns it as is
-	if($date =~ /^\d{4}-\d+-\d+$/)
+	if($date =~ /^[\dX]{4}-[\dX]{2}-[\dX]{2}$/)
 	{
 		return $date;
 	}
@@ -167,33 +167,54 @@ sub date_to_YYYY_MM_DD
 	my $month = -1;
 	my $day = -1;
 	
-	if($date =~ /^(\d\d\d\d)[\/-]([a-zA-Z]+)[\/-](\d+)$/) # YYYY/MMM/DD or YYYY-MMM-DD format, with Month written out (e.g., Dec)
+	if($date =~ /^([\dX]{4})[\/-]([a-zA-Z]+)[\/-]([\dX]+)$/) # YYYY/MMM/DD or YYYY-MMM-DD format, with Month written out (e.g., Dec)
 	{
 		# retrieves date
 		$year = $1;
 		$month = month_text_to_month_number($2);
 		$day = $3;
 	}
-	elsif($date =~ /^(\d+)[\/-]([a-zA-Z]+)[\/-](\d\d\d\d)$/) # DD/MMM/YYYY or DD-MMM-YYYY format, with Month written out (e.g., Dec)
+	elsif($date =~ /^([\dX]+)[\/-]([a-zA-Z]+)[\/-]([\dX]{4})$/) # DD/MMM/YYYY or DD-MMM-YYYY format, with Month written out (e.g., Dec)
 	{
 		# retrieves date
 		$year = $3;
 		$month = month_text_to_month_number($2);
 		$day = $1;
 	}
-	elsif($date =~ /^(\d+)[\/-]([a-zA-Z]+)[\/-](\d+)$/) # DD/MMM/YY or DD-MMM-YY format, with Month written out (e.g., Dec)
+	elsif($date =~ /^([\dX]+)[\/-]([a-zA-Z]+)[\/-]([\dX]+)$/) # DD/MMM/YY or DD-MMM-YY format, with Month written out (e.g., Dec)
 	{
 		# retrieves date
 		$year = $3;
 		$month = month_text_to_month_number($2);
 		$day = $1;
 	}
-	elsif($date =~ /^(\d+)[\/-](\d+)[\/-](\d+)$/) #  M/D/YY or M-D-YY format
+	elsif($date =~ /^([a-zA-Z]+)-([\dX]+)$/) # MMM-YY format, with Month written out (e.g., Dec)
+	{
+		# retrieves date
+		$year = $2;
+		$month = month_text_to_month_number($1);
+		$day = "XX";
+	}
+	elsif($date =~ /^([\dX]+)[\/-]([\dX]+)[\/-]([\dX]+)$/) #  M/D/YY or M-D-YY format
 	{
 		# retrieves date
 		$year = $3;
 		$month = $1;
 		$day = $2;
+	}
+	elsif($date =~ /^([\dX]+)-([\dX]+)$/) #  YYYY-MM format
+	{
+		# retrieves date
+		$year = $1;
+		$month = $2;
+		$day = "XX";
+	}
+	elsif($date =~ /^([\dX]+)$/) #  YYYY format
+	{
+		# retrieves date
+		$year = $1;
+		$month = "XX";
+		$day = "XX";
 	}
 	else # format not recognized
 	{
@@ -228,7 +249,7 @@ sub date_to_YYYY_MM_DD
 	my $output = $year."-".$month."-".$day;
 	
 	# verifies that output is in correct format
-	if($output =~ /^\d{4}-\d{2}-\d{2}$/)
+	if($output =~ /^[\dX]{4}-[\dX]{2}-[\dX]{2}$/)
 	{
 		return $output;
 	}
