@@ -17,7 +17,7 @@ use warnings;
 
 
 my $sequence_pairs = $ARGV[0]; # pairs of sequence names, space-separated, one per line
-my $alignment_file = $ARGV[1]; # fasta alignment; reference sequence must appear first
+my $alignment_file = $ARGV[1]; # fasta alignment
 
 
 my $NEWLINE = "\n";
