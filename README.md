@@ -58,6 +58,10 @@ Includes the following scripts—
 
    _Usage: `perl summarize_fasta_sequences.pl [fasta file path] [another fasta file path] [etc.] > [output table file path]`_
 
+- [`diff.pl`](/fasta/diff.pl): Compares sequences with the same name in the two fasta files. Prints any sequences that are different in the two fasta files.
+
+   _Usage: `perl diff.pl [fasta file path] [another fasta file path] > [output file path]`_
+
 - [`cluster_sequences.pl`](/fasta/cluster_sequences.pl): Clusters sequences by similarity.
 
    _Usage: `perl cluster_sequences.pl [sequences fasta file] [percent identity, for example 80] [file path of MAFFT executable file (mafft.bat) or mafft command] > [output table]`_
